@@ -426,23 +426,22 @@
 
                                           
                                             <div class="checklist_one_line">
-                                                <div class="checklist_column" style="height: 90px;">Diameter</div>
-                                                <div style="width: 100%; height: 90px; border-bottom: solid 1px; text-align: left; padding: 5px;">
+                                                <div class="checklist_column" style="height: 80px;">Diameter</div>
+                                                <div style="width: 100%; height: 80px; border-bottom: solid 1px; text-align: left; padding: 5px;">
                                                     <div style="width: 100%; height: 25px; display: flex; justify-content: left; align-items: center;">
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="width" placeholder="w" oninput="calculateVolume()">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="width" placeholder="w" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="height" placeholder="l" oninput="calculateVolume()">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="height" placeholder="l" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="depth" placeholder="h" oninput="calculateVolume()">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="depth" placeholder="h" oninput="calculateVolume(this)">
                                                         &nbsp;&nbsp;&nbsp;
                                                         <select style="width: 50px; height: 100%; border: solid 1px; background-color: rgb(221, 221, 221);" id="unitSelector" onchange="convertUnits()">
-                                                            <option value="cm">cm</option>
                                                             <option value="mm">mm</option>
+                                                            <option value="cm">cm</option>
                                                         </select>
                                                     </div>
-                                                    <dib>Volume=&nbsp;&nbsp; <small style="font-size: 14px; color: brown;" id="result"></small><small style="font-size: 14px;"> &nbsp; mL</small></dib>
-                                                    </br>
-                                                    <dib>Maximal size=&nbsp;&nbsp; <small style="font-size: 14px; color: brown" id="largestNumber"></small> &nbsp; <small style="font-size: 14px;" id="currentUnit"> &nbsp;</small></dib>
+                                                    <div style="margin-top: 5px;">Volume=&nbsp;&nbsp; <small style="font-size: 14px; color: brown;" id="result"></small><small style="font-size: 14px;"> &nbsp; mL</small></div>
+                                                    <div style="margin-top: 0px;">Maximal size=&nbsp;&nbsp; <small style="font-size: 14px; color: brown" id="largestNumber"></small> <small style="font-size: 14px;" id="currentUnit"> &nbsp;</small></div>
                                                 </div>
                                             </div>
                                             
@@ -483,22 +482,14 @@
         </div>
     </div>
 
-
-
     <script>
         var unitSelector = document.getElementById("unitSelector");
-        var currentUnit = unitSelector.value;
-        document.getElementById("currentUnit").textContent = currentUnit;
 
-
-        function calculateVolume() {
+        function calculateVolume(input) {
             // 입력 필드에서 숫자 3자리로 제한
-            var inputElements = document.querySelectorAll("input[type='number']");
-            for (var i = 0; i < inputElements.length; i++) {
-                var inputValue = inputElements[i].value;
-                if (inputValue.length > 3) {
-                    inputElements[i].value = inputValue.slice(0, 3);
-                }
+            var inputValue = input.value;
+            if (inputValue.length > 3) {
+                input.value = inputValue.slice(0, 3);
             }
 
             // 사용자로부터 입력된 가로, 세로, 높이 가져오기
@@ -513,70 +504,37 @@
                 return;
             }
 
-            // 부피 계산 (cm^3 또는 mm^3로 표시)
-            var volume = width * height * depth;
+            // // 육면체의 부피 계산
+            // var volume = width * height * depth;
+
+            // 구의 부피 계산
+            var Wradius = width / 2;
+            var Hradius = height / 2;
+            var Dradius = depth / 2;
+            var volume = (4/3) * Math.PI * Wradius * Hradius * Dradius
 
             // 선택된 단위에 따라 부피를 변환
+            var currentUnit = unitSelector.value;
             if (currentUnit === "mm") {
-                volume *= 1000; // cm^3에서 mm^3로 변환
-                document.getElementById("currentUnit").textContent = currentUnit;
-            }
-            
-            else if (currentUnit === "cm") {
-                document.getElementById("currentUnit").textContent = currentUnit;
-
+                volume *= 0.001; // cm^3에서 mm^3로 변환
             }
 
             // 결과를 화면에 표시
+            var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
+            document.getElementById("result").textContent = roundedVolume;
+            document.getElementById("currentUnit").textContent = currentUnit;
 
-            document.getElementById("result").textContent = volume;
-
-            var largestNumber = Math.max(width, height, depth)
-            
+            var largestNumber = Math.max(width, height, depth);
             document.getElementById("largestNumber").textContent = largestNumber;
         }
 
         function convertUnits() {
-            currentUnit = unitSelector.value;
-            calculateVolume();
+            calculateVolume(document.getElementById("width"));
         }
 
         // 초기 계산 수행
-        calculateVolume();
+        calculateVolume(document.getElementById("width"));
     </script>
-    <!-- 
-    // 가장 큰 숫자 계산 및 표시
-        var largestNumber = Math.max(width, height, depth);
-        document.getElementById("largestNumber").textContent = "Largest Number= " + largestNumber;
-    }-->
-
-                                   
-                                            <!--
-                                            직육면체(정육면체)의 부피:
-                                            부피 = 길이 x 너비 x 높이
-                                            V = L x W x H
-
-                                            원통의 부피:
-                                            부피 = 원주율(π) x 반지름^2 x 높이
-                                            V = π x r^2 x h
-
-                                            구의 부피:
-                                            부피 = (4/3) x 원주율(π) x 반지름^3
-                                            V = (4/3) x π x r^3
-
-                                   
-
-                                            타원체(타원 원통)의 부피:
-                                            부피 = (4/3) x 원주율(π) x 긴 반지름 x 짧은 반지름 x 높이
-                                            V = (4/3) x π x a x b x 
-
-                                            10 * 5 * 7
-                                            
-                                            6.25
-                                            15.625
-                                            65.41
-                                        -->
-
 
     <script>
         // 체크박스 변경 시 이벤트 처리
@@ -638,61 +596,59 @@
 
     <script>
         
-    function confirm_delete_interpretation(button) {
-        if (confirm("정말 삭제하시겠습니까?")) {
-            button.closest("form").submit();
+        function confirm_delete_interpretation(button) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                button.closest("form").submit();
+            }
         }
-    }
 
-    function confirm_delete_comment(button) {
-        if (confirm("정말 삭제하시겠습니까?")) {
-            button.closest("form").submit();
+        function confirm_delete_comment(button) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                button.closest("form").submit();
+            }
         }
-    }
 
 
-    function dontDelete() {
-        alert("삭제는 본인만 가능합니다.");
-    }
-
-    $("#agree_btn").click(function(){
-        $("form#agree_form").css("display","block");
-    })
-
-    $("#disagree_btn").click(function(){
-        $("form#disagree_form").css("display","block");
-    })
-
-    $(":reset").click(function(){
-        $("form").css("display","none");
-    })
-
-    
-
-    
-    {% if crop_img.is_nodule %}
-        $("p.{{crop_img.classifi_result|get_max_spec:'BM'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'PN'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'ECHO'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'MARGIN'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'ECHOGENIC_FOCI'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'ORIENTATION'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'SHAPE'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'COMPOSITION'}}").css({"color":"blue", "font-weight":"bold"});
-        $("p.{{crop_img.classifi_result|get_max_spec:'GRADE'}}").css({"color":"blue", "font-weight":"bold"});
-    {% endif %}
-    
-    const text_interpretation = document.querySelector('.id_interpretation');
-    const btn_interpretation = document.querySelector('.interpretation_write_button');
-    var interpretation_modal_close = document.getElementsByClassName("interpretation_close_button")[0];    
-
-    btn_interpretation.addEventListener('click', () => {
-        text_interpretation.style.display = 'block';
-    
-    interpretation_modal_close.onclick = function() {
-        text_interpretation.style.display = "none";
+        function dontDelete() {
+            alert("삭제는 본인만 가능합니다.");
         }
-    }); 
+
+        $("#agree_btn").click(function(){
+            $("form#agree_form").css("display","block");
+        })
+
+        $("#disagree_btn").click(function(){
+            $("form#disagree_form").css("display","block");
+        })
+
+        $(":reset").click(function(){
+            $("form").css("display","none");
+        })
+
+        
+        {% if crop_img.is_nodule %}
+            $("p.{{crop_img.classifi_result|get_max_spec:'BM'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'PN'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'ECHO'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'MARGIN'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'ECHOGENIC_FOCI'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'ORIENTATION'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'SHAPE'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'COMPOSITION'}}").css({"color":"blue", "font-weight":"bold"});
+            $("p.{{crop_img.classifi_result|get_max_spec:'GRADE'}}").css({"color":"blue", "font-weight":"bold"});
+        {% endif %}
+        
+        const text_interpretation = document.querySelector('.id_interpretation');
+        const btn_interpretation = document.querySelector('.interpretation_write_button');
+        var interpretation_modal_close = document.getElementsByClassName("interpretation_close_button")[0];    
+
+        btn_interpretation.addEventListener('click', () => {
+            text_interpretation.style.display = 'block';
+        
+        interpretation_modal_close.onclick = function() {
+            text_interpretation.style.display = "none";
+            }
+        }); 
 
     </script>
 {% endblock %}
