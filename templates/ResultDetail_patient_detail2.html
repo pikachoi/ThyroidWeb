@@ -1,0 +1,534 @@
+{% extends "Diagnosis_base.html" %}
+{% block content %}
+{% load static %}
+{% load result_detial_filter %}
+    <div id="content">
+        <div class="container-fluid">
+            <div class="card shadow mb-4" >
+                <div class="card-body" >
+                    <div class="row"  style = "background-color: #ededed;">
+                        <div style="width: 100%; height: auto; ">
+                            <br><br><br>
+                            <h5 class="m-0 ml-3 text-gray-800">Patient id : {{ patient.patient_name }} &nbsp;&nbsp;&nbsp; Doctor ID : {{ patient.doctor }} &nbsp;&nbsp;&nbsp; Visit date : {{ patient.visit_date }}</h5>
+                            <div>
+                                <hr>
+                                <h3 class="h3 mb-2 text-gray-600" align="left">■ Detected Nodules : {{crop_count.cnt}} &nbsp; ■ Present</h3>
+                                {% if sagittal_img_path.idx == detect_img.idx %}
+                                    <button class="btn btn-secondary" onclick="location.href='{% url 'patient_detail' patient.idx axial_img_path.idx 0 %}'">axial image 보기</button>
+                                    <button class="btn btn-secondary">sagittal image</button>
+                                {% elif sagittal_img_path %}
+                                    <button class="btn btn-secondary">axial image</button>
+                                    <button class="btn btn-secondary" onclick="location.href='{% url 'patient_detail' patient.idx sagittal_img_path.idx 0 %}'">sagittal image 보기</button>
+                                {% endif %}
+                            </div>
+                            <hr>
+                            {% if crop_img.is_nodule %}
+                                <ul class="tabs">
+                                    {% for crop_img_path_obj in crop_img_paths %}
+                                        <li class="tab-link current" data-tab="nodule{{ forloop.counter }}" onclick="location.href='{% url 'patient_detail' patient.idx detect_img.idx crop_img_path_obj.idx %}'">tagging {{ forloop.counter }}</li>
+                                    {% endfor %}
+                                    
+                                </ul>
+                                <p class="h3 mb-2 text-gray-600" style = "display : inline;">■ Original Image </p>
+                                <div class="row" style="margin-left: 2px;">
+                                    <div class = "ori_img" > 
+                                        <img class="card M-4" style="width: 70%; height:auto;"  src={{ detect_img.img_path.url|detect_nodule_img }}>
+                                    </div>
+                                    
+                                    <div class="pb-2" style="float: center; width: 40%; height: auto;" align="center"> 
+                                        <p class="h3 mb-2 text-gray-600" style = "float : left;">■ Crop Image </p>
+                                            <img class="card M-4" style="width: auto; height:50%;" src={{ crop_img.crop_img_path.url }}> 
+                                        
+                                        {% with crop_img.classifi_result|get_classification as grade %}
+                                            <h4 class="h3 mb-2 text-gray-600" style = "float:left; display : inline;">■ Guideline </h4>
+                                            <table class="table_Guideline">    
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th style='width: 20%;'>K-TIRADS</th>
+                                                        <th style='width: 30%;'>Biopsy size threshold</th>
+                                                    <th style='width: 40%;'>Malignancy Risk (%)</th>
+                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td align = "center"> {{ grade }}</td>
+                                                        {% if "C2" == grade %}
+                                                            <td align="center">
+                                                                <div class="tool">N/A <sup>(+)</sup></div>
+                                                            </td>
+                                                            <td align="center">
+                                                                Spongiform :  &lt; 3<br>
+                                                                else : &lt; 1
+                                                            </td>
+                                                        {% elif "C3" == grade %}
+                                                            <td align="center">&gt; 2.0 cm</td>
+                                                            <td align="center">3 ~ 10</td>
+                                                        {% elif "C4" == grade %}
+                                                            <td align="center">&gt; 1.0 ~ 1.5 cm</td>
+                                                            <td align="center">15 ~ 40 </td>
+                                                        {% elif "C5" == grade %}
+                                                            <td align="center">
+                                                                <div class="tool">
+                                                                    &ge; 1.0 cm <sup>(+)</sup>
+                                                                </div>
+                                                            </td>
+                                                            <td align="center">&gt; 60</td>
+                                                        {% else %}
+                                                            <td align="center">N/A</td>
+                                                            <td align="center">N/A</td>
+                                                        {% endif %}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <table  class="table_Guideline">    
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th style =" vertical-align: middle;">US Pattern</th>
+                                                        {% if "C2" == grade %}
+                                                            <td>
+                                                                1) Spongiform<br>
+                                                                2) Partially cystic nodule with comet tail artifact<br>
+                                                                3) Pure cyst
+                                                            </td>
+                                                        {% elif "C3" == grade %}
+                                                            <td>
+                                                                Partially cystic or isohyperechoic nodule without any of 3 suspicious US features*
+                                                            </td>
+                                                        {% elif "C4" == grade %}
+                                                            <td>
+                                                                1) Solid hypoechoic nodule without any of 3 suspicious US features* <br>
+                                                                2) Partially cystic or isohyperechoic nodule with any of 3 suspicious US features*
+                                                            </td>
+                                                        {% elif "C5" == grade %}
+                                                            <td>
+                                                                Solid hypoechoic nodule with any of 3 suspicious US features*
+                                                            </td>
+                                                        {% else %}
+                                                            <td>N/A</td>
+                                                            <td>N/A</td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    <tr>
+                                                        <th style='width: 20%;'>Recommendation</th>
+                                                        {% if "C2" == grade %}
+                                                            <td align="center">
+                                                                2-5 years depending on the nodule size
+                                                            </td>
+                                                        {% elif "C3" == grade %}
+                                                            <td align="center">
+                                                                At 1, 3, and 5 years -> every 5 years if there is no change 
+                                                            </td>
+                                                        {% elif "C4" == grade %}
+                                                            <td align="center">
+                                                                At 1, 3, and 5 years -> every 3-5 years if there is no change 
+                                                            </td>
+                                                        {% elif "C5" == grade %}
+                                                            <td align="center">
+                                                                US scan every 6 months for 1-2 years -> once every year, if no growth 
+                                                            </td>
+                                                        {% else %}
+                                                            <td align="center">N/A</td>
+                                                            <td align="center">N/A</td>
+                                                        {% endif %}
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        {% endwith %}
+                                    </div>
+                                    <div class="table-responsive" style = "margin-top : 10%;">
+                                    <table class="table responsive-table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th width="7.09%" scope="col" style = "text-align: center;">B / M</th>
+                                                <th width="7.09%" scope="col" style = "text-align: center;">P / N</th>
+                                                <th width="3.09%" scope="col" style = "text-align: center;">Echogenicity</th>
+                                                <th width="11.09%" scope="col" style = "text-align: center;">Margin</th>
+                                                <th width="15.09%" scope="col" style = "text-align: center;">Echogenic foci</th>
+                                                <th width="10.50%" scope="col" style = "text-align: center;">Orientation</th>
+                                                <th width="11.09%" scope="col" style = "text-align: center;">Shape</th>
+                                                <th width="11.09%" scope="col" style = "text-align: center;">Composition</th>
+                                               
+                                                
+                                                <th width="4.09%" scope="col"></th>                                                                      
+                                                <th width="9.09%" scope="col" style= "background-color : #fae0e0; text-align: center;">※ K-TIRADS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px; ">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"BM" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"PN" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"ECHO" %}
+                                                        <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"MARGIN" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"ECHOGENIC_FOCI" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"ORIENTATION" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"SHAPE" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"COMPOSITION" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                               
+                                                
+                                                <td></td>
+                                                <td style = "background-color : #fae0e0;">
+                                                    <div style="text-align: center;font-size: 13px;">
+                                                        {% for spec, value in crop_img.classifi_result|get_spec:"GRADE" %}
+                                                            <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="row" style="margin-left: 2px;">
+                                    <ul class="tabs">
+                                        <li class="tab-link current" data-tab="image">Original Image</li>
+                                        <h3 class="h3 mb-2 text-gray-600" align="center">■ Detected Nodules : 0 ■ Absent</h3>
+                                    </ul>
+                                </div>
+                                <div class="pb-2" style="float: left; width: 50%; height: auto;" align="center"> 
+                                    <img class="card M-4" style="width: 70%; height:auto;" src={{ detect_img.img_path.url }}>
+                                </div>
+                                <div class="row" >
+                                    <div>
+                                        <h5 class="h5 mb-2 text-gray-600" style="margin-top: 20%;">● Nodules did not detected.</h5>
+                                        <h5 class="h5 mb-2 text-gray-600" style="margin-top: 20%;">● Please check the image.</h5>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div style="margin-top: 10px;">
+                                <table style="font-size: 13px; table-layout: fixed;" class="table table-striped table-bordered sortable-table clickable-table" id="problemset">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center;width:10%">nodule</th>
+                                            <th style="text-align:center;width:60%">Tagging</th>
+                                            <th colspan="2" style="text-align:center;width:30%">동의여부 </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="vertical-align:middle;width:70%">nodule</td>
+                                            <td style="vertical-align:middle;width:70%">
+                                                <div class="progress progress-striped active" style="margin-bottom: 0px;">
+                                                    {% for total_agree_obj in total_agree %}
+                                                        {% if total_agree_obj.crop_img_path == crop_img.idx %} 
+                                                            <div class="progress-bar pb" style="width: 20%;">
+                                                                <span style="vertical-align:middle">{{ total_agree_obj.cnt }}</span>
+                                                            </div>                                                                
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for total_disagree_obj in total_disagree %}
+                                                        {% if total_disagree_obj.crop_img_path == crop_img.idx %} 
+                                                            <div class="progress-bar bg-danger pb1" style="width: 20%;">
+                                                                <span style="vertical-align:middle">{{ total_disagree_obj.cnt }}</span>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:middle; text-align: center;">
+                                                <button type="button" align='center' name="tagging" id="agree_btn" class="like1 btn btn-success glyphicon glyphicon-thumbs-up" {% if disable_buttons %}disabled{% endif %}>Agree</button>
+                                            </td>
+                                            <td style="vertical-align:middle; text-align: center;">
+                                                <button type="button" align='center' name="tagging1" id="disagree_btn" class="dislike btn btn-danger glyphicon glyphicon-thumbs-down" {% if disable_buttons %}disabled{% endif %}>Disagree</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot >
+                                        <tr>
+                                            <td colspan="4" style="background-color:white;"> 
+                                                <form id="agree_form" action ="{% url 'agree_tagging' crop_img.idx %}" method="POST" style="display:none;" >
+                                                    {% csrf_token %}
+                                                    <textarea name="body" cols="40" rows="10" maxlength="200"  class="text_modal2_body" id="id_body" placeholder="Comment..." required ></textarea>
+                                                    <input type="submit" class="comment_save" value="Save" />
+                                                    <input type="reset" class="comment_delete" value="Delete" data-dismiss="modal" />
+                                                </form>
+                                            </td>
+                                            <td colspan="4" style="background-color:white;"> 
+                                                <form id="disagree_form" action ="{% url 'disagree_tagging' crop_img.idx %}" method="POST" style="display:none;">
+                                                    {% csrf_token %}
+                                                    <textarea name="body"  cols="40" rows="10" maxlength="200"  class="text_modal2_body" id="id_body" placeholder="Comment..." required ></textarea>
+                                                    <input type="submit" class="comment_save" value="Save" />
+                                                    <input type="reset" class="comment_delete" value="Delete" data-dismiss="modal" />
+                                                </form>
+                                            </td>
+                                        <tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class = "flex-container">    
+                                <div class = "comment_table">   
+                                    <table style="font-size: 13px" class="table table-striped table-bordered sortable-table clickable-table" id="problemset">
+                                    {% csrf_token %}
+                                    <thead>
+                                        <td class="th_comment" id="th_comment" colspan="4">C O M M E N T</td>
+                                        <tr>
+                                            <th style="text-align:center; width:20%;" data-sort="string">Doctor ID</th>
+                                            <th style="text-align:center; width:20%;">Date</th>
+                                            <th style="text-align:center; width:50%;">Comment</th>
+                                            <th style="text-align:center; width:50%;">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody-comment">
+                                        {% for total_tagging_obj in total_tagging %}
+                                            <tr>
+                                                <td style="vertical-align:middle" class="click-this">{{ total_tagging_obj.doctor }}</td>
+                                                <td style="vertical-align:middle" class="click-this">{{ total_tagging_obj.write_date }}</td>
+                                                <td style="text-align:left;" class="click-this">{{ total_tagging_obj.comment }}</td>
+                                                
+                                                {% if doctor_username == total_tagging_obj.doctor %}
+                                                    <td align="center" width="50">
+                                                        <form action="{% url 'remove_tagging' total_tagging_obj.idx %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <button type="button" class="btn btn-outline-secondary" onclick="confirm_delete_comment(this)">Delete</button>
+                                                        </form>
+                                                    </td> 
+                                                {% else %}
+                                                    <td align="center" style="vertical-align: middle;">
+                                                        <button type="button" class="btn btn-outline-info" onclick="dontDelete()">Delete</button>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td colspan="4" align="center" style="vertical-align: middle;">아직 코멘트가 없습니다.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                </div>
+                                <div class="interpretation_table">
+                                    <table style="font-size: 13px" class="table table-striped table-bordered sortable-table clickable-table" id="problemset">
+                                        {% csrf_token %}
+                                        <thead>
+                                            <td class="th_interpretation" id="th_interpretation" colspan="4">
+                                                I N T E R P R E T A T I O N
+                                                {% if doctor_username == patient.doctor and not interpretation %}
+                                                    <button class="interpretation_write_button">판독문 작성</button>
+                                                {% endif %}
+                                            </td>
+                                            <tr>
+                                                <th style="text-align:center; width:20%;" data-sort="string">Doctor ID</th>
+                                                <th style="text-align:center; width:20%">Date</th>
+                                                <th align="text-align:center; width:400px;" style="text-align:center; width:50%; ">Interpretation</th>
+                                                <th style="text-align:center; width:50%;">Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="tbody-interpretation">
+                                            {% for interpret in interpretation %}
+                                                <tr>
+                                                    {% if doctor_username == interpret.patient.doctor %}
+                                                        <td style="vertical-align:middle" class="click-this">{{ interpret.patient.doctor }}</td>
+                                                        <td style="vertical-align:middle" class="click-this">{{ interpret.write_date }}</td>
+                                                        <td style="text-align: left;">{{ interpret.interpretation }}</td>
+                                                        <td align="center" width="50">
+                                                            <form action="{% url 'remove_interpretation' interpret.idx %}" method="POST">
+                                                                {% csrf_token %}
+                                                                <button type="button" class="btn btn-outline-secondary" onclick="confirm_delete_interpretation(this)">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    {% else %}
+                                                        <td colspan="4" align="center" style="vertical-align: middle;">판독문은 진료의만 볼 수 있습니다.</td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <td colspan="4" align="center" style="vertical-align: middle;">아직 판독문이 없습니다.</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="id_interpretation">
+                                <form id="write_interpretation" action="{% url 'write_interpretation' patient.idx %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="check_modal1_body">
+                                        <!-- 항목 1 -->
+                                        <div class="check_list_raw">
+                                            <small class="check_list_column">Margin</small>     
+                                            <input style="margin-left: 10px;" type="checkbox" id="item1-1" name="item1" value="Item 1-1">
+                                            <label for="item1-1">ILL-defined</label>
+                                
+                                            <input style="margin-left: 10px;" type="checkbox" id="item1-2" name="item1" value="Item 1-2">
+                                            <label for="item1-2">Smooth</label>
+                                
+                                            <input style="margin-left: 10px;" type="checkbox" id="item1-3" name="item1" value="Item 1-3">
+                                            <label for="item1-3">Spiculated</label>
+                                        </div>
+                                
+                                        <br>
+                                        <!-- 항목 2 -->
+                                        <input type="checkbox" id="item2" name="item2" value="Item 2">
+                                        <label for="item2">Item 2</label><br>
+                                    </div>
+                                    <!-- 체크된 항목이 텍스트로 들어가는 곳 -->
+                                    <textarea name="interpretation" cols="40" rows="5" maxlength="700" data-backdrop="static" data-keyboard="false" class="text_modal1_body" id="selected_items" placeholder="interpretation" required>안녕하세요 저는 1[] 2[] 입니다</textarea>
+                                    <span class="interpretation_close_button">&times;</span>
+                                    <input type="submit" class="interpretation_save" value="Save" />
+                                    <input type="reset" class="interpretation_delete" value="Delete" data-dismiss="modal" />
+                                    <button type="button" class="interpretation_reset">초기화</button> <!-- 초기화 버튼 추가 -->
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 체크박스 변경 시 이벤트 처리
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const selectedItems = document.getElementById('selected_items');
+        const resetButton = document.querySelector('.interpretation_reset'); // 초기화 버튼 선택
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const labelText = document.querySelector(`label[for="${this.id}"]`).textContent;
+                let interpretationText = selectedItems.value;
+        
+                // 체크된 항목의 값을 가져옴
+                const checkedItemValue = this.checked ? labelText : "";
+        
+                // 항목1과 항목2를 각각 다른 위치에 추가
+                if (this.id === "item1-1" || this.id === "item1-2" || this.id === "item1-3") {
+                    checkboxes.forEach(otherCheckbox => {
+                        if (otherCheckbox.id !== this.id && otherCheckbox.name === this.name) {
+                            otherCheckbox.checked = false; // 다른 항목들 해제
+                        }
+                    });
+                    interpretationText = interpretationText.replace(/1\[.*?\]/g, `1[${checkedItemValue}]`);
+                } else if (this.id === "item2") {
+                    interpretationText = interpretationText.replace(/2\[.*?\]/g, `2[${checkedItemValue}]`);
+                }
+        
+                selectedItems.value = interpretationText;
+            });
+        });
+
+        // 초기화 버튼 클릭 시
+        resetButton.addEventListener('click', function() {
+            // 모든 체크박스 해제
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // 텍스트 초기화
+            selectedItems.value = '안녕하세요 저는 1[] 2[] 입니다';
+        });
+    </script>
+
+
+
+
+
+    <script>
+        
+    function confirm_delete_interpretation(button) {
+        if (confirm("정말 삭제하시겠습니까?")) {
+            button.closest("form").submit();
+        }
+    }
+
+    function confirm_delete_comment(button) {
+        if (confirm("정말 삭제하시겠습니까?")) {
+            button.closest("form").submit();
+        }
+    }
+
+
+    function dontDelete() {
+        alert("삭제는 본인만 가능합니다.");
+    }
+
+    $("#agree_btn").click(function(){
+        $("form#agree_form").css("display","block");
+    })
+
+    $("#disagree_btn").click(function(){
+        $("form#disagree_form").css("display","block");
+    })
+
+    $(":reset").click(function(){
+        $("form").css("display","none");
+    })
+
+    
+
+    
+    {% if crop_img.is_nodule %}
+        $("p.{{crop_img.classifi_result|get_max_spec:'BM'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'PN'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'ECHO'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'MARGIN'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'ECHOGENIC_FOCI'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'ORIENTATION'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'SHAPE'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'COMPOSITION'}}").css({"color":"blue", "font-weight":"bold"});
+        $("p.{{crop_img.classifi_result|get_max_spec:'GRADE'}}").css({"color":"blue", "font-weight":"bold"});
+    {% endif %}
+    
+    const text_interpretation = document.querySelector('.id_interpretation');
+    const btn_interpretation = document.querySelector('.interpretation_write_button');
+    var interpretation_modal_close = document.getElementsByClassName("interpretation_close_button")[0];    
+
+    btn_interpretation.addEventListener('click', () => {
+        text_interpretation.style.display = 'block';
+    
+    interpretation_modal_close.onclick = function() {
+        text_interpretation.style.display = "none";
+        }
+    }); 
+
+    </script>
+{% endblock %}

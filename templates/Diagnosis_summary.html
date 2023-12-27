@@ -1,0 +1,104 @@
+{% extends "Diagnosis_base.html" %}
+{% block content %}
+{% load static %}
+{% load diagnosis_filter %}
+    <div id="content">
+        <div class="row justify-content-center">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body" style = "background-color: #ededed;">
+                    <h1 style="text-align:center; position: relative; line-height:150%; ">Diagnosis summary</h1>
+                    <span style="font-weight: bold;">
+                        <ul class="tabs" style="margin-left: 10px;">
+                            {% for summary_obj in need_summary %}
+                                <li class="tab-link current" data-tab="{{summary_obj.idx}}" onclick="location.href='{% url 'diagnosis_summary' summary_obj.idx 0 0 %}'">{{ summary_obj.patient_name }}</li>
+                            {% endfor %}
+                        </ul>
+                        <hr>
+                        {% if sagittal_img_path.idx == detect_img.idx %}
+                            <button class="btn btn-secondary" onclick="location.href='{% url 'diagnosis_summary' patient.idx axial_img_path.idx 0 %}'">axial image 보기</button>
+                            <button class="btn btn-secondary">sagittal image</button>
+                        {% elif sagittal_img_path %}
+                            <button class="btn btn-secondary">axial image</button>    
+                            <button class="btn btn-secondary" onclick="location.href='{% url 'diagnosis_summary' patient.idx sagittal_img_path.idx 0 %}'">sagittal image 보기</button>
+                        {% endif %}
+                        <hr>
+                        <div style="width: 300%;">
+                            <div class="row">
+                                {% if crop_img.is_nodule %}
+                                    <img class="card border-left-primary shadow h-100" src={{ detect_img.img_path.url|detect_nodule_img }} style="width: 300px; height: 270px;">
+                                    <h6 class="h6 mb-2 text-gray-600" style="margin-left: 20px;">● number of nodules : {{ crop_count.cnt }} </h6>
+                                    <div>
+                                        <h6 class="h6 mb-2 text-gray-600" style="margin-left: 20px;">● Present</h6>
+                                        <ul class="tabs2">
+                                            {% for crop_img_path_obj in crop_img_paths %}
+                                                <li class="tab-link2 current" data-tab="nodule{{ forloop.counter }}" style="display:block; margin: 0px 0px 5px 10px;" onclick="location.href='{% url 'diagnosis_summary' patient.idx detect_img.idx crop_img_path_obj.idx %}'">nodule {{ forloop.counter }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="tab-content2 current" style="margin-left: 3px;">
+                                        <img class="card border-left-primary shadow" src={{ crop_img.crop_img_path.url }} style="width: 130px; height: 100px;" >
+                                        <div style="margin-left: 15px;">
+                                            <div>1. K-TIRADS  :  {{ crop_img.classifi_result|get_classification }}</div>
+                                            {% for i, j in crop_img.classifi_result|get_classification_list %}
+                                                <div style="margin-left: 10px;"><h6>- {{ i }} : {{ j|floatformat:3 }} % </h6></div>
+                                            {% endfor %}
+                                            <div>2. B/M  :  {{ crop_img.classifi_result|get_BM }}</div>
+                                            <div>3. P/N  :  {{ crop_img.classifi_result|get_PN }}</div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <img class="card border-left-primary shadow h-100" src={{ detect_img.img_path.url }} style="width: 300px; height: 270px;">
+                                    <h6 class="h6 mb-2 text-gray-600" style="margin-left: 20px;">● number of nodules : 0</h6>
+                                    <h6 class="h6 mb-2 text-gray-600" style="margin-left: 20px;">● Absent</h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px; margin-top: 20px;">
+                            <table style="text-align:center; width:1000px; border:1px solid black;" class="table">
+                                <thead>
+                                    <tr class="th_color">
+                                        <th>patient id</th>
+                                        <th>Doctor ID</th>
+                                        <th>Tagging</th>
+                                        <th>Restart</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td align="center" width="530">{{ patient.patient_name }}</td>
+                                        <td align="center" width="530">{{ doctor_username }}</td>
+                                        <td>
+                                            <button class="btn btn-secondary" type="button" onclick="location.href='{% url 'check_summary' patient.idx %}'">Tagging</button>                
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-secondary" type="button" onclick="location.href='{% url 'remove_patient' patient.idx %}'">Restart</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        {% comment %}
+        현재 선택하고 있는 칸 강조
+         $(function(){
+            $("ul.tabs li:first").addClass("current");
+            let $tmp  = $("ul.tabs li:first").text();
+        }); {% endcomment %}
+        {% comment %} $('ul.tabs li').click(function(){
+            $('ul.tabs li').removeClass('current');
+            $(this).addClass('current');
+        }) {% endcomment %}
+
+
+        
+    </script>
+    
+{% endblock %}
+
+

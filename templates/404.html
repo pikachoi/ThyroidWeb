@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+   
+  </head>
+  <body>
+ <img src="{% static 'img/404_error.PNG' %}" style = "width : 30%;  margin-left : 33%;"></img>
+  </body>
+</html>
+
+
+
+
+
+<form id="imageForm" method="POST" enctype="multipart/form-data" action="{% url 'diagnosis_home' %}">
+  {% csrf_token %}
+  <input type="file" id="pastedImage" name="imgfile" style="display:none">
+  <input type="text" id="patientIdInput" name="patient_id" maxlength="20" class="form-control" placeholder="Patient id" required autofocus>
+</form>
+
+<div style="display: flex; justify-content: center;  margin-top: 10px;">
+  <div style="display: flex; justify-content: center; align-items: center; width: 350px; height: 250px; border: 1px solid; border-radius: 10px;" id="imageContainer1" class="image-container">
+      Axial
+  </div>
+
+  <div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+          <button style="margin-bottom: 10px;" class="btn btn-secondary" id="uploadButton">UPLOAD</button>
+      </div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+          <button style="margin-left: 15px; margin-right: 15px; width: 85px;" class="btn btn-secondary" type="reset" id="image_delete" onclick="image_delete_in_gallery2()">RESET</button>
+      </div>
+      
+      <div class="loadingio-spinner-double-ring-p9qoyno5prn" style="display: none;"><div class="ldio-y417rfe1szs">
+          <div></div>
+          <div></div>
+          <div><div></div></div>
+          <div><div></div></div>
+          </div></div>
+  </div>
+
+  <div style="display: flex; justify-content: center; align-items: center; width: 350px; height: 250px; border: 1px solid; border-radius: 10px;" id="imageContainer2" class="image-container">
+      Sagittal
+  </div>
+</div>
+
+<div class="horizontal-line"></div>
+
+<script>
+  var diagnosisHomeURL = "{% url 'diagnosis_home' %}";
+  var containers = document.querySelectorAll('.image-container');
+  var formData = new FormData(document.getElementById("imageForm"));
+  var activeContainer = null; // 현재 활성화된 컨테이너
+  
+  containers.forEach(function (container, index) {
+      container.addEventListener('click', function () {
+          activeContainer = container;
+
+          // 스타일 초기화
+          containers.forEach(function (c) {
+              c.style.border = '1px solid black';
+              c.style.fontWeight = 'normal';
+          });
+
+          // 스타일 변경
+          activeContainer.style.border = '4px solid rgba(78, 115, 223, 0.25)';
+          activeContainer.style.fontWeight = 'bold';
+      });
+  });
+
+  document.addEventListener('paste', function (e) {
+      var items = e.clipboardData.items;
+
+      for (var i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf("image") !== -1) {
+              // Blob(큰 이진 객체)
+              var blob = items[i].getAsFile();
+
+              // Blob을 이미지로 표시
+              var imageURL = URL.createObjectURL(blob);
+
+              activeContainer.innerHTML = ""; // 이미지 덮어쓰기
+              var img = document.createElement("img");
+              img.src = imageURL;
+              activeContainer.appendChild(img);
+
+              document.getElementById("uploadButton").style.display = "block";
+
+              // Blob을 FormData에 추가 (첫 번째 박스에만 추가)
+              if (activeContainer.id === 'imageContainer1') {
+                  formData.set('imgfile', blob);
+              }
+          }
+      }
+  });
+
+  document.getElementById("uploadButton").addEventListener("click", function () {
+      if (activeContainer === null) {
+          alert('Axial 이미지는 필수입니다!');
+      } else if (activeContainer.id === 'imageContainer2' && !document.querySelector('#imageContainer1 img')) {
+          alert('Axial 이미지는 필수입니다!');
+      } else {
+          var patientIdInput = document.getElementById("patientIdInput");
+          var patientId = patientIdInput.value.trim(); // 공백을 제거한 값 가져오기
+
+          if (!patientId) {
+              alert('환자 아이디를 입력하세요.');
+          } else {
+              formData.set('patient_id', patientId);
+
+              var loadingSpinners = document.querySelectorAll('.loadingio-spinner-double-ring-p9qoyno5prn');
+
+              loadingSpinners.forEach(function (spinner) {
+                  spinner.style.display = 'block'; // 로딩 스피너 보이기
+              });
+
+              var xhr = new XMLHttpRequest();
+              xhr.open('POST', diagnosisHomeURL, true);
+              xhr.onload = function () {
+                  if (xhr.status === 200) {
+                      console.log('이미지가 서버에 저장되었습니다.');
+                      setTimeout(function () {
+                          location.reload();
+                      }, 1000);
+                  } else {
+                      console.error('이미지 저장 중 오류가 발생했습니다.');
+                  }
+              };
+              xhr.send(formData);
+          }
+      }
+  });
+</script>
+
+<script>
+  // RESET
+  function image_delete_in_gallery2() {
+      clearImage('imageContainer1');
+      clearImage('imageContainer2');
+      $("#pastedImage").val("");
+      $("#patientIdInput").val("");
+      $("##uploadButton").prop("disabled", false);
+  }
+</script>

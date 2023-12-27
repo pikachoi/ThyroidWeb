@@ -1,0 +1,202 @@
+{% extends "Diagnosis_base.html" %}
+{% block content %}
+{% load static %}
+
+{% comment %}
+필요한가?? 일단 보류
+<div class = "search_select">
+    <select style="width: 20%; text-align:left;" name="order_by" id="order_by">
+        <option value="newrest">최신 순</option>
+        <option value="oldest">오래된 순</option>
+        <option value="ascending">사용자 id 오름차순</option>
+        <option value="descending">사용자 id 내림차순</option>
+    </select>
+</div>
+{% endcomment %}
+
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <br><br><br>
+        <h5 class="m-0 ml-3 text-gray-800">Interpretation History : </h5>
+        <p class="m-0 ml-2">환자들의 판독 결과를 관리해주는 페이지 입니다.</p>
+        <div class="container-fluid">
+            <div class="card shadow mb-4">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="list_select_top">
+                        <div class="search_list">
+                            <form id ="search_form" method="get" action="{% url 'patient_list' %}">
+                                <select name="keyword" class="keyword">
+                                    <option value="index_number">Index</option>
+                                    <option value="patient_id">Patient ID</option>
+                                    <option value="user">Doctor ID</option>
+                                </select>
+                                <input name="search" class="search_input" placeholder="검색하실 내용을 입력해주세요." value="{{ search_query }}">
+                                <input type="submit" class="search_button" value="검색">
+                                <button type="button" class="search_reset_button" onclick="searchClear()">초기화</button>
+                            </form>
+                        </div>
+                        <div class="search_count">
+                            <form id="count_form" method="get" action="{% url 'patient_list' %}">
+                                <select name="entry" class="entry" onchange="submitForm()">
+                                    <option value="20" {% if entry == 20 %}selected{% endif %}>20</option>
+                                    <option value="10" {% if entry == 10 %}selected{% endif %}>10</option>
+                                    <option value="5" {% if entry == 5 %}selected{% endif %}>5</option>
+                                </select>
+                                <input type="hidden" name="keyword" value="{{ keyword }}">
+                                <input type="hidden" name="search" value="{{ search_query }}">
+                                <input type="hidden" name="page" value="{{ patient_list.number }}">
+                            </form>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th align="center" width="5%">Index</th>
+                                <th align="center" width="20%">Patient Id</th>
+                                <th align="center" width="20%">Visit Date</th>
+                                <th align="center" width="20%">Doctor Id</th>
+                                <th align="center" width="20%">Patient Info Data</th>
+                                <th align="center" width="15%">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTable">
+                            {% if patient_list %}
+                            {% for patient in patient_list %}
+                            <tr>
+                                <td align="center" style="vertical-align: middle;">{{ patient.idx }}</td>
+                                <td align="center" id="Mytable" style="vertical-align: middle;">{{ patient.patient_name }}</td>
+                                <td align="center" id="Mytable2" style="vertical-align: middle;">{{ patient.visit_date }}</td>
+                                <td align="center" id="Mytable3" style="vertical-align: middle;">{{ patient.doctor }}</td>
+                                <td align="center" style="vertical-align: middle;"><button type="button" class="btn btn-outline-secondary" onclick="location.href='{% url 'patient_detail' patient.idx 0 0 %}'">Detail</button></td>
+                                {% if patient.doctor.username == doctorname %}
+                                <form action="{% url 'remove_list' patient.idx %}" method="POST">
+                                    {% csrf_token %}
+                                    <td><button type="submit" class="btn btn-outline-danger" onclick="confirmDelete(event, this)">Delete</button></td>
+                                </form>
+                                {% else %}
+                                <td align="center" style="vertical-align: middle;"><button type="button" class="btn btn-outline-info" onclick="dont_delete()">Delete</button></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="6" align='center'>환자 데이터가 없습니다.</td>
+                            </tr>
+
+                            {% endif %}
+                            <small style="color: red;" id="type-error">{{ type_error }}
+
+                        </tbody>
+                    </table>
+                       
+                    
+                    <div class="col-sm-12 col-md-7" id="page_button">
+                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            <ul class="pagination">
+                                {% if patient_list.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1&keyword={{ keyword }}&search={{ search_query }}&entry={{ entry }}">First</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ patient_list.previous_page_number }}&keyword={{ keyword }}&search={{ search_query }}&entry={{ entry }}">Previous</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">First</a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Previous</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for page_number in patient_list.paginator.page_range %}
+                                    {% if page_number >= patient_list.number|add:-2 and page_number <= patient_list.number|add:2 %}
+                                        {% if page_number == patient_list.number %}
+                                            <li class="page-item active">
+                                                <a class="page-link" href="?page={{ page_number }}&keyword={{ keyword }}&search={{ search_query }}&entry={{ entry }}">{{ page_number }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_number }}&keyword={{ keyword }}&search={{ search_query }}&entry={{ entry }}">{{ page_number }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if patient_list.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ patient_list.next_page_number }}&keyword={{ keyword }}&search={{ search_query }}&entry={{ entry }}">Next</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ patient_list.paginator.num_pages }}&keyword={{ keyword }}&search={{ search_query }}&entry={{ entry }}">Last</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Last</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            {% comment %} <div class="dataTables_info" id="dataTable_info" role = "status" aria-live="polite">Showing {{ page_obj.number }} to {{ last_page }} of {{ page_obj.paginator.count }} entries</div> {% endcomment %}
+                        </div>
+
+                        
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function searchClear() {
+    const list_url = new URL(window.location.href);
+    list_url.searchParams.delete('keyword');
+    list_url.searchParams.delete('search');
+    list_url.searchParams.delete('entry');
+
+    window.location.href = list_url.href;
+}
+
+function dont_delete() {
+    alert("이미지를 업로드 한 진단의만 삭제할 수 있습니다.")
+}
+
+function confirmDelete(event, button) {
+        event.preventDefault();
+        if (confirm("정말 삭제하시겠습니까?")) {
+            button.form.submit();
+        }
+    }
+
+function submitForm() {
+    var list_count = document.getElementById("count_form");
+    list_count.action = "{% url 'patient_list' %}?keyword={{ keyword }}&search={{ search_query }}";
+    list_count.submit();
+}
+
+function blinkText() {
+        var typeErrorElement = document.getElementById('type-error');
+        typeErrorElement.style.visibility = (typeErrorElement.style.visibility === 'hidden') ? 'visible' : 'hidden';
+    }
+    var blinkInterval = setInterval(blinkText, 300);
+    setTimeout(function() {
+        clearInterval(blinkInterval);
+        typeErrorElement.style.display = 'none'; 
+    }, 2500);
+</script>
+    
+{% endblock %}

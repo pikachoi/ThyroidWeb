@@ -1,0 +1,43 @@
+{% extends 'Accounts_base.html' %}
+{% load static %}
+{% block content %}
+    <div style="height:50%;">
+        <div class="account">
+            <h1 class="h4 text-gray-900 mb-4">아이디 찾기</h1><br>
+            <h5 class="h4 text-gray-900 mb-4">{{real_name}}
+                <span style="color: rgb(252, 113, 8); font-size: x-large;">
+                    {{doctor_username}}
+                </span>{{end_text}}
+                <span style="color: rgb(252, 8, 8); font-size:medium;">{{error}}</span>
+            </h5>
+         
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <input name="name" id = "name" type="text" placeholder="이름" required>
+            </div>
+            <div>
+                <input name="email" type="email" placeholder="이메일" required>
+            </div>
+            <div>
+                <input name="License_Number" id = "License_Number" type="text" placeholder="의사면허번호" required>
+            </div>
+            <select name="question" class="pass_search">
+                {% for q in question %}
+                    <option>{{ q }}</option>
+                {% endfor %}
+            </select>
+
+
+            
+            <div>
+                <input name="hint" id = "hint" type="text" placeholder="비밀번호 힌트 답변" required>
+            </div>
+
+            <input a href="{% url 'login' %}" type="submit" class="create_btn" value="아이디 찾기"></input>
+
+            <button class = "home_button" type = "button" onclick = "location.href = '../login/';">로그인 화면</button>
+        </form>   
+    </div> 
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>LTLUX</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
+        <link rel="stylesheet" href="{% static 'css/default.css' %}">
+    </head>
+    <body>
+        <div id = 'wrapper'>
+            <img class="logo_img" src="{% static 'img/ltlux-logo.png' %}"></img>
+            {% block content %} 
+            {% endblock %}
+        </div>
+    </body>
+    <footer>
+        <script type="text/javascript" src="{% static 'js/password_check.js' %}"></script>
+        <div>
+            <hr>
+            <img class = "footer_img" src="{% static 'img/lt4_logo.png' %}">
+                Copyright © Lt4 Corp. All Rights Reserved.
+            </img>
+        </div>    
+    </footer>
+</html>

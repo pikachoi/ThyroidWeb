@@ -1,0 +1,83 @@
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>LTLUX</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
+        
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}" >
+        <link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/sidebar_style.css' %}">
+        {% comment %}<link rel="stylesheet" type="text/css" href="{% static 'css/sb-admin-2.min.css' %}" >{% endcomment %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/sb-admin-2.css' %}" >
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css">
+
+        <script type="text/javascript">document.oncontextmenu = function(){return false;}</script>
+        <script type="text/javascript" src="{% static 'js/popupImage.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/tagging.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/sb-admin-2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/password_check.js' %}"></script>
+        
+        {% comment %} <script type="text/javascript" src="{% static 'js/history_blank_modal.js' %}"></script> {% endcomment %}
+        <script type="text/javascript" src="{% static 'js/demo/datatables-demo.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/chart_persent.js' %}"></script>
+    </head>
+    <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+        <header class = "top-bar">
+            <img id = "logo" style="width: 200px;" src="{% static 'img/ltlux-logo.png' %}"></img>
+            <nav>
+                <span>
+                    <a class="collapse-item" href="{% url 'diagnosis_home' %}">AI Interpretation</a>
+                </span>
+                <!-- <span>
+                    <a class="collapse-item" href="{% url 'upload_file' %}">DICOM Converter</a>
+                </span> -->
+                <span>
+                    <a class="collapse-item" href="{% url 'patient_list' %}">Clinic Form</a>
+                </span>
+                <span>
+                    <a class="collapse-item" href="{% url 'patient_chart' %}">Chart</a>    
+                </span>
+                <span>
+                    <a class="collapse-item" href="{% url 'logout' %}">Logout</a>
+                </span>
+            </nav>
+        </header>
+            {% csrf_token %}
+            {% block content %} 
+            {% endblock %}
+        <footer>            
+            <div>
+                <hr>
+                <img class = "footer_img" src="{% static 'img/lt4_logo.png' %}">
+                    Copyright © Lt4 Corp. All Rights Reserved.
+                </img>
+            </div>    
+        </footer>
+    </body>
+</html>

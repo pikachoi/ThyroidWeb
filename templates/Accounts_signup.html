@@ -1,0 +1,66 @@
+{% extends 'Accounts_base.html' %}
+{% load static %}
+{% block content %}
+    <div style="height:50%;">
+        <div class="account">
+            <h1 class="h4 text-gray-900 mb-4">회원가입</h1>
+        </div>
+        <form method="POST" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <div>
+                <input name="username" id = "id" type="text" placeholder="아이디" required>
+            </div>
+            <div id = "warning_signup">
+                {{ exists_id }}
+                {{ check_username }}
+            </div>
+            <div>
+                <input name="password1" id ="password1" type="password"  placeholder="비밀번호" required>
+            </div>
+            <div>
+                <input name="password2" id ="password2" type="password"  placeholder="비밀번호 재확인" required>
+            </div>
+            <div id = "warning_signup">
+                {{ check_password }}
+                {{ wrong_password }}
+            </div>
+            <div>
+                <input name="name" id = "name" type="text" placeholder="이름" required>
+            </div>
+            <div>
+                <input name="email" type="email" placeholder="이메일" required>
+            </div>
+            <div>
+                <input name="phonenumber" type="tel" placeholder="휴대폰번호('-' 제외)" required>
+            </div>
+            <div id = "warning_signup">
+                {{ wrong_phone }}
+            </div>
+            <div>
+                <input name="License_Number" id = "License_Number" type="text" placeholder="의사면허번호" required>
+            </div>
+            <div id = "warning_signup">
+                {{ exists_license }}
+            </div>
+            <div>
+                <input name="Affiliation" id = "Affiliation" type="text" placeholder="소속" required>
+            </div>
+            <div>
+                <input name="Rank" id = "Rank" type="text" placeholder="직급 / 직위" required>
+            </div>
+            <div>
+                <input name="Subject" id = "Subject" type="text" placeholder="진료 과목" required>
+            </div>
+            <select name="question" class="pass_search">
+                {% for q in question %}
+                    <option>{{ q }}</option>
+                {% endfor %}
+            </select>
+            <div>
+                <input name="hint" id = "hint" type="text" placeholder="비밀번호 힌트 답변" required>
+            </div>
+            <input a href="{% url 'login' %}" type="submit" class="create_btn" value="계정생성"></input>
+            <button class = "home_button" type="button" onclick="location.href='{% url 'login' %}'">로그인 화면</button>
+        </form>   
+    </div> 
+{% endblock %}

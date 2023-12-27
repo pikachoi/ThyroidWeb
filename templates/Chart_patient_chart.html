@@ -1,0 +1,518 @@
+{% extends "Diagnosis_base.html" %}
+{% block content %}
+{% load static %}
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <br><br><br>
+            <h5 class="m-0 ml-3 text-gray-800">Charts : </h5>
+            <p class="m-0 ml-2">검진 환자들의 결과 통계를 시각화하여 나타내는 페이지 입니다.</p> 
+            <div class="card-body">
+                <h1>QCR(Quantitative Concordance Rate) : {{ quantitative_Data|floatformat:3 }}%</h1>
+                <table style="width:100%;">
+                    <tr>
+                        <td style="vertical-align:middle; width:70%; ">
+                            <div class="progress progress-striped active" style="margin-bottom: 0px; height:35px;">
+                                <div class="positiveQCR" style="width:{{agree_rate}}%; display: flex; flex-direction: column; justify-content: center; font-size:20px;
+                                overflow: hidden; color: #fff; text-align: center; white-space: nowrap; background-color: #0080ff; transition: width 0.6s ease;">
+                                    <span style="vertical-align:middle">Agree : {{ agree_tagging }}</span>
+                                </div>
+                                <div class="negativeQCR " style="width:{{disagree_rate}}%;display: flex; flex-direction: column; justify-content: center; font-size:20px;
+                                overflow: hidden; color: #fff; text-align: center; white-space: nowrap; background-color: #00498c; transition: width 0.6s ease;">
+                                    <span style="vertical-align:middle">Disagree : {{ disagree_tagging }}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br><br>
+                <h3 classs="h3 mb-2 text-gray-400">전체 환자의 검진 통계입니다.</h3>
+                {% if crops_count %}
+                    <div class="row">
+                        <div class="card shadow m-2" style="width: 30%; height: 450px;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">K-TIRADS</h6>
+                            </div>
+                            <div class="card-body">            
+                                <canvas id="total_K-TIRADS"></canvas>
+                            </div>
+                        </div>
+                        <div class="card shadow m-2" style="width: 30%; height: 450px;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" style="width: 380px;">Benign / Malignant</h6>
+                            </div>
+                            <div class="card-body">                              
+                                <canvas id="total_Malignant"></canvas>
+                            </div>
+                        </div>
+                        <div class="card shadow m-2" style="width: 30%; height: 450px;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" style="width: 380px;">Positive / Negative</h6>
+                            </div>
+                            <div class="card-body">                              
+                                <canvas id="total_Positive"></canvas>
+                            </div>
+                        </div>
+                    </div>        
+                {% else %}
+                    <h3 class="h3 mb-2 text-gray-400">□ 검진 데이터가 존재하지 않습니다.</h3>
+                {% endif %} 
+                <br></br>
+                {% if my_crops_count %}
+                    <h3 classs="h3 mb-2 text-gray-400">{{ doctorname }}님의 검진 통계입니다.</h3>
+                    <div class="row">
+                        <div class="card shadow m-2" style="width: 30%; height: 450px;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" style="width: 380px; ">K-TIRADS</h6>
+                            </div>
+                            <div class="card-body">                              
+                                <canvas id="K-TIRADS"></canvas>
+                            </div>
+                        </div>
+                        <div class="card shadow m-2" style="width: 30%; height: 450px;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" style="width: 380px; ">Benign / Malignant</h6>
+                            </div>
+                            <div class="card-body">                              
+                                <canvas id="Malignant"></canvas>
+                            </div>
+                        </div>
+                        <div class="card shadow m-2" style="width: 30%; height: 450px;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" style="width: 380px; ">Positive / Negative</h6>
+                            </div>
+                            <div class="card-body">                              
+                                <canvas id="Positive"></canvas>
+                            </div>
+                        </div>
+                    </div>        
+                {% else %}
+                    <h3 class="h3 mb-2 text-gray-400"> □ {{ doctorname }}님의 검진 데이터가 존재하지 않습니다.</h3>
+                {% endif %} 
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        // K-TIRADS 별  차트 그려주는 부분 => canvas 중 id값으로 K-TIRADS를 가지고 있는 canvas에 그림
+        KTIRADS_config = 
+        {
+            type : 'doughnut',
+            data : {
+                labels : {{ k_labels|safe }},
+                datasets : [
+                    {
+                        data : {{ tk_datas|safe }},
+                        //backgroundColor: ['#cfffe5', '#ccff66', '#ff6600', '#4e73df', '#FF9900'],
+                        backgroundColor: ['#4B89DC', '#4075BC', '#35619D', '#2A4E7D', '#203A5E'],
+                        hoverBackgroundColor: ['#cfffcc', '#99ff66', '#ff3300', '#2e59d9', '#FF6600'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)"
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                
+                caretPadding: 10,
+                },
+                legend: {
+                display: true
+                },
+                // cutoutPercentage 값을 작게 할 경우에 도넛 차트 가운데 부분이 두꺼워짐 //
+                cutoutPercentage: 35,
+
+                //  도넛 차트에 있는 데이터들 퍼센테이지를 표시해주는 부분 
+                plugins : {
+                    datalabels : {
+                        display: true,
+                        backgroundColor: '#ccc',
+                        borderRadius: 3,
+                        formatter : (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data =>{
+                                sum += data;
+                            });
+                            let percentage = (value*100 / sum).toFixed(2) + "%";
+                            return percentage;
+                        },
+                        font: {
+                            color: 'red',
+                            weight: 'bold',
+                        }
+                    },
+                    doughnutlabel: {
+                        labels: [
+                            {
+                                text: 0,
+                                font: {
+                                size: '30',
+                                weight: 'bold',
+                                }
+                        },{
+                            text: 'title',
+                            font: {
+                            size: '20',
+                            weight: 'bold',
+                            }
+                        },
+                        ]
+                    }
+                }
+            }
+        };
+
+        var ctx = document.getElementById("total_K-TIRADS").getContext('2d');
+        var myPieChart = new Chart(ctx, KTIRADS_config);
+
+        // Malignant / Benign 별  차트 그려주는 부분 => canvas 중 id값으로 Malignant 가지고 있는 canvas에 그림        
+        BM_config =  {
+            type: 'doughnut',
+            data: {
+                labels: {{ m_labels|safe }},
+                datasets: [{
+                    data: {{ tm_datas|safe }},
+                    //backgroundColor: ['#cfffe5', '#ccff66', '#ff6600'],
+                    backgroundColor: ['#4B89DC', '#35619D', '#203A5E'],
+                    hoverBackgroundColor: ['#cfffcc', '#99ff66', '#ff3300'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 35,
+
+                //  도넛 차트에 있는 데이터들 퍼센테이지를 표시해주는 부분 
+                plugins : {
+                    datalabels : {
+                        display: true,
+                        backgroundColor: '#ccc',
+                        borderRadius: 3,
+                            formatter : (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data =>{
+                                    sum += data;
+                                });
+                                let percentage = (value*100 / sum).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            font: {
+                                color: 'red',
+                                weight: 'bold',
+                            }
+                    },
+                    doughnutlabel: {
+                        display: true,
+                        labels: [{
+                          text: '550',
+                          font: {
+                            size: 20,
+                            weight: 'bold'
+                          }
+                        }, {
+                          text: 'total'
+                        }]
+                    }
+                        
+                        
+                }
+            },
+        }
+
+        var ctx = document.getElementById("total_Malignant");
+        var myPieChart = new Chart(ctx, BM_config);
+
+        // Positive / Negative 별  차트 그려주는 부분 => canvas 중 id값으로 Positive 가지고 있는 canvas에 그림
+        PN_config = {
+            type: 'doughnut',
+            data: {
+                labels: {{ p_labels|safe }},
+                datasets: [{
+                    data: {{ tp_datas|safe }},
+                    //backgroundColor: ['#cfffe5', '#ccff66', '#ff6600'],
+                    backgroundColor: ['#4B89DC', '#35619D', '#203A5E'],
+                    hoverBackgroundColor: ['#cfffcc', '#99ff66', '#ff3300'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 35,
+
+                //  도넛 차트에 있는 데이터들 퍼센테이지를 표시해주는 부분 
+                plugins : {
+                    datalabels : {
+                        display: true,
+                        backgroundColor: '#ccc',
+                        borderRadius: 3,
+                            formatter : (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data =>{
+                                    sum += data;
+                                });
+                                let percentage = (value*100 / sum).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            font: {
+                                color: 'red',
+                                weight: 'bold',
+                            }
+                        }
+                    }
+            },
+        };
+
+        var ctx = document.getElementById("total_Positive");
+        var myPieChart = new Chart(ctx, PN_config);
+
+
+        // K-TIRADS 별  차트 그려주는 부분 => canvas 중 id값으로 K-TIRADS를 가지고 있는 canvas에 그림
+        KTIRADS_config = 
+        {
+            type : 'doughnut',
+            data : {
+                labels : {{ k_labels|safe }},
+                datasets : [
+                    {
+                        data : {{ pk_datas|safe }},
+                        //backgroundColor: ['#cfffe5', '#ccff66', '#ff6600', '#4e73df', '#FF9900'],
+                        backgroundColor: ['#4B89DC', '#4075BC', '#35619D', '#2A4E7D', '#203A5E'],
+                        hoverBackgroundColor: ['#cfffcc', '#99ff66', '#ff3300', '#2e59d9', '#FF6600'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)"
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+                },
+                legend: {
+                display: true
+                },
+                // cutoutPercentage 값을 작게 할 경우에 도넛 차트 가운데 부분이 두꺼워짐 //
+                cutoutPercentage: 35,
+
+                //  도넛 차트에 있는 데이터들 퍼센테이지를 표시해주는 부분 
+                plugins : {
+                datalabels : {
+                    display: true,
+                        backgroundColor: '#ccc',
+                        borderRadius: 3,
+                        formatter : (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data =>{
+                                sum += data;
+                            });
+                            let percentage = (value*100 / sum).toFixed(2) + "%";
+                            return percentage;
+                        },
+                        font: {
+                                color: 'red',
+                                weight: 'bold',
+                            }
+                    },
+                    doughnutlabel: {
+                        display: true,
+                        labels: [{
+                          text: '550',
+                          font: {
+                            size: 20,
+                            weight: 'bold'
+                          }
+                        }, {
+                          text: 'total'
+                        }]
+                    }
+                }
+            }
+        };
+
+        var ctx = document.getElementById("K-TIRADS").getContext('2d');
+        var myPieChart = new Chart(ctx, KTIRADS_config);
+    
+
+        // Malignant / Benign 별  차트 그려주는 부분 => canvas 중 id값으로 Malignant 가지고 있는 canvas에 그림
+        BM_config =  {
+            type: 'doughnut',
+            data: {
+                labels: {{ m_labels|safe }},
+                datasets: [{
+                    data: {{ pm_datas|safe }},
+                    //backgroundColor: ['#cfffe5', '#ccff66', '#ff6600'],
+                    backgroundColor: ['#4B89DC', '#35619D', '#203A5E'],
+                    hoverBackgroundColor: ['#cfffcc', '#99ff66', '#ff3300'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 35,
+
+                //  도넛 차트에 있는 데이터들 퍼센테이지를 표시해주는 부분 
+                plugins : {
+                    datalabels : {
+                        display: true,
+                        backgroundColor: '#ccc',
+                        borderRadius: 3,
+                            formatter : (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data =>{
+                                    sum += data;
+                                });
+                                let percentage = (value*100 / sum).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            font: {
+                                color: 'red',
+                                weight: 'bold',
+                            }
+                        },
+                    doughnutlabel: {
+                        display: true,
+                        labels: [{
+                          text: '550',
+                          font: {
+                            size: 20,
+                            weight: 'bold'
+                          }
+                        }, {
+                          text: 'total'
+                        }]
+                    }
+                    }
+            },
+        }
+
+        var ctx = document.getElementById("Malignant");
+        var myPieChart = new Chart(ctx, BM_config);
+        
+        
+        // Positive / Negative 별  차트 그려주는 부분 => canvas 중 id값으로 Positive 가지고 있는 canvas에 그림
+        PN_config = {
+            type: 'doughnut',
+            data: {
+                labels: {{ p_labels|safe }},
+                datasets: [{
+                    data: {{ pp_datas|safe }},
+                    //backgroundColor: ['#cfffe5', '#ccff66', '#ff6600'],
+                    backgroundColor: ['#4B89DC', '#35619D', '#203A5E'],
+                    hoverBackgroundColor: ['#cfffcc', '#99ff66', '#ff3300'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 35,
+
+                //  도넛 차트에 있는 데이터들 퍼센테이지를 표시해주는 부분 
+                plugins : {
+                    datalabels : {
+                        display: true,
+                        backgroundColor: '#ccc',
+                        borderRadius: 3,
+                            formatter : (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data =>{
+                                    sum += data;
+                                });
+                                let percentage = (value*100 / sum).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            font: {
+                                color: 'red',
+                                weight: 'bold',
+                            }
+                        },
+                    doughnutlabel: {
+                        display: true,
+                        labels: [{
+                          text: '550',
+                          font: {
+                            size: 20,
+                            weight: 'bold'
+                          }
+                        }, {
+                          text: 'total'
+                        }]
+                    }
+                    }
+            },
+        };
+
+        var ctx = document.getElementById("Positive");
+        var myPieChart = new Chart(ctx, PN_config);
+
+    </script>
+{% endblock %}

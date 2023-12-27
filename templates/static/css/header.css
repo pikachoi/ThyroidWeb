@@ -1,0 +1,30 @@
+.top-bar {  
+    font-size : 20px;
+    text-align:left;
+    position : fixed;
+    height: 85px;
+    padding: 1rem;
+    background: #92b0e1;
+    font-weight: bold;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index : 1;
+    width : 100%;
+  }
+  
+  h1, p {
+    margin: 0;
+  }
+  
+ 
+  
+  body, html {
+    height: 100%;
+  }
+
+  .collapse-item{
+    margin-left: 40px;
+    color : #000;
+  }
+

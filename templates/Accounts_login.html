@@ -1,0 +1,32 @@
+{% extends 'Accounts_base.html' %}
+{% load static %}
+{% block content %}
+    <form method="POST" action = "{% url 'login' %}">
+        {% csrf_token %}
+        <input type="text" name="username" id="username" placeholder="아이디" autofocus required>
+        <input type="password" name="password" placeholder="비밀번호" required>
+        <div>
+            <input type="checkbox" class="custom-control-input">로그인 상태 유지
+            <input type="submit" id="login-submit" value="로그인">
+        </div>
+        <div id = "warning_login">
+            {{ check_info }}
+            {{ success_signup }}
+            {{password_reset_success}}
+        </div>
+    </form>
+    <hr id = "login_hr">
+    <div class="text-center">
+        <ul>
+            <li class="login_text">
+                <a href="{% url 'signup' %}">회원가입</a> 
+            </li>
+            <li class="login_text">
+                <a href="{% url 'id_search' %}">아이디 찾기</a> 
+            </li>
+            <li class="login_text">
+                <a href="{% url 'password_search' %}">비밀번호 찾기</a> 
+            </li>
+        </ul>
+    </div>
+{% endblock %}
