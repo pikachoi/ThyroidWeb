@@ -308,13 +308,13 @@ input[type=tel] {
 }
 
 .checklist_column{
-    width: 100px;
+    width: 120px;
     height: 30px;
-    font-size:14px;
+    font-size:12px;
     font-weight: bold;
     border-bottom: solid 1px;
     border-right: solid 1px;
-
+    /* background-color: #f7f9ff; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -324,7 +324,7 @@ input[type=tel] {
     width: 100%;
     height: 30px;
     border-bottom: solid 1px;
-
+    font-size:12px;
     display: flex;
     justify-content: left;
     align-items: center;

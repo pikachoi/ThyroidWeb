@@ -428,7 +428,7 @@
                                             <div class="checklist_one_line">
                                                 <div class="checklist_column" style="height: 80px;">Diameter</div>
                                                 <div style="width: 100%; height: 80px; border-bottom: solid 1px; text-align: left; padding: 5px;">
-                                                    <div style="width: 100%; height: 25px; display: flex; justify-content: left; align-items: center;">
+                                                    <div style=" height: 25px; display: flex; justify-content: left; align-items: center;">
                                                         <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="width" placeholder="w" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
                                                         <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="height" placeholder="l" oninput="calculateVolume(this)">
@@ -436,15 +436,106 @@
                                                         <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="depth" placeholder="h" oninput="calculateVolume(this)">
                                                         &nbsp;&nbsp;&nbsp;
                                                         <select style="width: 50px; height: 100%; border: solid 1px; background-color: rgb(221, 221, 221);" id="unitSelector" onchange="convertUnits()">
-                                                            <option value="mm">mm</option>
+                                                            <option value="mm" selected>mm</option>
                                                             <option value="cm">cm</option>
                                                         </select>
                                                     </div>
-                                                    <div style="margin-top: 5px;">Volume=&nbsp;&nbsp; <small style="font-size: 14px; color: brown;" id="result"></small><small style="font-size: 14px;"> &nbsp; mL</small></div>
+                                                    <div style="margin-top: 5px;">Volume=&nbsp;&nbsp; <small style="font-size: 14px; color: brown;" id="volume-result"></small><small style="font-size: 14px;"> &nbsp; mL</small></div>
                                                     <div style="margin-top: 0px;">Maximal size=&nbsp;&nbsp; <small style="font-size: 14px; color: brown" id="largestNumber"></small> <small style="font-size: 14px;" id="currentUnit"> &nbsp;</small></div>
                                                 </div>
                                             </div>
                                             
+                                            <!-- 특성 Echogenicity -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column">Echogenicity</div>
+                                                <div class="checklist_items">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                    <label style="margin: 0px;" for="item2-1">Hypoechogenicity</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                    <label style="margin: 0px;" for="item2-2">Isoechogenicity</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 특성 Margin -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column">Margin</div>
+                                                <div class="checklist_items">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                    <label style="margin: 0px;" for="item2-1">Smooth</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                    <label style="margin: 0px;" for="item2-2">Ill-defined</label>
+
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
+                                                    <label style="margin: 0px;" for="item2-3">Spiculated</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 특성 Echogenicity foci -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column" style="height: 45px;">Echogenicity foci</div>
+                                                <div class="checklist_items" style="height: 45px;">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                    <label style="margin: 0px;" for="item2-1">Absent</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                    <label style="margin: 0px;" for="item2-2">Punctate echogenic foci</label>
+                                        
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
+                                                    <label style="margin: 0px;" for="item2-3">Macro</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 특성 Orientation -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column">Orientation</div>
+                                                <div class="checklist_items">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                    <label style="margin: 0px;" for="item2-1">Parallel</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                    <label style="margin: 0px;" for="item2-2">Nonparallel</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 특성 Shape -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column">Shape</div>
+                                                <div class="checklist_items">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                    <label style="margin: 0px;" for="item2-1">Round_to_oval</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                    <label style="margin: 0px;" for="item2-2">Irregular</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 특성 Internal -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column" style="height: 50px;">Internal</div>
+                                                <div style="width: 100%;">
+                                                    
+                                                    <div class="checklist_items" style="height: 25px; border: 0px;">
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                        <label style="margin: 0px;" for="item2-1">Solid</label>
+                                        
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                        <label style="margin: 0px;" for="item2-2">Predominantly_Solid</label>
+                                                    </div>
+                                                    <div class="checklist_items" style="height: 25px;">
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
+                                                        <label style="margin: 0px;" for="item2-3">Benign_Cystic</label>
+                       
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
+                                                        <label style="margin: 0px;" for="item2-3">Colloid</label>
+
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
+                                                        <label style="margin: 0px;" for="item2-3">Spongiform</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
 
                                         </div>
                                         <!-- 복사된 판독문 -->
@@ -474,7 +565,7 @@
                                         <br>
                                         K-TIRADS 기준 위험도는 <span id="item2-text">(    )</span> 등급으로 보입니다.
                                         <br>
-                                        결절의 부피는 <span id="result2">(    )</span> 입니다.
+                                        결절의 부피는 <span id="volume-result2">(    )</span> 입니다.
                                     </div>
 
                                 </form>
@@ -503,13 +594,10 @@
 
             // 입력된 숫자가 없으면 메시지 표시
             if (isNaN(width) || isNaN(height) || isNaN(depth)) {
-                document.getElementById("result").textContent = " ";
+                document.getElementById("volume-result").textContent = " ";
                 document.getElementById("largestNumber").textContent = " ";
                 return;
             }
-
-            // // 육면체의 부피 계산
-            // var volume = width * height * depth;
 
             // 구의 부피 계산
             var Wradius = width / 2;
@@ -525,14 +613,13 @@
 
             // 결과를 화면에 표시
             var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
-            document.getElementById("result").textContent = roundedVolume;
-            document.getElementById("result2").textContent = roundedVolume;
+            document.getElementById("volume-result").textContent = roundedVolume;
+            document.getElementById("volume-result2").textContent = roundedVolume;
             document.getElementById("currentUnit").textContent = currentUnit;
 
             var largestNumber = Math.max(width, height, depth);
             document.getElementById("largestNumber").textContent = largestNumber;
 
-       
             // container_B에 복사
             const containerAText = document.querySelector('.original_interpretation').innerText;
             textarea.value = containerAText; // textarea에 original_interpretation 내용 복사
@@ -595,14 +682,31 @@
             });
 
             // 텍스트 초기화
-            item1Text.textContent = '';
-            item2Text.textContent = '';
+            item1Text.textContent = '(    )';
+            item2Text.textContent = '(    )';
+            document.getElementById("volume-result2").textContent = '(    )';
 
-            // container_B에 빈 문자열 설정
+            // 부피 계산 입력값 초기화
+            document.getElementById("width").value = '';
+            document.getElementById("height").value = '';
+            document.getElementById("depth").value = '';
+            
+            // 부피 결과 및 최대 크기 초기화
+            document.getElementById("volume-result").textContent = '';
+            document.getElementById("largestNumber").textContent = '';
+
+            // 단위 선택 옵션 초기화
+            unitSelector.value = 'mm';
+
+            // 단위 표시 초기화
+            document.getElementById("currentUnit").textContent = 'mm'; // 단위 'mm'로 초기화
+            
+            // textarea에 빈 문자열 설정
             textarea.value = '';
         });
 
     </script>
+
 
     <script>
         
