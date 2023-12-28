@@ -470,7 +470,11 @@
 
                                     <!-- 원본 판독문 -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                     <div class="original_interpretation">
-                                        결절의 특성으로는 <span id="item1-text"></span> 특성이 관측되어 K-TIRADS 기준 위험도는 <span id="item2-text"></span> 등급으로 보입니다.
+                                        결절의 특성으로는 <span id="item1-text">(    )</span> 특성이 관측되어,
+                                        <br>
+                                        K-TIRADS 기준 위험도는 <span id="item2-text">(    )</span> 등급으로 보입니다.
+                                        <br>
+                                        결절의 부피는 <span id="result2">(    )</span> 입니다.
                                     </div>
 
                                 </form>
@@ -522,10 +526,16 @@
             // 결과를 화면에 표시
             var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
             document.getElementById("result").textContent = roundedVolume;
+            document.getElementById("result2").textContent = roundedVolume;
             document.getElementById("currentUnit").textContent = currentUnit;
 
             var largestNumber = Math.max(width, height, depth);
             document.getElementById("largestNumber").textContent = largestNumber;
+
+       
+            // container_B에 복사
+            const containerAText = document.querySelector('.original_interpretation').innerText;
+            textarea.value = containerAText; // textarea에 original_interpretation 내용 복사
         }
 
         function convertUnits() {
@@ -573,7 +583,7 @@
 
                 // container_B에 복사
                 const containerAText = document.querySelector('.original_interpretation').innerText;
-                textarea.value = containerAText; // textarea에 container_C의 내용 복사
+                textarea.value = containerAText; // textarea에 original_interpretation 내용 복사
             });
         });
 
