@@ -172,7 +172,7 @@
                                                 <td>
                                                     <div style="text-align: center;font-size: 13px;">
                                                         {% for spec, value in crop_img.classifi_result|get_spec:"ECHO" %}
-                                                        <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}}ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ : {{value}} % </p>
+                                                        <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
                                                         {% endfor %}
                                                     </div>
                                                 </td>
@@ -606,8 +606,25 @@
                                         K-TIRADS 기준 위험도는 <span id="item8-text">(    )</span> 등급으로 보입니다.
                                         <br>
                                         K-TIRADS 기준 위험도는 <span id="item9-text">(    )</span> 등급으로 보입니다.
-                                        
+                                        <br>
+                                        <span id="asas">(    )</span> 등급으로 보입니다.
                                     </div>
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"ECHO" %}
+                                        <div class="echogenicity-result" data-spec="{{ spec }}" data-value="{{ value }}"></div>
+                                    {% endfor %}
+
+
+                                    <!-- BM
+                                    PN
+                                    ECHO
+                                    MARGIN
+                                    ECHOGENIC_FOCI
+                                    ORIENTATION
+                                    SHAPE
+                                    COMPOSITION -->
+                            
+
 
                                 </form>
                             </div>
@@ -617,6 +634,18 @@
             </div>
         </div>
     </div>
+        
+    <script>
+        // LTLUX 펀독 결과 불러오기
+        const elements = document.querySelectorAll('.echogenicity-result'); // 클래스 선택자를 사용하여 원하는 요소 선택
+
+        elements.forEach(element => {
+            const specData = element.getAttribute('data-spec');
+            const valueData = element.getAttribute('data-value');
+            console.log(`${specData}${valueData}`);
+        });
+
+    </script>
 
     <script>
         var unitSelector = document.getElementById("unitSelector");
