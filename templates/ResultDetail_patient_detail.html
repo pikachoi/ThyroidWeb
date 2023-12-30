@@ -614,18 +614,17 @@
                                         <div class="echogenicity-result" data-spec="{{ spec }}" data-value="{{ value }}"></div>
                                     {% endfor %}
 
-
-                                    <!-- BM
+                                    <!--
+                                    BM
                                     PN
                                     ECHO
                                     MARGIN
                                     ECHOGENIC_FOCI
                                     ORIENTATION
                                     SHAPE
-                                    COMPOSITION -->
+                                    COMPOSITION
+                                    -->
                             
-
-
                                 </form>
                             </div>
                         </div>
@@ -636,7 +635,7 @@
     </div>
         
     <script>
-        // LTLUX 펀독 결과 불러오기
+        // LTLUX 판독 결과 불러오기
         const elements = document.querySelectorAll('.echogenicity-result'); // 클래스 선택자를 사용하여 원하는 요소 선택
 
         elements.forEach(element => {
@@ -644,7 +643,6 @@
             const valueData = element.getAttribute('data-value');
             console.log(`${specData}${valueData}`);
         });
-
     </script>
 
     <script>
