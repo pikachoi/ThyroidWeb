@@ -409,7 +409,7 @@
                                                 </div>
                                             </div>
 
-                                            <!-- 결절 위치 (높은, 중간, 낮은) dddddddddddddddddddddddddddd-->
+                                            <!-- 결절 위치 (높은, 중간, 낮은) -->
                                             <div class="checklist_one_line">
                                                 <div class="checklist_column">Location</div>
                                                 <div class="checklist_items">
@@ -587,27 +587,27 @@
 
                                     <!-- 원본 판독문 -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                     <div class="original_interpretation">
-                                        결절의 특성으로는 <span id="item1-text">(    )</span> 특성이 관측되어,
+                                        결절의 특성으로는 <span id="item1-text"></span> 특성이 관측되어,
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item2-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item2-text"></span> 등급으로 보입니다.
                                         <br>
-                                        결절의 부피는 <span id="volume-result2">(    )</span> 입니다.
+                                        결절의 부피는 <span id="volume-result2"></span> 입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item3-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item3-text"></span> 등급으로 보입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item4-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item4-text"></span> 등급으로 보입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item5-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item5-text"></span> 등급으로 보입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item6-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item6-text"></span> 등급으로 보입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item7-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item7-text"></span> 등급으로 보입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item8-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item8-text"></span> 등급으로 보입니다.
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item9-text">(    )</span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도는 <span id="item9-text"></span> 등급으로 보입니다.
                                         <br>
-                                        <span id="asas">(    )</span> 등급으로 보입니다.
+                                        <span id="asas"></span> 등급으로 보입니다.
                                     </div>
 
                                     {% for spec, value in crop_img.classifi_result|get_spec:"ECHO" %}
@@ -634,17 +634,8 @@
         </div>
     </div>
         
-    <script>
-        // LTLUX 판독 결과 불러오기
-        const elements = document.querySelectorAll('.echogenicity-result'); // 클래스 선택자를 사용하여 원하는 요소 선택
 
-        elements.forEach(element => {
-            const specData = element.getAttribute('data-spec');
-            const valueData = element.getAttribute('data-value');
-            console.log(`${specData}${valueData}`);
-        });
-    </script>
-
+    
     <script>
         var unitSelector = document.getElementById("unitSelector");
 
@@ -700,6 +691,53 @@
         // 초기 계산 수행
         calculateVolume(document.getElementById("width"));
     </script>
+
+
+    <!-- LTLUX 특성 분류 결과를 체크 항목의 기본값으로 가져오기 -->
+    <script>
+        // elements 배열 정의 및 요소 선택
+        const elements = document.querySelectorAll('.echogenicity-result');
+        const item33Text = document.getElementById('item3-text');
+
+        // 먼저 첫 번째와 두 번째 valueData를 저장할 변수를 선언합니다.
+        let firstValue = null;
+        let secondValue = null;
+        
+        elements.forEach(element => {
+            const specData = element.getAttribute('data-spec');
+            const valueData = parseFloat(element.getAttribute('data-value')); // 문자열을 숫자로 변환
+            // 첫 번째와 두 번째 valueData를 설정합니다.
+            if (firstValue === null) {
+                firstValue = valueData;
+            } else if (secondValue === null) {
+                secondValue = valueData;
+            }
+        
+            console.log(`${specData}${valueData}`);
+        });
+        
+        // 숫자 비교 후, 더 큰 valueData에 해당하는 specData를 가져옵니다.
+        let resultSpecData = null;
+        if (firstValue !== null && secondValue !== null) {
+            if (firstValue > secondValue) {
+                resultSpecData = elements[0].getAttribute('data-spec');
+            } else {
+                resultSpecData = elements[1].getAttribute('data-spec');
+            }
+        }
+        
+        console.log(`더 큰 숫자에 해당하는 specData: ${resultSpecData}`);
+
+        // 만약 resultSpecData가 Hypoechogenicity와 일치한다면 해당 항목을 체크합니다.
+        if (resultSpecData === 'Hypoechogenicity') {
+            const hypoechogenicityCheckbox = document.getElementById("item3-1");
+            hypoechogenicityCheckbox.checked = true; // 체크
+            item33Text.textContent = `Hypoechogenicity`;
+        }
+
+    </script>
+
+
 
     <script>
         // 체크박스 변경 시 이벤트 처리
@@ -799,9 +837,9 @@
                     item9Text.textContent = ` ${checkedItemValue}`;
                 }
 
-                // container_B에 복사
+                // textarea에 original_interpretation 내용 복사
                 const containerAText = document.querySelector('.original_interpretation').innerText;
-                textarea.value = containerAText; // textarea에 original_interpretation 내용 복사
+                textarea.value = containerAText; 
             });
         });
 
@@ -813,15 +851,7 @@
             });
 
             // 텍스트 초기화
-            item1Text.textContent = '(    )';
-            item2Text.textContent = '(    )';
-            item3Text.textContent = '(    )';
-            item4Text.textContent = '(    )';
-            item5Text.textContent = '(    )';
-            item6Text.textContent = '(    )';
-            item7Text.textContent = '(    )';
-            item8Text.textContent = '(    )';
-            item9Text.textContent = '(    )';
+            // 초기화 시 ltlux 결과 불러오는 함수 작동
 
             document.getElementById("volume-result2").textContent = '(    )';
 
@@ -841,7 +871,7 @@
             document.getElementById("currentUnit").textContent = 'mm'; // 단위 'mm'로 초기화
             
             // textarea에 빈 문자열 설정
-            textarea.value = '';
+            // textarea.value = '';
         });
 
     </script>
@@ -897,7 +927,11 @@
 
         btn_interpretation.addEventListener('click', () => {
             text_interpretation.style.display = 'block';
-        
+
+                // textarea에 original_interpretation 내용 복사
+                const containerAText = document.querySelector('.original_interpretation').innerText;
+
+                textarea.value = containerAText; 
         interpretation_modal_close.onclick = function() {
             text_interpretation.style.display = "none";
             }
