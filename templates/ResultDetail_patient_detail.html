@@ -444,7 +444,31 @@
                                                     <div style="margin-top: 0px;">Maximal size=&nbsp;&nbsp; <small style="font-size: 14px; color: brown" id="largestNumber"></small> <small style="font-size: 14px;" id="currentUnit"> &nbsp;</small></div>
                                                 </div>
                                             </div>
-                                            
+
+                                            <!-- 종양의 양성과 악성을 평가 -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column">B/M</div>
+                                                <div class="checklist_items">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item0-1" name="item0" value="Item0-1">
+                                                    <label style="margin: 0px;" for="item0-1">Benign</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item0-2" name="item0" value="Item0-2">
+                                                    <label style="margin: 0px;" for="item0-2">Malignant</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- 종양의 변이 여부를 평가 -->
+                                            <div class="checklist_one_line">
+                                                <div class="checklist_column">P/N</div>
+                                                <div class="checklist_items">
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item00-1" name="item00" value="Item00-1">
+                                                    <label style="margin: 0px;" for="item00-1">Positive</label>
+                                    
+                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item00-2" name="item00" value="Item00-2">
+                                                    <label style="margin: 0px;" for="item00-2">Negative</label>
+                                                </div>
+                                            </div>
+
                                             <!-- 특성 Echogenicity -->
                                             <div class="checklist_one_line">
                                                 <div class="checklist_column">Echogenicity</div>
@@ -587,44 +611,61 @@
 
                                     <!-- 원본 판독문 -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                     <div class="original_interpretation">
-                                        결절의 특성으로는 <span id="item1-text"></span> 특성이 관측되어,
+                                        악성 여부: <span id="item0-text"></span>, <span id="item00-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item2-text"></span> 등급으로 보입니다.
+                                        결절 위치: <span id="item1-text"></span>, <span id="item2-text"></span>
                                         <br>
-                                        결절의 부피는 <span id="volume-result2"></span> 입니다.
+                                        결절 부피: <span id="volume-result2"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item3-text"></span> 등급으로 보입니다.
+                                        결절 특성: <span id="item3-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item4-text"></span> 등급으로 보입니다.
+                                        결절 특성: <span id="item4-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item5-text"></span> 등급으로 보입니다.
+                                        결절 특성: <span id="item5-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item6-text"></span> 등급으로 보입니다.
+                                        결절 특성: <span id="item6-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item7-text"></span> 등급으로 보입니다.
+                                        결절 특성: <span id="item7-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item8-text"></span> 등급으로 보입니다.
+                                        결절 특성: <span id="item8-text"></span>
                                         <br>
-                                        K-TIRADS 기준 위험도는 <span id="item9-text"></span> 등급으로 보입니다.
+                                        K-TIRADS 기준 위험도: <span id="item9-text"></span>
                                         <br>
-                                        <span id="asas"></span> 등급으로 보입니다.
+                                        <span id="asas"></span>
                                     </div>
 
-                                    {% for spec, value in crop_img.classifi_result|get_spec:"ECHO" %}
-                                        <div class="echogenicity-result" data-spec="{{ spec }}" data-value="{{ value }}"></div>
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"BM" %}
+                                    <div class="BM-result" BM-spec="{{ spec }}" BM-value="{{ value }}"></div>
                                     {% endfor %}
 
-                                    <!--
-                                    BM
-                                    PN
-                                    ECHO
-                                    MARGIN
-                                    ECHOGENIC_FOCI
-                                    ORIENTATION
-                                    SHAPE
-                                    COMPOSITION
-                                    -->
-                            
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"PN" %}
+                                    <div class="PN-result" PN-spec="{{ spec }}" PN-value="{{ value }}"></div>
+                                    {% endfor %}
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"ECHO" %}
+                                        <div class="ECHO-result" ECHO-spec="{{ spec }}" ECHO-value="{{ value }}"></div>
+                                    {% endfor %}
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"MARGIN" %}
+                                    <div class="MARGIN-result" MARGIN-spec="{{ spec }}" MARGIN-value="{{ value }}"></div>
+                                    {% endfor %}
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"ECHOGENIC_FOCI" %}
+                                    <div class="ECHOGENIC_FOCI-result" ECHOGENIC_FOCI-spec="{{ spec }}" ECHOGENIC_FOCI-value="{{ value }}"></div>
+                                    {% endfor %}
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"ORIENTATION" %}
+                                    <div class="ORIENTATION-result" ORIENTATION-spec="{{ spec }}" ORIENTATION-value="{{ value }}"></div>
+                                    {% endfor %}
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"SHAPE" %}
+                                    <div class="SHAPE-result" SHAPE-spec="{{ spec }}" SHAPE-value="{{ value }}"></div>
+                                    {% endfor %}
+
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"COMPOSITION" %}
+                                    <div class="COMPOSITION-result" COMPOSITION-spec="{{ spec }}" COMPOSITION-value="{{ value }}"></div>
+                                    {% endfor %}
+
                                 </form>
                             </div>
                         </div>
@@ -634,8 +675,56 @@
         </div>
     </div>
         
+    <!-- LTLUX 특성 분류 결과를 체크 항목의 기본값으로 가져오기 -->
+    <script>
+        // elements 배열 정의 및 요소 선택
+        const ECHO_elements = document.querySelectorAll('.ECHO-result');
+        const ECHO_Text = document.getElementById('item3-text');
 
+        // 먼저 첫 번째와 두 번째 valueData를 저장할 변수를 선언합니다.
+        let ECHO_1_Value = null;
+        let ECHO_2_Value = null;
+        
+        ECHO_elements.forEach(element => {
+            const ECHO_specData = element.getAttribute('ECHO-spec');
+            const ECHO_valueData = parseFloat(element.getAttribute('ECHO-value')); // 문자열을 숫자로 변환
+            // 첫 번째와 두 번째 valueData를 설정합니다.
+            if (ECHO_1_Value === null) {
+                ECHO_1_Value = ECHO_valueData;
+            } else if (ECHO_2_Value === null) {
+                ECHO_2_Value = ECHO_valueData;
+            }
+        
+            console.log(`${ECHO_specData}${ECHO_valueData}`);
+        });
+        
+        // 숫자 비교 후, 더 큰 valueData에 해당하는 specData를 가져옵니다.
+        let ECHO_resultSpecData = null;
+        if (ECHO_1_Value !== null && ECHO_2_Value !== null) {
+            if (ECHO_1_Value > ECHO_2_Value) {
+                ECHO_resultSpecData = ECHO_elements[0].getAttribute('ECHO-spec');
+            } else {
+                ECHO_resultSpecData = ECHO_elements[1].getAttribute('ECHO-spec');
+            }
+        }
+        
+        console.log(`더 큰 숫자에 해당하는 specData: ${ECHO_resultSpecData}`);
+
+        // 만약 resultSpecData가 Hypoechogenicity와 일치한다면 해당 항목을 체크합니다.
+        if (ECHO_resultSpecData === 'Hypoechogenicity') {
+            const hypoechogenicityCheckbox = document.getElementById("item3-1");
+            hypoechogenicityCheckbox.checked = true; // 체크
+            ECHO_Text.textContent = `Hypoechogenicity`;
+        }
+        else {
+            const Isoechogenicity = document.getElementById("item3-1");
+            Isoechogenicity.checked = true; // 체크
+            ECHO_Text.textContent = `Isoechogenicity`;
+        }
+    </script>
     
+
+
     <script>
         var unitSelector = document.getElementById("unitSelector");
 
@@ -693,56 +782,13 @@
     </script>
 
 
-    <!-- LTLUX 특성 분류 결과를 체크 항목의 기본값으로 가져오기 -->
-    <script>
-        // elements 배열 정의 및 요소 선택
-        const elements = document.querySelectorAll('.echogenicity-result');
-        const item33Text = document.getElementById('item3-text');
-
-        // 먼저 첫 번째와 두 번째 valueData를 저장할 변수를 선언합니다.
-        let firstValue = null;
-        let secondValue = null;
-        
-        elements.forEach(element => {
-            const specData = element.getAttribute('data-spec');
-            const valueData = parseFloat(element.getAttribute('data-value')); // 문자열을 숫자로 변환
-            // 첫 번째와 두 번째 valueData를 설정합니다.
-            if (firstValue === null) {
-                firstValue = valueData;
-            } else if (secondValue === null) {
-                secondValue = valueData;
-            }
-        
-            console.log(`${specData}${valueData}`);
-        });
-        
-        // 숫자 비교 후, 더 큰 valueData에 해당하는 specData를 가져옵니다.
-        let resultSpecData = null;
-        if (firstValue !== null && secondValue !== null) {
-            if (firstValue > secondValue) {
-                resultSpecData = elements[0].getAttribute('data-spec');
-            } else {
-                resultSpecData = elements[1].getAttribute('data-spec');
-            }
-        }
-        
-        console.log(`더 큰 숫자에 해당하는 specData: ${resultSpecData}`);
-
-        // 만약 resultSpecData가 Hypoechogenicity와 일치한다면 해당 항목을 체크합니다.
-        if (resultSpecData === 'Hypoechogenicity') {
-            const hypoechogenicityCheckbox = document.getElementById("item3-1");
-            hypoechogenicityCheckbox.checked = true; // 체크
-            item33Text.textContent = `Hypoechogenicity`;
-        }
-
-    </script>
-
-
 
     <script>
         // 체크박스 변경 시 이벤트 처리
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
+        const item0Text = document.getElementById('item0-text');
+        const item00Text = document.getElementById('item00-text');
         const item1Text = document.getElementById('item1-text');
         const item2Text = document.getElementById('item2-text');
         const item3Text = document.getElementById('item3-text');
@@ -764,7 +810,23 @@
                 const checkedItemValue = this.checked ? labelText : "";
 
                 // 항목1~9 위치에 텍스트 추가
-                if (this.id === "item1-1" || this.id === "item1-2" || this.id === "item1-3") {
+                if (this.id === "item0-1" || this.id === "item0-2") {
+                    checkboxes.forEach(otherCheckbox => {
+                        if (otherCheckbox.id !== this.id && otherCheckbox.name === this.name) {
+                            otherCheckbox.checked = false; // 다른 항목들 해제
+                        }
+                    });
+                    item1Text.textContent = ` ${checkedItemValue}`;
+                }
+                else if (this.id === "item00-1" || this.id === "item00-2") {
+                    checkboxes.forEach(otherCheckbox => {
+                        if (otherCheckbox.id !== this.id && otherCheckbox.name === this.name) {
+                            otherCheckbox.checked = false;
+                        }
+                    });
+                    item1Text.textContent = ` ${checkedItemValue}`;
+                }
+                else if (this.id === "item1-1" || this.id === "item1-2" || this.id === "item1-3") {
                     checkboxes.forEach(otherCheckbox => {
                         if (otherCheckbox.id !== this.id && otherCheckbox.name === this.name) {
                             otherCheckbox.checked = false; // 다른 항목들 해제
