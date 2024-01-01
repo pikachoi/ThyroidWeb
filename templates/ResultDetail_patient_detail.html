@@ -666,6 +666,10 @@
                                     <div class="COMPOSITION-result" COMPOSITION-spec="{{ spec }}" COMPOSITION-value="{{ value }}"></div>
                                     {% endfor %}
 
+                                    {% for spec, value in crop_img.classifi_result|get_spec:"GRADE" %}
+                                    <div class="GRADE-result" GRADE-spec="{{ spec }}" GRADE-value="{{ value }}"></div>
+                                    {% endfor %}
+
                                 </form>
                             </div>
                         </div>
@@ -674,21 +678,100 @@
             </div>
         </div>
     </div>
-        
-    <!-- LTLUX 특성 분류 결과를 체크 항목의 기본값으로 가져오기 -->
+    
     <script>
-        // elements 배열 정의 및 요소 선택
+        const BM_elements = document.querySelectorAll('.BM-result');
+        const BM_Text = document.getElementById('item0-text');
+
+        let BM_1_Value = null;
+        let BM_2_Value = null;
+
+        BM_elements.forEach(element => {
+            const BM_specData = element.getAttribute('BM-spec');
+            const BM_valueData = parseFloat(element.getAttribute('BM-value'));
+
+            if (BM_1_Value === null) {
+                BM_1_Value = BM_valueData;
+            } else if (BM_2_Value === null) {
+                BM_2_Value = BM_valueData;
+            }
+        
+            console.log(`${BM_specData}${BM_valueData}`);
+        });
+
+        let BM_resultSpecData = null;
+        if (BM_1_Value !== null && BM_2_Value !== null) {
+            if (BM_1_Value > BM_2_Value) {
+                BM_resultSpecData = BM_elements[0].getAttribute('BM-spec');
+            } else {
+                BM_resultSpecData = BM_elements[1].getAttribute('BM-spec');
+            }
+        }
+
+        if (BM_resultSpecData === 'B') {
+            const Benign = document.getElementById("item0-1");
+            Benign.checked = true; 
+            BM_Text.textContent = `Benign`;
+        }
+        else {
+            const Malignant = document.getElementById("item0-2");
+            Malignant.checked = true; 
+            BM_Text.textContent = `Malignant`;
+        }
+
+        //-------------------------------------------------------------
+
+        const PN_elements = document.querySelectorAll('.PN-result');
+        const PN_Text = document.getElementById('item00-text');
+        
+        let PN_1_Value = null;
+        let PN_2_Value = null;
+
+        PN_elements.forEach(element => {
+            const PN_specData = element.getAttribute('PN-spec');
+            const PN_valueData = parseFloat(element.getAttribute('PN-value'));
+
+            if (PN_1_Value === null) {
+                PN_1_Value = PN_valueData;
+            } else if (PN_2_Value === null) {
+                PN_2_Value = PN_valueData;
+            }
+        
+            console.log(`${PN_specData}${PN_valueData}`);
+        });
+
+        let PN_resultSpecData = null;
+        if (PN_1_Value !== null && PN_2_Value !== null) {
+            if (PN_1_Value > PN_2_Value) {
+                PN_resultSpecData = PN_elements[0].getAttribute('PN-spec');
+            } else {
+                PN_resultSpecData = PN_elements[1].getAttribute('PN-spec');
+            }
+        }
+
+        if (PN_resultSpecData === 'P') {
+            const Positive = document.getElementById("item00-1");
+            Positive.checked = true; 
+            PN_Text.textContent = `Positive`;
+        }
+        else {
+            const Negtive = document.getElementById("item00-2");
+            Negtive.checked = true; 
+            PN_Text.textContent = `Negtive`;
+        }
+
+        //-------------------------------------------------------------
+
         const ECHO_elements = document.querySelectorAll('.ECHO-result');
         const ECHO_Text = document.getElementById('item3-text');
-
-        // 먼저 첫 번째와 두 번째 valueData를 저장할 변수를 선언합니다.
+     
         let ECHO_1_Value = null;
         let ECHO_2_Value = null;
-        
+
         ECHO_elements.forEach(element => {
             const ECHO_specData = element.getAttribute('ECHO-spec');
-            const ECHO_valueData = parseFloat(element.getAttribute('ECHO-value')); // 문자열을 숫자로 변환
-            // 첫 번째와 두 번째 valueData를 설정합니다.
+            const ECHO_valueData = parseFloat(element.getAttribute('ECHO-value'));
+
             if (ECHO_1_Value === null) {
                 ECHO_1_Value = ECHO_valueData;
             } else if (ECHO_2_Value === null) {
@@ -697,8 +780,7 @@
         
             console.log(`${ECHO_specData}${ECHO_valueData}`);
         });
-        
-        // 숫자 비교 후, 더 큰 valueData에 해당하는 specData를 가져옵니다.
+
         let ECHO_resultSpecData = null;
         if (ECHO_1_Value !== null && ECHO_2_Value !== null) {
             if (ECHO_1_Value > ECHO_2_Value) {
@@ -707,22 +789,366 @@
                 ECHO_resultSpecData = ECHO_elements[1].getAttribute('ECHO-spec');
             }
         }
-        
-        console.log(`더 큰 숫자에 해당하는 specData: ${ECHO_resultSpecData}`);
 
-        // 만약 resultSpecData가 Hypoechogenicity와 일치한다면 해당 항목을 체크합니다.
         if (ECHO_resultSpecData === 'Hypoechogenicity') {
             const hypoechogenicityCheckbox = document.getElementById("item3-1");
-            hypoechogenicityCheckbox.checked = true; // 체크
+            hypoechogenicityCheckbox.checked = true; 
             ECHO_Text.textContent = `Hypoechogenicity`;
         }
         else {
-            const Isoechogenicity = document.getElementById("item3-1");
-            Isoechogenicity.checked = true; // 체크
+            const Isoechogenicity = document.getElementById("item3-2");
+            Isoechogenicity.checked = true;
             ECHO_Text.textContent = `Isoechogenicity`;
         }
+
+        //-------------------------------------------------------------
+
+        const MARGIN_elements = document.querySelectorAll('.MARGIN-result');
+        const MARGIN_Text = document.getElementById('item4-text');
+     
+        let MARGIN_1_Value = null;
+        let MARGIN_2_Value = null;
+        let MARGIN_3_Value = null;
+
+        MARGIN_elements.forEach(element => {
+            const MARGIN_specData = element.getAttribute('MARGIN-spec');
+            const MARGIN_valueData = parseFloat(element.getAttribute('MARGIN-value'));
+
+            if (MARGIN_1_Value === null) {
+                MARGIN_1_Value = MARGIN_valueData;
+            } else if (MARGIN_2_Value === null) {
+                MARGIN_2_Value = MARGIN_valueData;
+            } else if (MARGIN_3_Value === null) {
+                MARGIN_3_Value = MARGIN_valueData;
+            }
+        
+            console.log(`${MARGIN_specData}${MARGIN_valueData}`);
+        });
+
+        let MARGIN_resultSpecData = null;
+        if (MARGIN_1_Value !== null && MARGIN_2_Value !== null && MARGIN_3_Value !== null) {
+
+            var maxMarginValue = Math.max(MARGIN_1_Value, MARGIN_2_Value, MARGIN_3_Value);
+
+            if (maxMarginValue === MARGIN_1_Value) {
+                MARGIN_resultSpecData = MARGIN_elements[0].getAttribute('MARGIN-spec');
+            } else if (maxMarginValue === MARGIN_2_Value) {
+                MARGIN_resultSpecData = MARGIN_elements[1].getAttribute('MARGIN-spec');
+            } else {
+                MARGIN_resultSpecData = MARGIN_elements[2].getAttribute('MARGIN-spec');
+            }
+        }
+
+        if (MARGIN_resultSpecData === 'Smooth') {
+            const Smooth = document.getElementById("item4-1");
+            Smooth.checked = true; 
+            MARGIN_Text.textContent = `Smooth`;
+        }
+        else if (MARGIN_resultSpecData === 'Ill-defined') {
+            const Ill_defined = document.getElementById("item4-2");
+            Ill_defined.checked = true;
+            MARGIN_Text.textContent = `Ill-defined`;
+        }
+        else {
+            const Spiculated = document.getElementById("item4-3");
+            Spiculated.checked = true;
+            MARGIN_Text.textContent = `Spiculated`;
+        }
+        
+        //-------------------------------------------------------------
+
+        const ECHOGENIC_FOCI_elements = document.querySelectorAll('.ECHOGENIC_FOCI-result');
+        const ECHOGENIC_FOCI_Text = document.getElementById('item5-text');
+     
+        let ECHOGENIC_FOCI_1_Value = null;
+        let ECHOGENIC_FOCI_2_Value = null;
+        let ECHOGENIC_FOCI_3_Value = null;
+
+        ECHOGENIC_FOCI_elements.forEach(element => {
+            const ECHOGENIC_FOCI_specData = element.getAttribute('ECHOGENIC_FOCI-spec');
+            const ECHOGENIC_FOCI_valueData = parseFloat(element.getAttribute('ECHOGENIC_FOCI-value'));
+
+            if (ECHOGENIC_FOCI_1_Value === null) {
+                ECHOGENIC_FOCI_1_Value = ECHOGENIC_FOCI_valueData;
+            } else if (ECHOGENIC_FOCI_2_Value === null) {
+                ECHOGENIC_FOCI_2_Value = ECHOGENIC_FOCI_valueData;
+            } else if (ECHOGENIC_FOCI_3_Value === null) {
+                ECHOGENIC_FOCI_3_Value = ECHOGENIC_FOCI_valueData;
+            }
+        
+            console.log(`${ECHOGENIC_FOCI_specData}${ECHOGENIC_FOCI_valueData}`);
+        });
+
+        let ECHOGENIC_FOCI_resultSpecData = null;
+        if (ECHOGENIC_FOCI_1_Value !== null && ECHOGENIC_FOCI_2_Value !== null && ECHOGENIC_FOCI_3_Value !== null) {
+            
+            var maxECHOGENIC_FOCIValue = Math.max(ECHOGENIC_FOCI_1_Value, ECHOGENIC_FOCI_2_Value, ECHOGENIC_FOCI_3_Value);
+
+            if (maxECHOGENIC_FOCIValue === ECHOGENIC_FOCI_1_Value) {
+                ECHOGENIC_FOCI_resultSpecData = ECHOGENIC_FOCI_elements[0].getAttribute('ECHOGENIC_FOCI-spec');
+            } else if (maxECHOGENIC_FOCIValue === ECHOGENIC_FOCI_2_Value) {
+                ECHOGENIC_FOCI_resultSpecData = ECHOGENIC_FOCI_elements[1].getAttribute('ECHOGENIC_FOCI-spec');
+            } else {
+                ECHOGENIC_FOCI_resultSpecData = ECHOGENIC_FOCI_elements[2].getAttribute('ECHOGENIC_FOCI-spec');
+            }
+        }
+
+        if (ECHOGENIC_FOCI_resultSpecData === 'Absent') {
+            const Absent = document.getElementById("item5-1");
+            Absent.checked = true; 
+            ECHOGENIC_FOCI_Text.textContent = `Absent`;
+        }
+        else if (ECHOGENIC_FOCI_resultSpecData === 'Punctate_echogenic_foci') {
+            const Punctate_echogenic_foci = document.getElementById("item5-2");
+            Punctate_echogenic_foci.checked = true;
+            ECHOGENIC_FOCI_Text.textContent = `Punctate_echogenic_foci`;
+        }
+        else {
+            const Macrocalcifications = document.getElementById("item5-3");
+            Macrocalcifications.checked = true;
+            ECHOGENIC_FOCI_Text.textContent = `Macrocalcifications`;
+        }
+
+        //-------------------------------------------------------------
+
+        const ORIENTATION_elements = document.querySelectorAll('.ORIENTATION-result');
+        const ORIENTATION_Text = document.getElementById('item6-text');
+     
+        let ORIENTATION_1_Value = null;
+        let ORIENTATION_2_Value = null;
+
+        ORIENTATION_elements.forEach(element => {
+            const ORIENTATION_specData = element.getAttribute('ORIENTATION-spec');
+            const ORIENTATION_valueData = parseFloat(element.getAttribute('ORIENTATION-value'));
+
+            if (ORIENTATION_1_Value === null) {
+                ORIENTATION_1_Value = ORIENTATION_valueData;
+            } else if (ORIENTATION_2_Value === null) {
+                ORIENTATION_2_Value = ORIENTATION_valueData;
+            }
+        
+            console.log(`${ORIENTATION_specData}${ORIENTATION_valueData}`);
+        });
+
+        let ORIENTATION_resultSpecData = null;
+        if (ORIENTATION_1_Value !== null && ORIENTATION_2_Value !== null) {
+            if (ORIENTATION_1_Value > ORIENTATION_2_Value) {
+                ORIENTATION_resultSpecData = ORIENTATION_elements[0].getAttribute('ORIENTATION-spec');
+            } else {
+                ORIENTATION_resultSpecData = ORIENTATION_elements[1].getAttribute('ORIENTATION-spec');
+            }
+        }
+
+        if (ORIENTATION_resultSpecData === 'Parallel') {
+            const Parallel = document.getElementById("item6-1");
+            Parallel.checked = true; 
+            ORIENTATION_Text.textContent = `Parallel`;
+        }
+        else {
+            const Nonparallel = document.getElementById("item6-2");
+            Nonparallel.checked = true;
+            ORIENTATION_Text.textContent = `Nonparallel`;
+        }
+        
+        //-------------------------------------------------------------
+
+        const SHAPE_elements = document.querySelectorAll('.SHAPE-result');
+        const SHAPE_Text = document.getElementById('item7-text');
+     
+        let SHAPE_1_Value = null;
+        let SHAPE_2_Value = null;
+
+        SHAPE_elements.forEach(element => {
+            const SHAPE_specData = element.getAttribute('SHAPE-spec');
+            const SHAPE_valueData = parseFloat(element.getAttribute('SHAPE-value'));
+
+            if (SHAPE_1_Value === null) {
+                SHAPE_1_Value = SHAPE_valueData;
+            } else if (SHAPE_2_Value === null) {
+                SHAPE_2_Value = SHAPE_valueData;
+            }
+        
+            console.log(`${SHAPE_specData}${SHAPE_valueData}`);
+        });
+
+        let SHAPE_resultSpecData = null;
+        if (SHAPE_1_Value !== null && SHAPE_2_Value !== null) {
+            if (SHAPE_1_Value > SHAPE_2_Value) {
+                SHAPE_resultSpecData = SHAPE_elements[0].getAttribute('SHAPE-spec');
+            } else {
+                SHAPE_resultSpecData = SHAPE_elements[1].getAttribute('SHAPE-spec');
+            }
+        }
+
+        if (SHAPE_resultSpecData === 'Round_to_oval') {
+            const Round_to_oval = document.getElementById("item7-1");
+            Round_to_oval.checked = true; 
+            SHAPE_Text.textContent = `Round_to_oval`;
+        }
+        else {
+            const Irregular = document.getElementById("item7-2");
+            Irregular.checked = true;
+            SHAPE_Text.textContent = `Irregular`;
+        }
+
+        //-------------------------------------------------------------
+
+        const COMPOSITION_elements = document.querySelectorAll('.COMPOSITION-result');
+        const COMPOSITION_Text = document.getElementById('item8-text');
+     
+        let COMPOSITION_1_Value = null;
+        let COMPOSITION_2_Value = null;
+        let COMPOSITION_3_Value = null;
+        let COMPOSITION_4_Value = null;
+        let COMPOSITION_5_Value = null;
+
+        COMPOSITION_elements.forEach(element => {
+            const COMPOSITION_specData = element.getAttribute('COMPOSITION-spec');
+            const COMPOSITION_valueData = parseFloat(element.getAttribute('COMPOSITION-value'));
+
+            if (COMPOSITION_1_Value === null) {
+                COMPOSITION_1_Value = COMPOSITION_valueData;
+            } else if (COMPOSITION_2_Value === null) {
+                COMPOSITION_2_Value = COMPOSITION_valueData;
+            } else if (COMPOSITION_3_Value === null) {
+                COMPOSITION_3_Value = COMPOSITION_valueData;
+            } else if (COMPOSITION_4_Value === null) {
+                COMPOSITION_4_Value = COMPOSITION_valueData;
+            } else if (COMPOSITION_5_Value === null) {
+                COMPOSITION_5_Value = COMPOSITION_valueData;
+            } 
+        
+            console.log(`${COMPOSITION_specData}${COMPOSITION_valueData}`);
+        });
+
+        let COMPOSITION_resultSpecData = null;
+        if (COMPOSITION_1_Value !== null && COMPOSITION_2_Value !== null && COMPOSITION_3_Value !== null && COMPOSITION_4_Value !== null && COMPOSITION_5_Value !== null) {
+            
+            var maxCOMPOSITIONValue = Math.max(COMPOSITION_1_Value, COMPOSITION_2_Value, COMPOSITION_3_Value, COMPOSITION_4_Value, COMPOSITION_5_Value);
+
+            if (maxCOMPOSITIONValue === COMPOSITION_1_Value) {
+                COMPOSITION_resultSpecData = COMPOSITION_elements[0].getAttribute('COMPOSITION-spec');
+            } else if (maxCOMPOSITIONValue === COMPOSITION_2_Value) {
+                COMPOSITION_resultSpecData = COMPOSITION_elements[1].getAttribute('COMPOSITION-spec');
+            } else if (maxCOMPOSITIONValue === COMPOSITION_3_Value) {
+                COMPOSITION_resultSpecData = COMPOSITION_elements[2].getAttribute('COMPOSITION-spec');
+            } else if (maxCOMPOSITIONValue === COMPOSITION_4_Value) {
+                COMPOSITION_resultSpecData = COMPOSITION_elements[3].getAttribute('COMPOSITION-spec');
+            } else {
+                COMPOSITION_resultSpecData = COMPOSITION_elements[4].getAttribute('COMPOSITION-spec');
+            }
+        }
+
+        if (COMPOSITION_resultSpecData === 'Solid') {
+            const Solid = document.getElementById("item8-1");
+            Solid.checked = true; 
+            COMPOSITION_Text.textContent = `Solid`;
+        }
+        else if (COMPOSITION_resultSpecData === 'Predominantly_Solid') {
+            const Predominantly_Solid = document.getElementById("item8-2");
+            Predominantly_Solid.checked = true;
+            COMPOSITION_Text.textContent = `Predominantly_Solid`;
+        }
+        else if (COMPOSITION_resultSpecData === 'Benign_Cystic') {
+            const Benign_Cystic = document.getElementById("item8-3");
+            Benign_Cystic.checked = true;
+            COMPOSITION_Text.textContent = `Benign_Cystic`;
+        }
+        else if (COMPOSITION_resultSpecData === 'Colloid') {
+            const Colloid = document.getElementById("item8-4");
+            Colloid.checked = true;
+            COMPOSITION_Text.textContent = `Colloid`;
+        }
+        else {
+            const Spongiform = document.getElementById("item8-5");
+            Spongiform.checked = true;
+            COMPOSITION_Text.textContent = `Spongiform`;
+        }
+
+        //-------------------------------------------------------------
+
+        const GRADE_elements = document.querySelectorAll('.GRADE-result');
+        const GRADE_Text = document.getElementById('item9-text');
+     
+        let GRADE_2_Value = null;
+        let GRADE_3_Value = null;
+        let GRADE_4_Value = null;
+        let GRADE_5_Value = null;
+
+        GRADE_elements.forEach(element => {
+            const GRADE_specData = element.getAttribute('GRADE-spec');
+            const GRADE_valueData = parseFloat(element.getAttribute('GRADE-value'));
+
+           if (GRADE_2_Value === null) {
+                GRADE_2_Value = GRADE_valueData;
+            } else if (GRADE_3_Value === null) {
+                GRADE_3_Value = GRADE_valueData;
+            } else if (GRADE_4_Value === null) {
+                GRADE_4_Value = GRADE_valueData;
+            } else if (GRADE_5_Value === null) {
+                GRADE_5_Value = GRADE_valueData;
+            } 
+        
+            console.log(`${GRADE_specData}${GRADE_valueData}`);
+        });
+
+        let GRADE_resultSpecData = null;
+        if (GRADE_2_Value !== null && GRADE_3_Value !== null && GRADE_4_Value !== null && GRADE_5_Value !== null) {
+            
+            var maxGRADEValue = Math.max(GRADE_2_Value, GRADE_3_Value, GRADE_4_Value, GRADE_5_Value);
+
+            if (maxGRADEValue === GRADE_2_Value) {
+                GRADE_resultSpecData = GRADE_elements[0].getAttribute('GRADE-spec');
+            } else if (maxGRADEValue === GRADE_3_Value) {
+                GRADE_resultSpecData = GRADE_elements[1].getAttribute('GRADE-spec');
+            } else if (maxGRADEValue === GRADE_4_Value) {
+                GRADE_resultSpecData = GRADE_elements[2].getAttribute('GRADE-spec');
+            } else if (maxGRADEValue === GRADE_5_Value) {
+                GRADE_resultSpecData = GRADE_elements[3].getAttribute('GRADE-spec');
+            }
+        }
+
+        if (GRADE_resultSpecData === 'C2') {
+            const C2 = document.getElementById("item9-2");
+            C2.checked = true; 
+            GRADE_Text.textContent = `C2`;
+        }
+        else if (GRADE_resultSpecData === 'C3') {
+            const C3 = document.getElementById("item9-3");
+            C3.checked = true; 
+            GRADE_Text.textContent = `C3`;
+        }
+        else if (GRADE_resultSpecData === 'C4') {
+            const C4 = document.getElementById("item9-4");
+            C4.checked = true;
+            GRADE_Text.textContent = `C4`;
+        }
+        else if (GRADE_resultSpecData === 'C5') {
+            const C5 = document.getElementById("item9-5");
+            C5.checked = true;
+            GRADE_Text.textContent = `C5`;
+        }
+        else {
+            const C1 = document.getElementById("item9-1");
+            C1.checked = true;
+            GRADE_Text.textContent = `C1`;
+        }
+ 
+
+        
     </script>
     
+    
+
+
+
+
+
+
+
+
+
+
 
 
     <script>
@@ -816,7 +1242,7 @@
                             otherCheckbox.checked = false; // 다른 항목들 해제
                         }
                     });
-                    item1Text.textContent = ` ${checkedItemValue}`;
+                    item0Text.textContent = ` ${checkedItemValue}`;
                 }
                 else if (this.id === "item00-1" || this.id === "item00-2") {
                     checkboxes.forEach(otherCheckbox => {
@@ -824,7 +1250,7 @@
                             otherCheckbox.checked = false;
                         }
                     });
-                    item1Text.textContent = ` ${checkedItemValue}`;
+                    item00Text.textContent = ` ${checkedItemValue}`;
                 }
                 else if (this.id === "item1-1" || this.id === "item1-2" || this.id === "item1-3") {
                     checkboxes.forEach(otherCheckbox => {
