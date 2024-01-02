@@ -367,7 +367,7 @@
                                                     {% if doctor_username == interpret.patient.doctor %}
                                                         <td style="vertical-align:middle" class="click-this">{{ interpret.patient.doctor }}</td>
                                                         <td style="vertical-align:middle" class="click-this">{{ interpret.write_date }}</td>
-                                                        <td style="text-align: left;">{{ interpret.interpretation }}</td>
+                                                        <td style="text-align: left; white-space: pre-line;">{{ interpret.interpretation }}</td>
                                                         <td align="center" width="50">
                                                             <form action="{% url 'remove_interpretation' interpret.idx %}" method="POST">
                                                                 {% csrf_token %}
@@ -399,13 +399,13 @@
                                                 <div class="checklist_column">Location</div>
                                                 <div class="checklist_items">
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-1" name="item1" value="Item1-1">
-                                                    <label style="margin: 0px;" for="item1-1">R1</label>
+                                                    <label style="margin: 0px;" for="item1-1">Rt</label>
                                     
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-2" name="item1" value="Item1-2">
-                                                    <label style="margin: 0px;" for="item1-2">L1</label>
+                                                    <label style="margin: 0px;" for="item1-2">Lt</label>
                                     
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-3" name="item1" value="Item1-3">
-                                                    <label style="margin: 0px;" for="item1-3">IS1</label>
+                                                    <label style="margin: 0px;" for="item1-3">ISt</label>
                                                 </div>
                                             </div>
 
@@ -414,13 +414,13 @@
                                                 <div class="checklist_column">Location</div>
                                                 <div class="checklist_items">
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
-                                                    <label style="margin: 0px;" for="item2-1">Upper</label>
+                                                    <label style="margin: 0px;" for="item2-1">upper</label>
                                     
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
-                                                    <label style="margin: 0px;" for="item2-2">Middle</label>
+                                                    <label style="margin: 0px;" for="item2-2">mid</label>
                                     
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
-                                                    <label style="margin: 0px;" for="item2-3">Lower</label>
+                                                    <label style="margin: 0px;" for="item2-3">lower</label>
                                                 </div>
                                             </div>
 
@@ -547,10 +547,12 @@
                                                         <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item8-2" name="item8" value="Item8-2">
                                                         <label style="margin: 0px;" for="item8-2">Predominantly_Solid</label>
 
-                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item8-3" name="item8" value="Item8-3">
-                                                        <label style="margin: 0px;" for="item8-3">Benign_Cystic</label>
+                                                        
                                                     </div>
                                                     <div class="checklist_items" style="height: 25px;">
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item8-3" name="item8" value="Item8-3">
+                                                        <label style="margin: 0px;" for="item8-3">Benign_Cystic</label>
+
                                                         <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item8-4" name="item8" value="Item8-4">
                                                         <label style="margin: 0px;" for="item8-4">Colloid</label>
 
@@ -610,28 +612,24 @@
                                     </div>
 
                                     <!-- 원본 판독문 -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-                                    <div class="original_interpretation">
-                                        악성 여부: <span id="item0-text"></span>, <span id="item00-text"></span>
-                                        <br>
-                                        결절 위치: <span id="item1-text"></span>, <span id="item2-text"></span>
-                                        <br>
-                                        결절 부피: <span id="volume-result2"></span>
-                                        <br>
-                                        결절 특성: <span id="item3-text"></span>
-                                        <br>
-                                        결절 특성: <span id="item4-text"></span>
-                                        <br>
-                                        결절 특성: <span id="item5-text"></span>
-                                        <br>
-                                        결절 특성: <span id="item6-text"></span>
-                                        <br>
-                                        결절 특성: <span id="item7-text"></span>
-                                        <br>
-                                        결절 특성: <span id="item8-text"></span>
-                                        <br>
-                                        K-TIRADS 기준 위험도: <span id="item9-text"></span>
-                                        <br>
-                                        <span id="asas"></span>
+                                    <div style="white-space: pre-line;" class="original_interpretation">
+                                        A nodule measuring [<span id="width-text"></span><span id="currentUnit1"></span> x <span id="height-text"></span><span id="currentUnit2"></span> x <span id="depth-text"></span><span id="currentUnit3"></span>] and having a volume of [<span id="volume-result2"></span>ml] was discovered in the <span id="item2-text"></span> portion of the <span id="item1-text"></span> thyroid gland.
+
+                                        This nodule is <span id="item00-text"></span>, and the identified characteristics are as follows:
+
+                                        Echogenicity: <span id="item3-text"></span>
+                                        Margin: <span id="item4-text"></span>
+                                        Echogenicity Foci: <span id="item5-text"></span>
+                                        Orientation: <span id="item6-text"></span>
+                                        Shape: <span id="item7-text"></span>
+                                        Internal Composition: <span id="item8-text"></span>
+
+                                        Based on these characteristics, it has been classified as <span id="item9-text"></span>.
+                                
+
+                                        <span style="display: none;" id="item0-text"></span>, 
+
+                                 
                                     </div>
 
                                     {% for spec, value in crop_img.classifi_result|get_spec:"BM" %}
@@ -678,8 +676,93 @@
             </div>
         </div>
     </div>
-    
+    <!-- "This nodule is positive, and the identified characteristics are as follows:
+
+    Echogenicity: 'Hypoechogenicity'
+    Margin: 'Smooth'
+    Echogenicity Foci: 'Absent'
+    Orientation: 'Parallel'
+    Shape: 'Round to oval'
+    Internal Composition: 'Solid'
+    Based on these characteristics, it has been classified as K-TIRADS 2." 
+
+    이 결절은 양성이며, 확인된 특징은 다음과 같습니다:
+
+초음파 밝기: '저밝기'
+경계: '부드러운'
+초음파 밝기 중심: '없음'
+방향: '평행'
+모양: '둥근 형태에서 타원 형태로'
+내부 구성: '고체'
+이러한 특징들을 기반으로 K-TIRADS 2로 분류되었습니다." -->
+
     <script>
+        var unitSelector = document.getElementById("unitSelector");
+
+        function calculateVolume(input) {
+            // 입력 필드에서 숫자 3자리로 제한
+            var inputValue = input.value;
+            if (inputValue.length > 3) {
+                input.value = inputValue.slice(0, 3);
+            }
+
+            // 사용자로부터 입력된 가로, 세로, 높이 가져오기
+            var width = parseFloat(document.getElementById("width").value);
+            var height = parseFloat(document.getElementById("height").value);
+            var depth = parseFloat(document.getElementById("depth").value);
+
+            // 입력된 숫자가 없으면 메시지 표시
+            if (isNaN(width) || isNaN(height) || isNaN(depth)) {
+                document.getElementById("volume-result").textContent = " ";
+                document.getElementById("largestNumber").textContent = " ";
+                return;
+            }
+
+            // 구의 부피 계산
+            var Wradius = width / 2;
+            var Hradius = height / 2;
+            var Dradius = depth / 2;
+            var volume = (4/3) * Math.PI * Wradius * Hradius * Dradius
+
+            // 선택된 단위에 따라 부피를 변환
+            var currentUnit = unitSelector.value;
+            if (currentUnit === "mm") {
+                volume *= 0.001; // cm^3에서 mm^3로 변환
+            }
+
+            // 결과를 화면에 표시
+            var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
+            document.getElementById("volume-result").textContent = roundedVolume;
+            document.getElementById("volume-result2").textContent = roundedVolume;
+            document.getElementById("currentUnit").textContent = currentUnit;
+            document.getElementById("currentUnit1").textContent = currentUnit;
+            document.getElementById("currentUnit2").textContent = currentUnit;
+            document.getElementById("currentUnit3").textContent = currentUnit;
+
+            document.getElementById("width-text").textContent = width;
+            document.getElementById("height-text").textContent = height;
+            document.getElementById("depth-text").textContent = depth;
+
+            var largestNumber = Math.max(width, height, depth);
+            document.getElementById("largestNumber").textContent = largestNumber;
+
+            // container_B에 복사
+            const containerAText = document.querySelector('.original_interpretation').innerText;
+            textarea.value = containerAText; // textarea에 original_interpretation 내용 복사
+        }
+
+        function convertUnits() {
+            calculateVolume(document.getElementById("width"));
+        }
+
+        // 초기 계산 수행
+        calculateVolume(document.getElementById("width"));
+    </script>
+
+
+    <script>
+        //-------------------------------------------------------------BM
+
         const BM_elements = document.querySelectorAll('.BM-result');
         const BM_Text = document.getElementById('item0-text');
 
@@ -719,7 +802,7 @@
             BM_Text.textContent = `Malignant`;
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------PN
 
         const PN_elements = document.querySelectorAll('.PN-result');
         const PN_Text = document.getElementById('item00-text');
@@ -752,15 +835,15 @@
         if (PN_resultSpecData === 'P') {
             const Positive = document.getElementById("item00-1");
             Positive.checked = true; 
-            PN_Text.textContent = `Positive`;
+            PN_Text.textContent = `positive`;
         }
         else {
             const Negtive = document.getElementById("item00-2");
             Negtive.checked = true; 
-            PN_Text.textContent = `Negtive`;
+            PN_Text.textContent = `negtive`;
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------ECHO
 
         const ECHO_elements = document.querySelectorAll('.ECHO-result');
         const ECHO_Text = document.getElementById('item3-text');
@@ -801,7 +884,7 @@
             ECHO_Text.textContent = `Isoechogenicity`;
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------MARGIN
 
         const MARGIN_elements = document.querySelectorAll('.MARGIN-result');
         const MARGIN_Text = document.getElementById('item4-text');
@@ -855,7 +938,7 @@
             MARGIN_Text.textContent = `Spiculated`;
         }
         
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------ECHOGENIC_FOCI
 
         const ECHOGENIC_FOCI_elements = document.querySelectorAll('.ECHOGENIC_FOCI-result');
         const ECHOGENIC_FOCI_Text = document.getElementById('item5-text');
@@ -909,7 +992,7 @@
             ECHOGENIC_FOCI_Text.textContent = `Macrocalcifications`;
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------ORIENTATION
 
         const ORIENTATION_elements = document.querySelectorAll('.ORIENTATION-result');
         const ORIENTATION_Text = document.getElementById('item6-text');
@@ -950,7 +1033,7 @@
             ORIENTATION_Text.textContent = `Nonparallel`;
         }
         
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------SHAPE
 
         const SHAPE_elements = document.querySelectorAll('.SHAPE-result');
         const SHAPE_Text = document.getElementById('item7-text');
@@ -991,7 +1074,7 @@
             SHAPE_Text.textContent = `Irregular`;
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------COMPOSITION
 
         const COMPOSITION_elements = document.querySelectorAll('.COMPOSITION-result');
         const COMPOSITION_Text = document.getElementById('item8-text');
@@ -1065,7 +1148,7 @@
             COMPOSITION_Text.textContent = `Spongiform`;
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------GRADE
 
         const GRADE_elements = document.querySelectorAll('.GRADE-result');
         const GRADE_Text = document.getElementById('item9-text');
@@ -1111,101 +1194,34 @@
         if (GRADE_resultSpecData === 'C2') {
             const C2 = document.getElementById("item9-2");
             C2.checked = true; 
-            GRADE_Text.textContent = `C2`;
+            GRADE_Text.textContent = `K-TIRADS 2`;
         }
         else if (GRADE_resultSpecData === 'C3') {
             const C3 = document.getElementById("item9-3");
             C3.checked = true; 
-            GRADE_Text.textContent = `C3`;
+            GRADE_Text.textContent = `K-TIRADS 3`;
         }
         else if (GRADE_resultSpecData === 'C4') {
             const C4 = document.getElementById("item9-4");
             C4.checked = true;
-            GRADE_Text.textContent = `C4`;
+            GRADE_Text.textContent = `K-TIRADS 4`;
         }
         else if (GRADE_resultSpecData === 'C5') {
             const C5 = document.getElementById("item9-5");
             C5.checked = true;
-            GRADE_Text.textContent = `C5`;
+            GRADE_Text.textContent = `K-TIRADS 5`;
         }
         else {
             const C1 = document.getElementById("item9-1");
             C1.checked = true;
-            GRADE_Text.textContent = `C1`;
+            GRADE_Text.textContent = `K-TIRADS 1`;
         }
  
-
-        
     </script>
     
-    
 
 
 
-
-
-
-
-
-
-
-
-
-    <script>
-        var unitSelector = document.getElementById("unitSelector");
-
-        function calculateVolume(input) {
-            // 입력 필드에서 숫자 3자리로 제한
-            var inputValue = input.value;
-            if (inputValue.length > 3) {
-                input.value = inputValue.slice(0, 3);
-            }
-
-            // 사용자로부터 입력된 가로, 세로, 높이 가져오기
-            var width = parseFloat(document.getElementById("width").value);
-            var height = parseFloat(document.getElementById("height").value);
-            var depth = parseFloat(document.getElementById("depth").value);
-
-            // 입력된 숫자가 없으면 메시지 표시
-            if (isNaN(width) || isNaN(height) || isNaN(depth)) {
-                document.getElementById("volume-result").textContent = " ";
-                document.getElementById("largestNumber").textContent = " ";
-                return;
-            }
-
-            // 구의 부피 계산
-            var Wradius = width / 2;
-            var Hradius = height / 2;
-            var Dradius = depth / 2;
-            var volume = (4/3) * Math.PI * Wradius * Hradius * Dradius
-
-            // 선택된 단위에 따라 부피를 변환
-            var currentUnit = unitSelector.value;
-            if (currentUnit === "mm") {
-                volume *= 0.001; // cm^3에서 mm^3로 변환
-            }
-
-            // 결과를 화면에 표시
-            var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
-            document.getElementById("volume-result").textContent = roundedVolume;
-            document.getElementById("volume-result2").textContent = roundedVolume;
-            document.getElementById("currentUnit").textContent = currentUnit;
-
-            var largestNumber = Math.max(width, height, depth);
-            document.getElementById("largestNumber").textContent = largestNumber;
-
-            // container_B에 복사
-            const containerAText = document.querySelector('.original_interpretation').innerText;
-            textarea.value = containerAText; // textarea에 original_interpretation 내용 복사
-        }
-
-        function convertUnits() {
-            calculateVolume(document.getElementById("width"));
-        }
-
-        // 초기 계산 수행
-        calculateVolume(document.getElementById("width"));
-    </script>
 
 
 
@@ -1258,7 +1274,14 @@
                             otherCheckbox.checked = false; // 다른 항목들 해제
                         }
                     });
-                    item1Text.textContent = ` ${checkedItemValue}`;
+                    if (this.id === "item1-1") {
+                        item1Text.textContent = `right`;
+                    } else if (this.id === "item1-2") {
+                        item1Text.textContent = `left`;
+                    } else if (this.id === "item1-3") {
+                        item1Text.textContent = `lsthmus`;
+                    }
+                    
                 }
                 else if (this.id === "item2-1" || this.id === "item2-2" || this.id === "item2-3") {
                     checkboxes.forEach(otherCheckbox => {
@@ -1363,6 +1386,7 @@
         });
 
     </script>
+
 
 
     <script>
