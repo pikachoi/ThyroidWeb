@@ -106,20 +106,18 @@ input[type=tel] {
 
 
 .interpretation_save{
-    position: fixed;
-    top: 68%;
-    left: 75%;
-    width: 8%;
+    width: 70px;
+    height: 100%;
     background-color: dodgerblue;
     color: #fff;
-    padding: 7px;
     border-radius: 5px;
     border: none;
-    z-index: 1;
     font-size: 16px;
 }
+
 .interpretation_reset{
-    width: 100px;
+    width: 70px;
+    height: 100%;
     background-color: dodgerblue;
     color: #fff;
     border-radius: 5px;
@@ -201,6 +199,16 @@ input[type=tel] {
     cursor: pointer;
 }
 
+.interpretation_close_button2{
+    width: 70px;
+    height: 100%;
+    background-color: dodgerblue;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
 /* 버튼 클릭시 텍스트 모달 창*/
 
 .text_modal1, .text_modal2, .text_modal3, .id_interpretation  {
@@ -251,7 +259,7 @@ input[type=tel] {
     left: 50%;
 
     width: 805px;
-    height: 455px;
+    height: 490px;
     font-size:14px;
     padding: 5px;
 
@@ -267,19 +275,19 @@ input[type=tel] {
 
 .check_list{
     width: 390PX;
-    height: 100%;
+    height: 445px;
     font-size:14px;
     text-align: center;
     border-radius: 5px;
     margin-right: 5px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.85);
     border: solid 1px;
 
 }
 
 .copied_interpretation{
     width: 390px;
-    height: 100%;
+    height: 445px;
     font-size:14px;
     padding: 10px;
     text-align: left;
@@ -331,8 +339,9 @@ input[type=tel] {
 }
 
 .interpretation_button_elements{
+    height: 30px;
     position: fixed;
-    top:  78%;
+    top: 100%;
     left: 50%; 
     background-color: rgba(101, 35, 35, 0);
     display: flex;

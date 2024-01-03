@@ -593,6 +593,12 @@
                                                     </div>
                                             </div>
 
+                                            <div class="interpretation_button_elements">
+                                                <button style="margin: 5px;" type="button" class="interpretation_reset">Reset</button> <!-- 초기화 버튼 추가 -->
+                                                <input style="margin: 5px;" type="submit" class="interpretation_save" value="Save" />
+                                                <span style="margin: 5px; padding-top: 3.5px;"  class="interpretation_close_button2" >Close</span>
+                                            </div>
+                                            
                                         </div>
                                         <!-- 복사된 판독문 -->
                                         <textarea
@@ -609,11 +615,7 @@
                                         </textarea>
                                     </div>
 
-                                    <div class="interpretation_button_elements">
-                                        <input type="submit" value="Save" />
-                                        <button type="button" class="interpretation_reset">Reset</button> <!-- 초기화 버튼 추가 -->
-                                        <span  class="interpretation_close_button" >&times;</span>
-                                    </div>
+                                    
 
                                     <!-- 원본 판독문 -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                     <div style="white-space: pre-line;" class="original_interpretation">
@@ -1453,7 +1455,7 @@
         
         const text_interpretation = document.querySelector('.id_interpretation');
         const btn_interpretation = document.querySelector('.interpretation_write_button');
-        var interpretation_modal_close = document.getElementsByClassName("interpretation_close_button")[0];    
+        var interpretation_modal_close = document.getElementsByClassName("interpretation_close_button2")[0];    
 
         btn_interpretation.addEventListener('click', () => {
             text_interpretation.style.display = 'block';
