@@ -404,45 +404,45 @@
                                         <div class="check_list">
 
                                             <!-- 결절 위치 (오른, 왼, 지협) -->
-                                            <div class="checklist_one_line">
-                                                <div class="checklist_column">Location</div>
-                                                <div class="checklist_items">
-                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-1" name="item1" value="Item1-1">
-                                                    <label style="margin: 0px;" for="item1-1">Rt</label>
-                                    
-                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-2" name="item1" value="Item1-2">
-                                                    <label style="margin: 0px;" for="item1-2">Lt</label>
-                                    
-                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-3" name="item1" value="Item1-3">
-                                                    <label style="margin: 0px;" for="item1-3">Ist</label>
-                                                </div>
-                                            </div>
+                                            <div style="display: flex;">
+                                                <div class="checklist_column" style="height: 60px; background-color: rgb(214, 239, 247);">Location</div>
+                                                <div style="width: 100%;">
+                                                    <div class="checklist_one_line">
+                                                        <div class="checklist_items">
+                                                            <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-1" name="item1" value="Item1-1">
+                                                            <label style="margin: 0px;" for="item1-1">Rt</label>
+                                            
+                                                            <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-2" name="item1" value="Item1-2">
+                                                            <label style="margin: 0px;" for="item1-2">Lt</label>
+                                            
+                                                            <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item1-3" name="item1" value="Item1-3">
+                                                            <label style="margin: 0px;" for="item1-3">Ist</label>
+                                                        </div>
+                                                    </div>
 
-                                            <!-- 결절 위치 (높은, 중간, 낮은) -->
-                                            <div class="checklist_one_line">
-                                                <div class="checklist_column">Location</div>
-                                                <div class="checklist_items">
-                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
-                                                    <label style="margin: 0px;" for="item2-1">upper</label>
-                                    
-                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
-                                                    <label style="margin: 0px;" for="item2-2">mid</label>
-                                    
-                                                    <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
-                                                    <label style="margin: 0px;" for="item2-3">lower</label>
+                                                    <div class="checklist_items">
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
+                                                        <label style="margin: 0px;" for="item2-1">upper</label>
+                                        
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-2" name="item2" value="Item2-2">
+                                                        <label style="margin: 0px;" for="item2-2">mid</label>
+                                        
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
+                                                        <label style="margin: 0px;" for="item2-3">lower</label>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                           
                                             <div class="checklist_one_line">
-                                                <div class="checklist_column" style="height: 80px;">Diameter</div>
+                                                <div class="checklist_column" style="width: 121px; height: 80px; background-color: rgb(214, 239, 247);">Diameter</div>
                                                 <div style="width: 100%; height: 80px; border-bottom: solid 1px; text-align: left; padding: 5px;">
                                                     <div style=" height: 25px; display: flex; justify-content: left; align-items: center;">
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="width" placeholder="w" oninput="calculateVolume(this)">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="width" placeholder="AP" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="height" placeholder="l" oninput="calculateVolume(this)">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="height" placeholder="T" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="depth" placeholder="h" oninput="calculateVolume(this)">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="depth" placeholder="L" oninput="calculateVolume(this)">
                                                         &nbsp;&nbsp;&nbsp;
                                                         <select style="width: 50px; height: 100%; border: solid 1px; background-color: rgb(221, 221, 221);" id="unitSelector" onchange="convertUnits()">
                                                             <option value="mm" selected>mm</option>
@@ -676,6 +676,14 @@
             var Dradius = depth / 2;
             var volume = (4/3) * Math.PI * Wradius * Hradius * Dradius
 
+            // 현재는 타원체의 부피를 구하는 공식을 적용 시켰으나 갑상선 결절은 완벽한 타원체가 아니므로 
+            // 임상 의학에서 갑상선 부피를 측정할 때 주로 사용되는 공식은 AP * T * L / 2 를 사용함
+            // 하지만 판독문 생성 참고 사이트에서는 타원체 부피 계산 공식을 사용하고 있어 이를 적용함
+
+            // AP (Anteroposterior): 갑상선 결절의 앞뒤 두께를 의미합니다.
+            // T (Transverse): 갑상선 결절의 횡단면, 즉 결절의 가장 넓은 부분의 폭을 나타냅니다.
+            // L (Longitudinal): 갑상선 결절의 길이, 즉 상하 방향의 치수를 의미합니다.
+
             // 선택된 단위에 따라 부피를 변환
             var currentUnit = unitSelector.value;
             if (currentUnit === "mm") {
@@ -683,7 +691,7 @@
             }
 
             // 결과를 화면에 표시
-            var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
+            var roundedVolume = volume.toFixed(4); // 소수점 둘째 자리까지 반올림
             
             document.getElementById("volume-result").textContent = roundedVolume;
             document.getElementById("volume-result2").textContent = roundedVolume;
