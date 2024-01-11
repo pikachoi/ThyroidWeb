@@ -347,7 +347,7 @@
                                             </tr>
                                         {% empty %}
                                             <tr>
-                                                <td colspan="4" align="center" style="vertical-align: middle;">아직 코멘트가 없습니다.</td>
+                                                <td colspan="4" align="center" style="vertical-align: middle;">No coment content available yet</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -389,7 +389,7 @@
                                                 </tr>
                                             {% empty %}
                                                 <tr>
-                                                    <td colspan="4" align="center" style="vertical-align: middle;">아직 판독문이 없습니다.</td>
+                                                    <td colspan="4" align="center" style="vertical-align: middle;">No interpretation content available yet.</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
@@ -435,22 +435,22 @@
 
                                           
                                             <div class="checklist_one_line">
-                                                <div class="checklist_column" style="width: 121px; height: 80px; background-color: rgb(214, 239, 247);">Diameter</div>
-                                                <div style="width: 100%; height: 80px; border-bottom: solid 1px; text-align: left; padding: 5px;">
+                                                <div class="checklist_column" style="width: 121px; height: 65px; background-color: rgb(214, 239, 247);">Diameter</div>
+                                                <div style="width: 100%; height: 65px; border-bottom: solid 1px; text-align: left; padding: 5px;">
                                                     <div style=" height: 25px; display: flex; justify-content: left; align-items: center;">
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="width" placeholder="AP" oninput="calculateVolume(this)">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="text" id="width" placeholder="AP" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="height" placeholder="T" oninput="calculateVolume(this)">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="text" id="height" placeholder="T" oninput="calculateVolume(this)">
                                                         &nbsp;X&nbsp;
-                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="number" id="depth" placeholder="L" oninput="calculateVolume(this)">
+                                                        <input style="width: 50px; height: 100%; border: solid 1px;" type="text" id="depth" placeholder="L" oninput="calculateVolume(this)">
                                                         &nbsp;&nbsp;&nbsp;
-                                                        <select style="width: 50px; height: 100%; border: solid 1px; background-color: rgb(221, 221, 221);" id="unitSelector" onchange="convertUnits()">
-                                                            <option value="mm" selected>mm</option>
-                                                            <option value="cm">cm</option>
-                                                        </select>
+                                                        <div style="width: 50px; height: 100%; border: solid 1px; background-color: rgb(221, 221, 221);" id="unitSelector" onchange="convertUnits()">
+                                                            <!-- <option style="text-align: center;" value="mm" selected>mm</option> -->
+                                                            <option style="text-align: center;" value="cm">cm</option>
+                                                        </div>
                                                     </div>
-                                                    <div style="margin-top: 5px;">Volume=&nbsp;&nbsp; <small style="font-size: 14px; color: brown;" id="volume-result"></small><small style="font-size: 14px;"> &nbsp; mL</small></div>
-                                                    <div style="margin-top: 0px;">Maximal size=&nbsp;&nbsp; <small style="font-size: 14px; color: brown" id="largestNumber"></small> <small style="font-size: 14px;" id="currentUnit"> &nbsp;</small></div>
+                                                    <div style="margin-top: 5px;">Volume=&nbsp;&nbsp; <small style="font-size: 16px; color: brown;" id="volume-result"></small><small style="font-size: 14px;"> &nbsp; mL</small></div>
+                                                    <div style="display: none; margin-top: 0px;">Maximal size=&nbsp;&nbsp; <small style="font-size: 14px; color: brown" id="largestNumber"></small> <small style="font-size: 14px;" id="currentUnit"> &nbsp;</small></div>
                                                 </div>
                                             </div>
 
@@ -501,7 +501,7 @@
                                                     <label style="margin: 0px;" for="item4-2">Ill-defined</label>
 
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item4-3" name="item4" value="Item4-3">
-                                                    <label style="margin: 0px;" for="item4-3">Spiculated</label>
+                                                    <label style="margin: 0px;" for="item4-3">Irregular</label>
                                                 </div>
                                             </div>
 
@@ -533,7 +533,7 @@
                                             </div>
 
                                             <!-- 특성 Shape -->
-                                            <div class="checklist_one_line">
+                                            <div style="display: none;" class="checklist_one_line">
                                                 <div class="checklist_column">Shape</div>
                                                 <div class="checklist_items">
                                                     <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item7-1" name="item7" value="Item7-1">
@@ -595,8 +595,8 @@
 
                                             <div class="interpretation_button_elements">
                                                 <button style="margin: 5px;" type="button" class="interpretation_reset">Reset</button> <!-- 초기화 버튼 추가 -->
+                                                <span style="margin: 5px; padding-top: 3.5px;"  class="interpretation_close_button2" >Cancel</span>
                                                 <input style="margin: 5px;" type="submit" class="interpretation_save" value="Save" />
-                                                <span style="margin: 5px; padding-top: 3.5px;"  class="interpretation_close_button2" >Close</span>
                                             </div>
                                             
                                         </div>
@@ -621,7 +621,7 @@
                                     <div style="white-space: pre-line;" class="original_interpretation">
                                         A nodule measuring [<span id="width-text"></span><span id="currentUnit1"></span> x <span id="height-text"></span><span id="currentUnit2"></span> x <span id="depth-text"></span><span id="currentUnit3"></span>] and having a volume of [<span id="volume-result2"></span>ml] was discovered in the <span id="item2-text">[   ]</span> portion of the <span id="item1-text">[   ]</span> thyroid gland.
 
-                                        This nodule is <span id="item00-text">[   ]</span>, and the identified characteristics are as follows:
+                                        This nodule is <span id="item0-text">[   ]</span>, and the identified characteristics are as follows:
 
                                         Echogenicity: <span id="item3-text"></span>
                                         Margin: <span id="item4-text"></span>
@@ -631,7 +631,8 @@
                                         Internal Composition: <span id="item8-text"></span>
 
                                         Based on these characteristics, it has been classified as <span id="item9-text"></span>.
-                                        <span style="display: none;" id="item0-text"></span>
+                                        
+                                        <span style="display: none;"  id="item00-text">[   ]</span>
                                     </div>
                                 </form>
                             </div>
@@ -652,10 +653,10 @@
         document.getElementById("volume-result2").textContent = 0;
 
         function calculateVolume(input) {
-            // 입력 필드에서 숫자 3자리로 제한
+            // 입력 필드에서 숫자 4자리로 제한
             var inputValue = input.value;
-            if (inputValue.length > 3) {
-                input.value = inputValue.slice(0, 3);
+            if (inputValue.length > 4) {
+                input.value = inputValue.slice(0, 4);
             }
 
             // 사용자로부터 입력된 가로, 세로, 높이 가져오기
@@ -675,23 +676,14 @@
             var Hradius = height / 2;
             var Dradius = depth / 2;
             var volume = (4/3) * Math.PI * Wradius * Hradius * Dradius
-
-            // 현재는 타원체의 부피를 구하는 공식을 적용 시켰으나 갑상선 결절은 완벽한 타원체가 아니므로 
-            // 임상 의학에서 갑상선 부피를 측정할 때 주로 사용되는 공식은 AP * T * L / 2 를 사용함
-            // 하지만 판독문 생성 참고 사이트에서는 타원체 부피 계산 공식을 사용하고 있어 이를 적용함
-
-            // AP (Anteroposterior): 갑상선 결절의 앞뒤 두께를 의미합니다.
-            // T (Transverse): 갑상선 결절의 횡단면, 즉 결절의 가장 넓은 부분의 폭을 나타냅니다.
-            // L (Longitudinal): 갑상선 결절의 길이, 즉 상하 방향의 치수를 의미합니다.
-
-            // 선택된 단위에 따라 부피를 변환
             var currentUnit = unitSelector.value;
+
             if (currentUnit === "mm") {
                 volume *= 0.001; // cm^3에서 mm^3로 변환
             }
 
             // 결과를 화면에 표시
-            var roundedVolume = volume.toFixed(4); // 소수점 둘째 자리까지 반올림
+            var roundedVolume = volume.toFixed(2); // 소수점 둘째 자리까지 반올림
             
             document.getElementById("volume-result").textContent = roundedVolume;
             document.getElementById("volume-result2").textContent = roundedVolume;
@@ -700,9 +692,9 @@
             document.getElementById("currentUnit2").textContent = currentUnit;
             document.getElementById("currentUnit3").textContent = currentUnit;
 
-            document.getElementById("width-text").textContent = width;
-            document.getElementById("height-text").textContent = height;
-            document.getElementById("depth-text").textContent = depth;
+            document.getElementById("width-text").textContent = width + "cm";
+            document.getElementById("height-text").textContent = height + "cm";
+            document.getElementById("depth-text").textContent = depth + "cm";
 
             var largestNumber = Math.max(width, height, depth);
             document.getElementById("largestNumber").textContent = largestNumber;
@@ -753,12 +745,12 @@
                 if (BM_resultSpecData === 'B') {
                     const Benign = document.getElementById("item0-1");
                     Benign.checked = true; 
-                    BM_Text.textContent = `Benign`;
+                    BM_Text.textContent = `benign`;
                 }
                 else if (BM_resultSpecData === 'M') {
                     const Malignant = document.getElementById("item0-2");
                     Malignant.checked = true; 
-                    BM_Text.textContent = `Malignant`;
+                    BM_Text.textContent = `malignant`;
                 }
             });
         }
@@ -897,7 +889,7 @@
                 else if (MARGIN_resultSpecData === 'Spiculated') {
                     const Spiculated = document.getElementById("item4-3");
                     Spiculated.checked = true;
-                    MARGIN_Text.textContent = `Spiculated`;
+                    MARGIN_Text.textContent = `Irregular`;
                 }
             });
         }
@@ -1221,7 +1213,16 @@
                             otherCheckbox.checked = false; // 다른 항목들 해제
                         }
                     });
-                    item0Text.textContent = ` ${checkedItemValue}`; // 각 항목명을 텍스트로 추가
+                    // 체크 항목 이름을 임의로 수정
+                    if (checkedItemValue === "Benign") {
+                        const checkedItemValue = "benign";
+                        item0Text.textContent = ` ${checkedItemValue}`;
+                    } else if (checkedItemValue === "Malignant") {
+                        const checkedItemValue = "malignant";
+                        item0Text.textContent = ` ${checkedItemValue}`;
+                    } else {
+                        item0Text.textContent = '[   ]';
+                    }
                 }
                 else if (this.id === "item00-1" || this.id === "item00-2") {
                     checkboxes.forEach(otherCheckbox => {
@@ -1384,10 +1385,10 @@
             document.getElementById("volume-result2").textContent = 0;
 
             // 단위 선택 옵션 초기화
-            unitSelector.value = 'mm';
+            unitSelector.value = 'cm';
 
             // 단위 표시 초기화
-            document.getElementById("currentUnit").textContent = 'mm'; // 단위 'mm'로 초기화
+            document.getElementById("currentUnit").textContent = 'cm'; // 단위 'mm'로 초기화
             document.getElementById("currentUnit2").textContent = ''; // 판독문의 단위 초기화 
 
             // 모든 체크박스 해제

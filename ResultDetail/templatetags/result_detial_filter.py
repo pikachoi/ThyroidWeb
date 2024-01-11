@@ -27,8 +27,8 @@ def get_spec(classification_info, spec) :
     
     elif spec == 'PN' :
         pn = classification_info['K-TIRADS']
-        res['P'] = f"{(pn[0] + pn[1]) * 100:.3f}"
-        res['N'] = f"{(pn[2] + pn[3]) * 100:.3f}"
+        res['P'] = f"{(pn[2] + pn[3]) * 100:.3f}"
+        res['N'] = f"{(pn[0] + pn[1]) * 100:.3f}"
         return res.items()
     
     elif spec == "ECHO" :
@@ -95,9 +95,9 @@ def get_max_spec(classification_info, spec) :
     elif spec == 'PN' :
         pn = classification_info['K-TIRADS']
         if (pn[0] + pn[1]) > (pn[2] + pn[3]) :
-            return 'P'
-        else :
             return 'N'
+        else :
+            return 'P'
     
 
 

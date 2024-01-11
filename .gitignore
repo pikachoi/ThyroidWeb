@@ -1,6 +1,7 @@
 # 특정 디렉토리
 media/
 yolov5/
+data/
 
 # 이미지 파일
 *.jpg
@@ -11,6 +12,9 @@ yolov5/
 *.JPEG
 *.PNG
 *.GIF
+*.zip
+*.tar
+*.csv
 
 # 파이썬 가상 환경 관련 파일/디렉토리
 __pycache__/
