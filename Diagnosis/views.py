@@ -14,6 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 import subprocess
 import base64
 
+import time
+
 
 AI_mode = True
 
@@ -191,52 +193,112 @@ if AI_mode :
 
         return padding_image
 
+
+    # def normalize_image(image):
+    #     return image / 255.0
+
+    # # 중복 코드를 제거하고 간결하게 만든 calssci_spec_func 함수입니다.
+    # def calssci_spec_func(image_obj):
+    #     ori_crop_img_paths = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/crops"))
+    #     extend_crop_img_paths = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/extend_crops"))
+
+    #     if not ori_crop_img_paths or not extend_crop_img_paths:
+    #         crop_raw = Crop(
+    #             img_path = ImagePath.objects.get(img_path = image_obj.img_path),
+    #             crop_img_path = ""
+    #         )
+    #         crop_raw.save()
+    #     else:
+    #         for ori_path, extend_path in zip(ori_crop_img_paths, extend_crop_img_paths):
+    #             crop_img_224 = cv2.resize(cv2.imread(ori_path), (224, 224))
+    #             crop_img_299 = cv2.resize(cv2.imread(ori_path), (299, 299))
+
+    #             crop_img_array = np.array(crop_img_299)
+    #             cropped_echogenicity_orientation_img = apply_orientation_echogenicity(Image.fromarray(crop_img_array), 299, 299)
+
+    #             crop_result = {
+    #                 "K-TIRADS": classification_model.predict(np.expand_dims(normalize_image(crop_img_299), axis=0)).tolist()[0],
+    #                 "echogenicity": echogenicity_model.predict(np.expand_dims(normalize_image(np.array(cropped_echogenicity_orientation_img)), axis=0)).tolist()[0],
+    #                 "margin": [],
+    #                 "echogenic_foci": echogenic_foci_model.predict(np.expand_dims(normalize_image(crop_img_224), axis=0)).tolist()[0],
+    #                 "orientation": orientation_model.predict(np.expand_dims(normalize_image(np.array(cropped_echogenicity_orientation_img)), axis=0)).tolist()[0],
+    #                 "shape": shape_model.predict(np.expand_dims(normalize_image(crop_img_224), axis=0)).tolist()[0],
+    #                 "composition": []
+    #             }
+
+    #             crop_img_extend = cv2.resize(cv2.imread(extend_path), (224, 224))
+    #             crop_img_composition = apply_composition(crop_img_extend)
+    #             crop_img_margin = apply_margin(crop_img_extend)
+    #             print('margin')
+    #             margin_value = margin_model.predict(np.expand_dims(normalize_image(crop_img_margin), axis=0)).tolist()[0]
+    #             print('composition_model')
+    #             composition_value = composition_model.predict(np.expand_dims(normalize_image(crop_img_composition), axis=0)).tolist()[0]
+
+    #             crop_result["margin"].append(margin_value)
+    #             crop_result["composition"].append(composition_value)
+
+    #             crop_raw = Crop(
+    #                 img_path=image_obj,
+    #                 crop_img_path=ori_path.split(f"media{os.path.sep}")[-1],
+    #                 is_nodule=True,
+    #                 classifi_result=crop_result
+    #             )
+    #             crop_raw.save()
+    
+
     def calssci_spec_func(image_obj):
-        ori_crop_img = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/crops"))
-        extend_crop_img = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/extend_crops"))
+            start_time = time.time()
 
-        if len(ori_crop_img) == 0 or len(extend_crop_img) == 0:
-            crop_raw = Crop(
-                img_path                = ImagePath.objects.get(img_path = image_obj.img_path),
-                crop_img_path           = ""
-            )
-            crop_raw.save()
-        else :
+            ori_crop_img = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/crops"))
+            extend_crop_img = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/extend_crops"))
 
-
-            for i in ori_crop_img:
-                crop_img_224 = cv2.resize(cv2.imread(i), (224, 224))
-                crop_img_299 = cv2.resize(cv2.imread(i), (299, 299))
-                crop_img_array = np.array(crop_img_299)
-                cropped_echogenicity_orientation_img = apply_orientation_echogenicity(Image.fromarray(crop_img_array), 299, 299)
-                crop_result = {
-                    "K-TIRADS": classification_model.predict(np.expand_dims(crop_img_299 / 255.0, axis=0)).tolist()[0],
-                    "echogenicity": echogenicity_model.predict(np.expand_dims(np.array(cropped_echogenicity_orientation_img) / 255.0, axis=0)).tolist()[0],
-                    "margin": [],
-                    "echogenic_foci": echogenic_foci_model.predict(np.expand_dims(crop_img_224, axis=0)).tolist()[0],
-                    "orientation": orientation_model.predict(np.expand_dims(np.array(cropped_echogenicity_orientation_img) / 255.0, axis=0)).tolist()[0],
-                    "shape": shape_model.predict(np.expand_dims(crop_img_224 / 255.0, axis=0)).tolist()[0],
-                    "composition": [],
-                }
-
-                for j in extend_crop_img:
-                    crop_img_extend = cv2.resize(cv2.imread(j), (224, 224))
-                    crop_img_composition = apply_composition(crop_img_extend)
-                    crop_img_margin = apply_margin(crop_img_extend)
-                    margin_value = margin_model.predict(np.expand_dims(crop_img_margin, axis=0)).tolist()[0]
-                    composition_value = composition_model.predict(np.expand_dims(crop_img_composition, axis=0)).tolist()[0]
-                    crop_result["margin"].append(margin_value)
-                    crop_result["composition"].append(composition_value)
-
+            if len(ori_crop_img) == 0 or len(extend_crop_img) == 0:
                 crop_raw = Crop(
-                    img_path=image_obj,
-                    crop_img_path=i.split(f"media{os.path.sep}")[-1],
-                    is_nodule=True,
-                    classifi_result=crop_result
+                    img_path                = ImagePath.objects.get(img_path = image_obj.img_path),
+                    crop_img_path           = ""
                 )
                 crop_raw.save()
+            else :
 
-    
+
+                for i in ori_crop_img:
+                    crop_img_224 = cv2.resize(cv2.imread(i), (224, 224))
+                    crop_img_299 = cv2.resize(cv2.imread(i), (299, 299))
+                    crop_img_array = np.array(crop_img_299)
+                    cropped_echogenicity_orientation_img = apply_orientation_echogenicity(Image.fromarray(crop_img_array), 299, 299)
+                    crop_result = {
+                        "K-TIRADS": classification_model.predict(np.expand_dims(crop_img_299 / 255.0, axis=0)).tolist()[0],
+                        "echogenicity": echogenicity_model.predict(np.expand_dims(np.array(cropped_echogenicity_orientation_img) / 255.0, axis=0)).tolist()[0],
+                        "margin": [],
+                        "echogenic_foci": echogenic_foci_model.predict(np.expand_dims(crop_img_224, axis=0)).tolist()[0],
+                        "orientation": orientation_model.predict(np.expand_dims(np.array(cropped_echogenicity_orientation_img) / 255.0, axis=0)).tolist()[0],
+                        "shape": shape_model.predict(np.expand_dims(crop_img_224 / 255.0, axis=0)).tolist()[0],
+                        "composition": [],
+                    }
+
+                    for j in extend_crop_img:
+                        crop_img_extend = cv2.resize(cv2.imread(j), (224, 224))
+                        crop_img_composition = apply_composition(crop_img_extend)
+                        crop_img_margin = apply_margin(crop_img_extend)
+                        print('margin')
+                        margin_value = margin_model.predict(np.expand_dims(crop_img_margin, axis=0)).tolist()[0]
+                        composition_value = composition_model.predict(np.expand_dims(crop_img_composition, axis=0)).tolist()[0]
+                        crop_result["margin"].append(margin_value)
+                        crop_result["composition"].append(composition_value)
+
+                    crop_raw = Crop(
+                        img_path=image_obj,
+                        crop_img_path=i.split(f"media{os.path.sep}")[-1],
+                        is_nodule=True,
+                        classifi_result=crop_result
+                    )
+                    crop_raw.save()
+
+                    end_time = time.time()
+                    print("--------------------------------------apply_composition 함수 실행 시간: ", end_time - start_time)
+
+
+
     classification_model = load_model("media/AI_model/densenet201.0.87-0.76.h5")
     echogenicity_model = load_model("media/AI_model/Refactoring/Echogenicity/Echogenicity_299.h5")
     margin_model = load_model("media/AI_model/Refactoring/Margin/Margin_224.h5")
@@ -245,18 +307,31 @@ if AI_mode :
     shape_model = load_model("media/AI_model/Refactoring/Shape/Shape_224.h5")
     composition_model = load_model("media/AI_model/Refactoring/Composition/Composition_224.h5")
 
+    
+
     print("\n모델 첫번째 분류 수행중...\n")
 
     dummy_image_224 = np.expand_dims(np.zeros((224, 224, 3), dtype = np.uint8), axis = 0)
     dummy_image_299 = np.expand_dims(np.zeros((299, 299, 3), dtype = np.uint8), axis = 0)
+
     
+    print('classification')
     classification_model.predict(dummy_image_299 / 255.0)
+    print('echogenicity_model')
     echogenicity_model.predict(dummy_image_299 / 255.0 )
+    print('margin_model')
     margin_model.predict(dummy_image_224 / 255.0)
+    print('echogenic_foci_model')
     echogenic_foci_model.predict(dummy_image_224 / 255.0)
+    print('orientation_model')
     orientation_model.predict(dummy_image_299 / 255.0)
+    print('shape_model')
     shape_model.predict(dummy_image_224 / 255.0)
+    print('composition_model')
     composition_model.predict(dummy_image_224/ 255.0)
+    
+
+
 
 
 # 판독 화면 접근시

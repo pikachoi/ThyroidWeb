@@ -15,16 +15,12 @@
 
 
 #pw_search_input, #id, #name, #License_Number, #Affiliation, #username, #Rank, #Subject, #hint {
-    width: 20%;
-    height : 300%;
+    width: 200PX;
+    height : 30PX;
     padding: 8px;
-    #margin: 10px 0;
     border-radius: 5px;
     border: 1px solid lightgray;
-    box-sizing: border-box;
-    postion : absolute;
-    margin-top: 1%;
-    margin-left : 40%;
+    box-sizing: border-box
 }
 
 
@@ -38,18 +34,14 @@ input[type=email] {
     margin-left : 40%;
 }
 
-input[type=password] {
-    width: 20%;
+/* input[type=password] {
+    width: 200PX;
+    height : 30PX;
     padding: 8px;
-    margin: 0px 0;
     border-radius: 5px;
     border: 1px solid lightgray;
     box-sizing: border-box;
-    margin-top: 1%;
-    margin-left : 40%;
-    
-    
-}
+} */
 
 input[type=tel] {
     width: 20%;
@@ -85,9 +77,6 @@ input[type=tel] {
     margin-top: 15px;
     border-radius: 5px;
     border: none;
-    margin-top: 1%;
-    margin-left : 40%;
-  
 }
 
 
@@ -690,7 +679,7 @@ p {
 
 #wrapper2{
     min-height : 100%;
-    max-height : auto%;
+    max-height : auto;
     margin: auto;
     
 }
@@ -709,15 +698,13 @@ html, body {
 .login_footer_img {
     width: 4%;
     height: 4%; 
-    margin-left : 37%;
     margin-bottom: -0.5%;
 }
 
 .footer_img {
-    width: 4%;
-    height: 4%; 
-    margin-left : 37%;
-    margin-bottom: 0%;
+    width: 45px;
+    margin-top: 4px;
+    margin-right: 10px;
 }
 
 

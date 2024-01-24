@@ -1,0 +1,101 @@
+html{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%
+  }
+  
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .div-custom{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo {
+    width: 80px;
+    margin-bottom: 10px;
+  }
+
+  .input {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 2rem;
+    display: block;
+    width: 220px;
+    border: none;
+    box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
+      6px 6px 6px rgba(255, 255, 255, 0.781);
+    outline: none;
+    background-color: inherit;
+    color: rgb(161, 161, 161);
+    font-size: inherit;
+  }
+  
+.account-back {
+    width: 100%;
+    height: 40rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7f7f7;
+  }
+
+  .select-custom {
+    appearance: none; 
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    background: url('/static/img/ic-down_97618.png') no-repeat right center; /* 화살표 이미지 설정 */
+    background-size: 10px;
+}
+
+.or {
+  position: relative;
+  font-weight: bold;
+  color: rgb(112, 112, 112);
+  margin-top: 0px;
+}
+
+.or::before , .or::after {
+  position: absolute;
+  content: '';
+  width: 700%;
+  height: 1px;
+  top: 50%;
+  margin: 0 6px;
+  background-color: rgba(0, 0, 0, 0.479);
+}
+
+.or::before {
+  right: 100%;
+}
+
+.or::after {
+}
+
+.forgotten {
+  text-align: center;
+  font-size: .8rem;
+  width: 80%;
+  color: gray;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.hr-vertical{
+  width: 0.01px;
+  height: 35px;
+  border: solid 0.01px;
+  border-color: rgb(190, 190, 190);
+  margin-top: 3px;
+}

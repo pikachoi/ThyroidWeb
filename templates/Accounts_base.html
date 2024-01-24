@@ -4,23 +4,64 @@
     <head>
         <meta charset="UTF-8">
         <title>LTLUX</title>
-        <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
-        <link rel="stylesheet" href="{% static 'css/default.css' %}">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/lt4_symbol.png' %}">
+        <link rel="stylesheet" href="{% static 'css/Accounts_base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/Accounts_login.css' %}">
+        <link rel="stylesheet" href="{% static 'css/Accounts_id_search.css' %}">
+        <script type="text/javascript" src="{% static 'js/password_check.js' %}"></script>
+        <!-- HTML에 캐싱을 제어하는 메타 태그 -->
+        <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="pragma" content="no-cache">
+        <meta http-equiv="expires" content="0">
+        
+
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+
     </head>
+
     <body>
-        <div id = 'wrapper'>
-            <img class="logo_img" src="{% static 'img/ltlux-logo.png' %}"></img>
+        <!-- 로그인화면 메시지 -->
+        <div class="message-print" id = "warning_login">
+            {{ check_info }}
+            {{ success_signup }}
+            {{password_reset_success}}
+        </div>
+
+        <!-- 아이디찾기화면 메시지 -->
+        <div class="message-print">
+            <h5 class="h4 text-gray-900 mb-4">{{real_name}}
+                <span style="color: rgb(252, 113, 8); font-size: x-large;">
+                    {{doctor_username}}
+                </span>{{end_text}}
+                <span style="color: rgb(252, 8, 8); font-size:medium;">{{error}}</span>
+            </h5>
+        </div>
+
+        <!-- 비번찾기화면 메시지 -->
+        <div class="account">
+            <h5 class="h4 text-gray-900 mb-4">{{real_name}}
+                <span style="color: rgb(252, 113, 8); font-size: x-large;">
+                    {{doctor_username}}
+                </span>{{end_text}}
+                <span style="color: rgb(252, 8, 8); font-size:medium;">{{error}}</span>
+            </h5>
+        </div>
+
+        <div class="div-custom">
             {% block content %} 
             {% endblock %}
         </div>
+
+        <hr>
+        <footer>
+            <img style="width: 45px; margin-top: 4px; margin-right: 10px;" src="{% static 'img/lt4_logo.png' %}"></img>
+            <div><small>Copyright © Lt4 Corp. All Rights Reserved.</small></div>
+        </footer>
     </body>
-    <footer>
-        <script type="text/javascript" src="{% static 'js/password_check.js' %}"></script>
-        <div>
-            <hr>
-            <img class = "footer_img" src="{% static 'img/lt4_logo.png' %}">
-                Copyright © Lt4 Corp. All Rights Reserved.
-            </img>
-        </div>    
-    </footer>
+    
+    
 </html>
+
+

@@ -1,0 +1,91 @@
+.login-form {
+  border-radius: 10px;
+  width: 350px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -3px -3px 3px white, 3px 3px 5px rgba(209, 209, 209, 0.705);
+  background-color: #f7f7f7;
+}
+
+.login-submit{
+  width: 235px;
+  margin-top: 15px;
+  font-weight: bold;
+  box-shadow: -3px -3px 5px white, 3px 3px 5px rgba(182, 182, 182, 0.705);
+  color: rgb(112, 112, 112);
+  cursor: pointer;
+}
+
+.login-submit:hover {
+  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
+    6px 6px 6px rgba(255, 255, 255, 0.781);
+  transition: 500ms;
+}
+
+.login-submit:active {
+  color: rgb(255, 135, 60);
+  transition: 10ms;
+ }
+
+::placeholder {
+  color: rgb(161, 161, 161);
+}
+
+a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.find-submit{
+  color: gray;
+  font-size: small;
+  text-align: center;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.find-submit:hover {
+  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
+    6px 6px 6px rgba(255, 255, 255, 0.781);
+  transition: 10ms;
+}
+
+.find-submit:active {
+  color: rgb(255, 135, 60);
+  transition: 10ms;
+ }
+
+.signup-text { 
+  margin-top: 20px;
+  font-size: 1rem;
+  color: gray;
+}
+
+.signup-submit{
+  font-weight: bolder;
+  box-shadow: -3px -3px 5px white, 3px 3px 5px rgba(182, 182, 182, 0.705);
+  color: gray;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-size: 0.9rem;
+}
+
+.signup-submit:hover {
+  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
+    6px 6px 6px rgba(255, 255, 255, 0.781);
+  transition: 500ms;
+}
+
+.signup-submit:active {
+  color: rgb(255, 135, 60);
+  transition: 10ms;
+ }
+

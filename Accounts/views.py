@@ -6,7 +6,13 @@ from django.contrib.auth import authenticate
 
 from .models import Doctor, Doctor_profile, Question
 
+# from django.views.decorators.cache import never_cache
+# from django.contrib.auth.decorators import login_required
 
+# https://sir.kr/qa/128348 참조
+
+# @never_cache  # 캐시 방지
+# @login_required  # 로그인 상태
 def login(request) :
     if request.method == "POST" :
         username = request.POST["username"]
@@ -20,6 +26,7 @@ def login(request) :
             return redirect("diagnosis_home") 
     else :
         return render(request, "Accounts_login.html")
+    
 
 def logout(request) :
     auth.logout(request)

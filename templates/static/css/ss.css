@@ -1,0 +1,109 @@
+
+.login_form{
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    width: 370px;
+    height: 280px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* box-shadow: 0px 0px 7px rgb(148, 148, 148); */
+}
+
+.input_form{
+    width: 200px;
+    height: 50px;
+    border: solid 1px black;
+}
+
+.signup_form{
+    background-color: rgb(255, 255, 255);
+    border-radius: 50px;
+    width: 380px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 3px 3px 10px rgb(133, 133, 133);
+}
+
+.id_search_form{
+    background-color: rgb(255, 255, 255);
+    border-radius: 50px;
+    width: 300px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 3px 3px 10px rgb(133, 133, 133);
+}
+
+.id_password_form{
+    background-color: rgb(255, 255, 255);
+    border-radius: 50px;
+    width: 300px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 3px 3px 10px rgb(133, 133, 133);
+}
+
+.id_password_reset_form{
+    background-color: rgb(255, 255, 255);
+    border-radius: 50px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 3px 3px 10px rgb(133, 133, 133);
+}
+
+.find_button{
+    background-color: rgba(255, 255, 255, 0.952);
+    border-color: rgb(204, 204, 204);
+    color: #303030;
+    border-radius: 10px;
+    width: 110px;
+    margin-bottom: 5%;
+    border-style: outset;
+    border-width: 1.5px;
+    padding: 2px;
+    font-size: 12px;
+    /* box-shadow: 1px 1px 1px 1px rgb(211, 211, 211); */
+}
+
+.circle {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    background: #f4f4f4; /* 내부 원의 색상 */
+    border-radius: 50%;
+    margin-top: 3px;
+    margin-right: 4px;
+    margin-left: 48px;
+}
+
+.circle::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    border: 1.3px inset #b7b7b7; /* 내부 외곽선 색상 */
+    border-radius: 50%;
+    
+}
