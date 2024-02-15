@@ -1,35 +1,53 @@
 import re
-
-from django.contrib import auth
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate
-
+from django.contrib.auth import authenticate, login, logout
 from .models import Doctor, Doctor_profile, Question
-
-# from django.views.decorators.cache import never_cache
+from .forms import LoginForm
+from django.views.decorators.cache import never_cache
 # from django.contrib.auth.decorators import login_required
-
-# https://sir.kr/qa/128348 참조
-
-# @never_cache  # 캐시 방지
+# from django.views.decorators.csrf import csrf_exempt
 # @login_required  # 로그인 상태
-def login(request) :
-    if request.method == "POST" :
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username = username, password = password)
+# @csrf_exempt
 
-        if user is None :
-            return render(request, "Accounts_login.html", context = {"check_info" : "아이디와 비밀번호를 확인해주세요!"})
-        else :
-            auth.login(request, user)
-            return redirect("diagnosis_home") 
-    else :
-        return render(request, "Accounts_login.html")
+@never_cache
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("/diagnosis_home")
+    
+    if request.method == "POST":
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect("diagnosis_home")
+            else:
+                form.add_error(None, "등록되지 않은 아이디이거나 아이디 또는 비밀번호를 잘못 입력했습니다.")
+    else:
+        form = LoginForm()
+
+    context = {"form": form}
+    return render(request, "Accounts_login.html", context)
+
+
+    #     if user is None :
+    #         return render(request, "Accounts_login.html", context = {"check_info" : "아이디와 비밀번호를 확인해주세요!"})
+    #     else :
+    #         login(request, user)
+    #         return redirect("diagnosis_home") 
+    # else :
+    #     return render(request, "Accounts_login.html")
     
 
-def logout(request) :
-    auth.logout(request)
+
+
+
+
+def logout_view(request) :
+    logout(request)
     return redirect("login")
 
 
@@ -44,7 +62,7 @@ def signup(request) :
         if Doctor.object.filter(username = request.POST["username"]).exists() :
             return render(request, "Accounts_signup.html", context = {"question" : question, "exists_id" : "존재하는 아이디입니다."})
         
-        elif not re.search(r"^[\w*$]{5,25}", (request.POST['username'])):
+        elif not re.search(r'^[a-zA-Z0-9]{5,25}$', (request.POST['username'])):
             return render(request, "Accounts_signup.html", context = {"question" : question,"check_username" : "아이디는 5~25 글자의 영어 대 소문자, 숫자만 입력 가능합니다."})
         
         elif not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
@@ -61,7 +79,7 @@ def signup(request) :
                 username = request.POST["username"],
                 password = request.POST["password1"],
             )
-            auth.login(request, doctor)
+            login(request, doctor)
 
             Doctor_profile.objects.create(
                 doctor_username = Doctor.object.get(username = request.POST["username"]),

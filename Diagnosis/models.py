@@ -30,6 +30,10 @@ class Patient(models.Model) :
     visit_date      = models.DateTimeField(verbose_name = "visit_date", auto_now = True)
     is_summary      = models.BooleanField(default = True)   # 요약 모달창을 아직 안띄워줘서 tagging 하기 전이면 True, 요약 모달창에서 선택을 끝내면 False
 
+# @admin.register(Patient)
+# class MyModelAdmin(admin.ModelAdmin):
+#     list_display = ('idx', 'doctor', 'patient_name', 'visit_date', 'is_summary')
+
 class ImagePath(models.Model) :
     idx             = models.AutoField(primary_key = True)
     patient         = models.ForeignKey(Patient, on_delete = models.CASCADE, db_column = "patient", null = False)

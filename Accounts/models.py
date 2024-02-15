@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+
 class DoctorManager(BaseUserManager) :
     def create_user(self, username,  password = None) :
         if not username :
@@ -30,7 +31,7 @@ class Doctor(AbstractBaseUser) :
     is_staff        = models.BooleanField(default = False)
     is_superuser    = models.BooleanField(default = False)
     
-    object = DoctorManager()
+    objects = DoctorManager()
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -59,3 +60,4 @@ class Doctor_profile(models.Model) :
     medical_subject = models.CharField(max_length = 128)    # 진료 과목
     question        = models.ForeignKey(Question, on_delete = models.CASCADE, default = 1, db_column = "question")
     question_answer = models.CharField(max_length = 128)
+

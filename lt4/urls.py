@@ -18,7 +18,6 @@ urlpatterns = [
     path("Chart/",include("Chart.urls")),
     path("PatientList/",include("PatientList.urls")),
     path("ResultDetail/",include("ResultDetail.urls")),   
-    path('converter/', include('Dcm_converter.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

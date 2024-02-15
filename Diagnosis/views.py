@@ -17,7 +17,7 @@ import base64
 import time
 
 
-AI_mode = True
+AI_mode = False
 
 if AI_mode :
     print("\n검출 모델 로드 중...\n")
@@ -134,7 +134,6 @@ if AI_mode :
                             xyxy[2] += 30  # x_max
                             xyxy[3] += 30  # y_max
 
-                            
                             xyxy[0] = max(xyxy[0], 0)
                             xyxy[1] = max(xyxy[1], 0)
                             xyxy[2] = min(xyxy[2], im0.shape[1])
@@ -150,7 +149,6 @@ if AI_mode :
                 if save_img:
                     cv2.imwrite(save_path, im0)
                     
-
             # Print time (inference-only)
             LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
 
@@ -159,27 +157,26 @@ if AI_mode :
         LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
 
 
-    # composition preprocessing apply
     # extend_crop / 224 / CLAHE - > 발테 전처리 o
     def apply_composition(image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         clahe_image = clahe.apply(gray)
         clahe_image = cv2.cvtColor(clahe_image, cv2.COLOR_GRAY2BGR)
+
         return clahe_image
     
 
-    # margin preprocessing apply
     # extend crop / 224 / COLOR_RGB2GRAY, meian_filter, 다시 COLOR_GRAY2RGB / 정규화 -> 발테 전처리 적용 o
     def apply_margin(image):
         gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) 
         filtered_im = median_filter(gray, 5) 
         filtered_im_rgb = cv2.cvtColor(filtered_im, cv2.COLOR_GRAY2RGB)
         filter_image = filtered_im_rgb / 255
+
         return filter_image
 
 
-    # orientation, echogenicity preprocessing apply
     # # echogenicity / orientation - ori crop image / 299 / padding  -> 발테 전처리 적용 o
     def apply_orientation_echogenicity(image, target_width, target_height, padding_color=(0, 0, 0)):
         ratio = min(target_width / image.width, target_height / image.height)
@@ -194,58 +191,6 @@ if AI_mode :
         return padding_image
 
 
-    # def normalize_image(image):
-    #     return image / 255.0
-
-    # # 중복 코드를 제거하고 간결하게 만든 calssci_spec_func 함수입니다.
-    # def calssci_spec_func(image_obj):
-    #     ori_crop_img_paths = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/crops"))
-    #     extend_crop_img_paths = list(list_files(f"{os.path.split(image_obj.img_path.path)[0]}/nodule/extend_crops"))
-
-    #     if not ori_crop_img_paths or not extend_crop_img_paths:
-    #         crop_raw = Crop(
-    #             img_path = ImagePath.objects.get(img_path = image_obj.img_path),
-    #             crop_img_path = ""
-    #         )
-    #         crop_raw.save()
-    #     else:
-    #         for ori_path, extend_path in zip(ori_crop_img_paths, extend_crop_img_paths):
-    #             crop_img_224 = cv2.resize(cv2.imread(ori_path), (224, 224))
-    #             crop_img_299 = cv2.resize(cv2.imread(ori_path), (299, 299))
-
-    #             crop_img_array = np.array(crop_img_299)
-    #             cropped_echogenicity_orientation_img = apply_orientation_echogenicity(Image.fromarray(crop_img_array), 299, 299)
-
-    #             crop_result = {
-    #                 "K-TIRADS": classification_model.predict(np.expand_dims(normalize_image(crop_img_299), axis=0)).tolist()[0],
-    #                 "echogenicity": echogenicity_model.predict(np.expand_dims(normalize_image(np.array(cropped_echogenicity_orientation_img)), axis=0)).tolist()[0],
-    #                 "margin": [],
-    #                 "echogenic_foci": echogenic_foci_model.predict(np.expand_dims(normalize_image(crop_img_224), axis=0)).tolist()[0],
-    #                 "orientation": orientation_model.predict(np.expand_dims(normalize_image(np.array(cropped_echogenicity_orientation_img)), axis=0)).tolist()[0],
-    #                 "shape": shape_model.predict(np.expand_dims(normalize_image(crop_img_224), axis=0)).tolist()[0],
-    #                 "composition": []
-    #             }
-
-    #             crop_img_extend = cv2.resize(cv2.imread(extend_path), (224, 224))
-    #             crop_img_composition = apply_composition(crop_img_extend)
-    #             crop_img_margin = apply_margin(crop_img_extend)
-    #             print('margin')
-    #             margin_value = margin_model.predict(np.expand_dims(normalize_image(crop_img_margin), axis=0)).tolist()[0]
-    #             print('composition_model')
-    #             composition_value = composition_model.predict(np.expand_dims(normalize_image(crop_img_composition), axis=0)).tolist()[0]
-
-    #             crop_result["margin"].append(margin_value)
-    #             crop_result["composition"].append(composition_value)
-
-    #             crop_raw = Crop(
-    #                 img_path=image_obj,
-    #                 crop_img_path=ori_path.split(f"media{os.path.sep}")[-1],
-    #                 is_nodule=True,
-    #                 classifi_result=crop_result
-    #             )
-    #             crop_raw.save()
-    
-
     def calssci_spec_func(image_obj):
             start_time = time.time()
 
@@ -258,9 +203,8 @@ if AI_mode :
                     crop_img_path           = ""
                 )
                 crop_raw.save()
+
             else :
-
-
                 for i in ori_crop_img:
                     crop_img_224 = cv2.resize(cv2.imread(i), (224, 224))
                     crop_img_299 = cv2.resize(cv2.imread(i), (299, 299))
@@ -270,7 +214,7 @@ if AI_mode :
                         "K-TIRADS": classification_model.predict(np.expand_dims(crop_img_299 / 255.0, axis=0)).tolist()[0],
                         "echogenicity": echogenicity_model.predict(np.expand_dims(np.array(cropped_echogenicity_orientation_img) / 255.0, axis=0)).tolist()[0],
                         "margin": [],
-                        "echogenic_foci": echogenic_foci_model.predict(np.expand_dims(crop_img_224, axis=0)).tolist()[0],
+                        "echogenic_foci": echogenic_foci_model.predict(np.expand_dims(crop_img_224 / 255.0, axis=0)).tolist()[0],  # 약 3초 원래 정규화 없음
                         "orientation": orientation_model.predict(np.expand_dims(np.array(cropped_echogenicity_orientation_img) / 255.0, axis=0)).tolist()[0],
                         "shape": shape_model.predict(np.expand_dims(crop_img_224 / 255.0, axis=0)).tolist()[0],
                         "composition": [],
@@ -282,7 +226,8 @@ if AI_mode :
                         crop_img_margin = apply_margin(crop_img_extend)
                         print('margin')
                         margin_value = margin_model.predict(np.expand_dims(crop_img_margin, axis=0)).tolist()[0]
-                        composition_value = composition_model.predict(np.expand_dims(crop_img_composition, axis=0)).tolist()[0]
+                        print('composition')
+                        composition_value = composition_model.predict(np.expand_dims(crop_img_composition / 255.0, axis=0)).tolist()[0]  # 약 2초 원래 정규화 없음
                         crop_result["margin"].append(margin_value)
                         crop_result["composition"].append(composition_value)
 
@@ -295,8 +240,7 @@ if AI_mode :
                     crop_raw.save()
 
                     end_time = time.time()
-                    print("--------------------------------------apply_composition 함수 실행 시간: ", end_time - start_time)
-
+                    print("-------------------------------------- 전체 함수 실행 시간: ", end_time - start_time)
 
 
     classification_model = load_model("media/AI_model/densenet201.0.87-0.76.h5")
@@ -307,7 +251,6 @@ if AI_mode :
     shape_model = load_model("media/AI_model/Refactoring/Shape/Shape_224.h5")
     composition_model = load_model("media/AI_model/Refactoring/Composition/Composition_224.h5")
 
-    
 
     print("\n모델 첫번째 분류 수행중...\n")
 
@@ -330,8 +273,6 @@ if AI_mode :
     print('composition_model')
     composition_model.predict(dummy_image_224/ 255.0)
     
-
-
 
 
 # 판독 화면 접근시
@@ -377,6 +318,7 @@ def diagnosis_home(request):
                     img_path=request.FILES["imgfile2"], 
                     is_axial=False
                 )
+
                 image_obj_sagittal.save()
                 yolov5_detect(source=image_obj_sagittal.img_path.path, project=os.path.split(image_obj_sagittal.img_path.path)[0])
                 calssci_spec_func(image_obj_sagittal)
