@@ -12,7 +12,7 @@ from django.views.decorators.cache import never_cache
 @never_cache
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("/diagnosis_home")
+        return render(request, "Accounts_login_status.html")
     
     if request.method == "POST":
         form = LoginForm(data=request.POST)
@@ -32,7 +32,8 @@ def login_view(request):
     context = {"form": form}
     return render(request, "Accounts_login.html", context)
 
-
+# 로그인 후 메인페이지로 넘어간 상태에서 브라우저 뒤로가기를 눌렀을 시 로그인 페이지가 나오지 않게 하려고 @never_cache를 사용했는데
+#  문제는 로그인 페이지가 나오진 않지만 대신 404페이가 나와서 보기가 싫은데 혹시 뒤로가기나 앞으로 가기 시 404페이지가 나온다면 404페이지를 건너뛰고 더 이전이나 앞의 페이지로 넘어가게 할수는 없니? 만약 더 이전이나 앞의 페이지 기록이 없다면 현재페이지가 다시 나오게해줘
     #     if user is None :
     #         return render(request, "Accounts_login.html", context = {"check_info" : "아이디와 비밀번호를 확인해주세요!"})
     #     else :
@@ -59,7 +60,7 @@ def signup(request) :
         if Doctor_profile.objects.filter(license=license_number).exists():
             return render(request, "Accounts_signup.html", context={"question": question, "exists_license": "이미 등록된 의사면허번호입니다."})
         
-        if Doctor.object.filter(username = request.POST["username"]).exists() :
+        if Doctor.objects.filter(username = request.POST["username"]).exists():
             return render(request, "Accounts_signup.html", context = {"question" : question, "exists_id" : "존재하는 아이디입니다."})
         
         elif not re.search(r'^[a-zA-Z0-9]{5,25}$', (request.POST['username'])):
@@ -75,14 +76,14 @@ def signup(request) :
             return render(request, "Accounts_signup.html", context = {"question" : question, "wrong_password" : "비밀번호가 일치하지 않습니다!"})
 
         else :
-            doctor = Doctor.object.create_user(
+            doctor = Doctor.objects.create_user(
                 username = request.POST["username"],
                 password = request.POST["password1"],
             )
             login(request, doctor)
 
             Doctor_profile.objects.create(
-                doctor_username = Doctor.object.get(username = request.POST["username"]),
+                doctor_username = Doctor.objects.get(username = request.POST["username"]),
                 license=license_number,
                 real_name       = request.POST["name"],
                 email           = request.POST["email"],
@@ -202,7 +203,7 @@ def password_reset(request):
             try:
                 if not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
                     return render(request, "Accounts_password_reset.html", context=context)
-                doctor = Doctor.object.get(username=username)
+                doctor = Doctor.objects.get(username=username)
                 doctor.set_password(password1)
                 doctor.save()
                 request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제

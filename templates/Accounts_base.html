@@ -13,33 +13,33 @@
         <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
         <meta http-equiv="pragma" content="no-cache">
         <meta http-equiv="expires" content="0">
-        
-
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
         <meta http-equiv="Pragma" content="no-cache">
         <meta http-equiv="Expires" content="0">
-
     </head>
 
     <body>
+        
+    
         <!-- 로그인화면 메시지 -->
-        <div class="message-print" id = "warning_login">
+        <div class="message-print" style="text-align: center;" id = "warning_login">
             {{ check_info }}
             {{ success_signup }}
             {{password_reset_success}}
-
-            
+            <p>
             {{ form.non_field_errors }}
-
-            {% for error in form.username.errors %}
-           {{ error }}
-            {% endfor %}
-
-            {% for error in form.password.errors %}
-                <p style="color: red">{{ error }}</p>
-            {% endfor %}
-
-        </div>
+                </p>
+            <p>
+                {% for error in form.username.errors %}
+                    {{ error }}
+                {% endfor %}
+            </p>
+            <p>
+                {% for error in form.password.errors %}
+                    {{ error }}
+                {% endfor %}
+            </p>
+            </div>
 
         <!-- 아이디찾기화면 메시지 -->
         <div class="message-print">
@@ -51,12 +51,26 @@
             </h5>
         </div>
 
-        
+    
 
         <div class="div-custom">
+                <div style="width: 150px; height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: solid 0.5px; padding: 10px; border-radius: 10px; color: rgb(205, 205, 205);">
+                    <a class="menu-submit" href="{% url 'login' %}">Sig in</a>
+                    <a class="menu-submit" href="{% url 'signup' %}">Sign up</a>
+                    <a class="menu-submit" href="{% url 'id_search' %}">Find id</a>
+                    <a class="menu-submit" href="{% url 'password_search' %}">Find pw</a>
+                </div>
             {% block content %} 
             {% endblock %}
+            <div style="width: 150px; height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: solid 0.5px; padding: 10px; border-radius: 10px; color: rgb(205, 205, 205);">
+                <a class="menu-submit" href="{% url 'login' %}">Sig in</a>
+                <a class="menu-submit" href="{% url 'signup' %}">Sign up</a>
+                <a class="menu-submit" href="{% url 'id_search' %}">Find id</a>
+                <a class="menu-submit" href="{% url 'password_search' %}">Find pw</a>
+            </div>
         </div>
+        
+        
 
         <hr class="hr">
         <footer>
@@ -64,7 +78,6 @@
             <div><small>Copyright © Lt4 Corp. All Rights Reserved.</small></div>
         </footer>
     </body>
-    
     
 </html>
 

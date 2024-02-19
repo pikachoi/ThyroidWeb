@@ -7,14 +7,11 @@
         <form class="login-form" method="POST" action = "{% url 'login' %}">
             {% csrf_token %}
             
-            
             <img class="logo" src="{% static 'img/ltlux-logo2.png' %}"></img>
 
             <input class="input" type="text" name="{{ form.username.html_name }}" required placeholder="ID">
             <input class="input" type="password" name="{{ form.password.html_name }}" required placeholder="Password">
-            <!-- <input class="input" type="text" name="username" required="" placeholder=" ID">
-            <input class="input" type="password" name="password" required="" placeholder=" Password">    -->
-            <input class="input login-submit" type="submit" value="Log in">
+            <input class="input login-submit" type="submit" value="Sign in">
 
             <p class="forgotten" style="margin-top: 20px;">Forgotten your login details ?</p>
 
@@ -26,11 +23,7 @@
             
             <div class="or" style="margin-right: 3px;">or</div>
 
-            <p class="signup-text">Don't have an account ? <a class="signup-submit" href="{% url 'signup' %}">SignUp</a></p>
-
-      
-
-
+            <p class="signup-text">Don't have an account ? <a class="signup-submit" href="{% url 'signup' %}">Sign up</a></p>
         </form>
     </div>
 {% endblock %}

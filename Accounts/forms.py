@@ -20,11 +20,10 @@ class LoginForm(forms.Form):
         
     def clean_password(self):
         password = self.cleaned_data.get("password")
-        if len(password) < 10 or len(password) > 25:
-            raise ValidationError("비밀번호는 최소 10자리에서 최대 25자리 사이여야 합니다.")
+        if len(password) < 8 or len(password) > 25:
+            raise ValidationError("비밀번호는 최소 8자리에서 최대 25자리 사이여야 합니다.")
         return password
     
-
 
         # if Doctor.objects.filter(username=username).exists():
         #     raise ValidationError(f"입력한 사용자명({username})은 이미 사용 중입니다.")
