@@ -2,7 +2,7 @@ import re
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Doctor, Doctor_profile, Question
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, IDSearchForm, PasswordSearchForm, PasswordResetForm
 from django.views.decorators.cache import never_cache
 from django.contrib import messages
 
@@ -40,7 +40,7 @@ def signup_view(request):
     if request.user.is_authenticated:
         return render(request, "Accounts_login_status.html")
         
-    question = [q.question for q in Question.objects.all()]
+    question_list = [q.question for q in Question.objects.all()]
 
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -49,7 +49,6 @@ def signup_view(request):
             user = Doctor.object.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'],
-                
             )
 
             Doctor_profile.objects.create(
@@ -64,138 +63,145 @@ def signup_view(request):
                 question=Question.objects.get(question = request.POST["question"]),
                 question_answer=form.cleaned_data['hint'],
             )
-            messages.success(request, "회원가입이 완료되었습니다! 로그인 해주세요.")
+            messages.success(request, "회원가입이 완료되었습니다. 로그인 해주세요.")
             return redirect("login")
     else:
         form = SignUpForm()
 
-    return render(request, "Accounts_signup.html", {"form": form, "question": question})
+    return render(request, "Accounts_signup.html", {"form": form, "question": question_list})
 
 
 @never_cache
-def id_search(request):
+def id_search_view(request):
     if request.user.is_authenticated:
         return render(request, "Accounts_login_status.html")
     
-    question = [q.question for q in Question.objects.all()]
+    question_list = [q.question for q in Question.objects.all()]
+
+    form = IDSearchForm(request.POST or None)
     
-    if request.method == "POST":
-        hint = request.POST.get("hint", "")
-        question_text = request.POST.get("question", "")
-        real_name = request.POST.get("name", "")
-        email = request.POST.get("email", "")
-        license_number = request.POST.get("License_Number", "")
+    if request.method == "POST" and form.is_valid():
+        name = form.cleaned_data["name"]
+        email = form.cleaned_data["email"]
+        license_number = form.cleaned_data["License_Number"]
+        question = form.cleaned_data["question"].question
+        hint = form.cleaned_data["hint"]
         
-        try:
-            question_obj = Question.objects.get(question=question_text)
-            doctor_profiles = Doctor_profile.objects.filter(question=question_obj, question_answer=hint)
-            
-            # 입력한 정보와 Doctor_profile의 정보를 비교하여 일치 여부를 확인
-            matching_profiles = []
-            for profile in doctor_profiles:
-                if (profile.real_name == real_name) and (profile.email == email) and (profile.license == license_number):
-                    matching_profiles.append(profile)
-            
-            if not matching_profiles:
+        doctor_profiles = Doctor_profile.objects.filter(
+            question__question=question, question_answer=hint,
+            real_name=name, email=email, license=license_number)
+        
+        if doctor_profiles.exists():
+            if doctor_profiles.count() == 1:
+                profile = doctor_profiles.first()
                 return render(request, "Accounts_id_search.html",
-                              context={"question": question, "error": "일치하는 정보가 없습니다. 다시 입력해주세요."})
-            
-            if len(matching_profiles) == 1:
-                return render(request, "Accounts_id_search.html",
-                              context={"question": question,
-                                       "real_name": f"{matching_profiles[0].real_name}님의 아이디는",
-                                       "doctor_username": f"{matching_profiles[0].doctor_username.username}",
-                                       "end_text": "입니다"})
+                              {"real_name": f'{profile.real_name} 님의 아이디는', "doctor_username": f'{profile.doctor_username.username} 입니다.'})
             else:
+                # 일치하는 프로필이 여러 개인 경우(중복 프로필은 애초에 가입이 되지 않으나 버그, 보안 대비)
                 return render(request, "Accounts_id_search.html",
-                              context={"question": question,
-                                       "matching_profiles": matching_profiles})
-        except Question.DoesNotExist:
-            return render(request, "Accounts_id_search.html",
-                          context={"question": question, "error": "일치하는 정보가 없습니다. 다시 입력해주세요."})
+                              {"matching_profiles": doctor_profiles})
+        else:
+            form.add_error(None, "일치하는 정보가 없습니다. 다시 입력해주세요.")
     
-    return render(request, "Accounts_id_search.html", context={"question": question})
+    return render(request, "Accounts_id_search.html", {"form": form, "question": question_list})
 
 
 @never_cache
-def password_search(request):
+def password_search_view(request):
     if request.user.is_authenticated:
         return render(request, "Accounts_login_status.html")
     
-    question = [q.question for q in Question.objects.all()]
+    question_list = [q.question for q in Question.objects.all()]
     
-    if request.method == "POST":
-        doctor_username = request.POST.get("pw_search_input", "")
-        question_text = request.POST.get("question", "")
-        real_name = request.POST.get("name", "")
-        email = request.POST.get("email", "")
-        license_number = request.POST.get("License_Number", "")
-        hint = request.POST.get("hint", "")
+    form = PasswordSearchForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        username = form.cleaned_data["username"]
+        question = form.cleaned_data["question"]
+        name = form.cleaned_data["name"]
+        email = form.cleaned_data["email"]
+        license_number = form.cleaned_data["License_Number"]
+        hint = form.cleaned_data["hint"]
         
-        try:
-            question_obj = Question.objects.get(question=question_text)
-            doctor_profiles = Doctor_profile.objects.filter(
-                question=question_obj, question_answer=hint
-            )
-            
-            # 입력한 정보와 Doctor_profile의 정보를 비교하여 일치 여부를 확인
-            matching_profiles = []
-            for profile in doctor_profiles:
-                if (profile.doctor_username.username == doctor_username) and (profile.real_name == real_name) and (profile.email == email) and (profile.license == license_number):
-                    matching_profiles.append(profile)
-            
-            if not matching_profiles:
-                return render(
-                    request,
-                    "Accounts_password_search.html",
-                    context={"question": question, "error": "일치하는 정보가 없습니다. 다시 입력해주세요."},
-                )
-            elif len(matching_profiles) == 1:
-                request.session["reset_username"] = matching_profiles[0].doctor_username.username
+        doctor_profiles = Doctor_profile.objects.filter(
+            doctor_username__username=username,
+            question=question, question_answer=hint,
+            real_name=name, email=email, license=license_number
+        )
+        
+        if doctor_profiles.exists():
+            if doctor_profiles.count() == 1:
+                request.session["reset_username"] = doctor_profiles[0].doctor_username.username
                 return redirect("password_reset")
             else:
-                return render(
-                    request,
-                    "Accounts_password_search.html",
-                    context={"question": question, "matching_profiles": matching_profiles},
-                )
-        except Question.DoesNotExist:
-            return render(
-                request,
-                "Accounts_password_search.html",
-                context={"question": question, "error": "일치하는 정보가 없습니다. 다시 입력해주세요."},
-            )
+                return render(request, "Accounts_password_search.html", {"form": form, "matching_profiles": doctor_profiles})
+        else:
+            form.add_error(None, "일치하는 정보가 없습니다. 다시 입력해주세요.")
     
-    return render(request, "Accounts_password_search.html", context={"question": question})
+    return render(request, "Accounts_password_search.html", {"form": form,  "question": question_list})
 
 
 @never_cache
-def password_reset(request):
+def password_reset_view(request):
     if request.user.is_authenticated:
         return render(request, "Accounts_login_status.html")
+
+    # 세션에 정보가 없다면 페이지 접근 제한(url 수동 입력으로 접근을 막기위함)
+    username = request.session.get("reset_username")
+    if not username:
+        return redirect("password_search")
+
+    form = PasswordResetForm(request.POST or None)
+
+    if form.is_valid():
+        password1 = form.cleaned_data["password1"]
+        
+        try:
+            doctor = Doctor.object.get(username=username)
+            doctor.set_password(password1)
+            doctor.save()
+            request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제
+            return render(request, "Accounts_login.html", {"password_reset_success": "비밀번호가 재설정되었습니다."})
+        except Doctor.DoesNotExist:
+            form.add_error(None, "사용자를 찾을 수 없습니다.")
+
+    return render(request, "Accounts_password_reset.html", {"form": form})
+
+
+
+
+# @never_cache
+# def password_reset_view(request):
+#     if request.user.is_authenticated:
+#         return render(request, "Accounts_login_status.html")
+
+#     # 세션에 정보가 없다면 페이지 접근 제한(url 수동 입력으로 접근을 막기위함)
+#     username = request.session.get("reset_username")
+#     if not username:
+#         return redirect("password_search")
+
+#     if request.method == "POST":
+#         password1 = request.POST.get("password1")
+#         password2 = request.POST.get("password2")
+        
+#         if password1 != password2:
+#             return render(request, "Accounts_password_reset.html", {"error": "비밀번호가 일치하지 않습니다."})
+        
+#         # 비밀번호 재설정 로직
+#         username = request.session.get("reset_username")
+#         context = {"check_password" : "비밀번호는 10~25 글자의 영어 대 소문자, 숫자, 특수문자를 사용하세요."}
+#         if username:
+#             try:
+#                 if not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
+#                     return render(request, "Accounts_password_reset.html", context=context)
+#                 doctor = Doctor.object.get(username=username)
+#                 doctor.set_password(password1)
+#                 doctor.save()
+#                 request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제
+#                 return render(request, "Accounts_login.html", {"password_reset_success": "비밀번호가 재설정되었습니다."})
+#             except Doctor.DoesNotExist:
+#                 return render(request, "Accounts_password_reset.html")
+        
+#         return render(request, "Accounts_password_reset.html", context=context)
     
-    if request.method == "POST":
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
-        
-        if password1 != password2:
-            return render(request, "Accounts_password_reset.html", {"error": "비밀번호가 일치하지 않습니다."})
-        
-        # 비밀번호 재설정 로직
-        username = request.session.get("reset_username")
-        context = {"check_password" : "비밀번호는 10~25 글자의 영어 대 소문자, 숫자, 특수문자를 사용하세요."}
-        if username:
-            try:
-                if not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
-                    return render(request, "Accounts_password_reset.html", context=context)
-                doctor = Doctor.object.get(username=username)
-                doctor.set_password(password1)
-                doctor.save()
-                request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제
-                return render(request, "Accounts_login.html", {"password_reset_success": "비밀번호가 재설정되었습니다."})
-            except Doctor.DoesNotExist:
-                return render(request, "Accounts_password_reset.html")
-        
-        return render(request, "Accounts_password_reset.html", context=context)
-    
-    return render(request, "Accounts_password_reset.html")
+#     return render(request, "Accounts_password_reset.html")

@@ -34,30 +34,20 @@
                 </div>
             {% endif %}
             
-            {% if form.errors %}
                 <div>
-                    <ul>
-                        {% for field, errors in form.errors.items %}
-                            {% for error in errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                        <li>{{ error }}</li>
                         {% endfor %}
-                    </ul>
+                    {% endfor %}
                 </div>
-            {% endif %}
 
             {{password_reset_success}}
             
-        </div>
-
         <!-- 아이디찾기화면 메시지 -->
-        <div class="message-print">
-            <h5 class="h4 text-gray-900 mb-4">{{real_name}}
-                <span style="color: rgb(252, 113, 8); font-size: x-large;">
-                    {{doctor_username}}
-                </span>{{end_text}}
-                <span style="color: rgb(252, 8, 8); font-size:medium;">{{error}}</span>
-            </h5>
+            <div>
+                {{real_name}} {{doctor_username}}
+            </div>
         </div>
 
 
