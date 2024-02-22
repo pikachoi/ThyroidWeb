@@ -31,7 +31,7 @@ class Doctor(AbstractBaseUser) :
     is_staff        = models.BooleanField(default = False)
     is_superuser    = models.BooleanField(default = False)
     
-    objects = DoctorManager()
+    object = DoctorManager()
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -60,4 +60,3 @@ class Doctor_profile(models.Model) :
     medical_subject = models.CharField(max_length = 128)    # 진료 과목
     question        = models.ForeignKey(Question, on_delete = models.CASCADE, default = 1, db_column = "question")
     question_answer = models.CharField(max_length = 128)
-

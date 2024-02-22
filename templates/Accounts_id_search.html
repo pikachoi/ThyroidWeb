@@ -2,11 +2,15 @@
 {% load static %}
 {% block content %}
 
+    <div class="menu-state">
+        <div class="findid-state"></div>
+    </div>
+
     <div class="account-back">
         <form class="findId-form" method="POST" action = "{% url 'id_search' %}">
             {% csrf_token %}
             <div class="div-custom">
-                <img class="logo" src="{% static 'img/ltlux-logo2.png' %}" style="margin-top: 15px;"></img>
+                <img class="logo" src="{% static 'img/ltlux-logo2.png' %}" style="margin-top: 15px;">
                 <samll class="forgotten" style="margin-top: 15px; margin-left: 3px; font-size: 85%;"><samll>｜</samll>forgot your ID ? </samll>
             </div>
 
@@ -24,7 +28,7 @@
                 <div class="or" style="margin-top: 5px;">or</div>
 
                 <div class="div-custom" style="width: 100%; height: 35px; margin-left: 7px;">
-                    <a class="find-submit" style="font-size: 14px;" href="{% url 'login' %}">Sign in</a>
+                    <a class="find-submit" style="font-size: 14px;" href="{% url 'login' %}">Sign In</a>
                     <div class="hr-vertical" style="margin-top: 3px;"></div>
                     <a class="find-submit" href="{% url 'password_search' %}">Find PW</a>
                 </div>

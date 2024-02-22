@@ -2,12 +2,9 @@ import re
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Doctor, Doctor_profile, Question
-from .forms import LoginForm
+from .forms import LoginForm, SignUpForm
 from django.views.decorators.cache import never_cache
-# from django.contrib.auth.decorators import login_required
-# from django.views.decorators.csrf import csrf_exempt
-# @login_required  # 로그인 상태
-# @csrf_exempt
+from django.contrib import messages
 
 @never_cache
 def login_view(request):
@@ -32,73 +29,54 @@ def login_view(request):
     context = {"form": form}
     return render(request, "Accounts_login.html", context)
 
-# 로그인 후 메인페이지로 넘어간 상태에서 브라우저 뒤로가기를 눌렀을 시 로그인 페이지가 나오지 않게 하려고 @never_cache를 사용했는데
-#  문제는 로그인 페이지가 나오진 않지만 대신 404페이가 나와서 보기가 싫은데 혹시 뒤로가기나 앞으로 가기 시 404페이지가 나온다면 404페이지를 건너뛰고 더 이전이나 앞의 페이지로 넘어가게 할수는 없니? 만약 더 이전이나 앞의 페이지 기록이 없다면 현재페이지가 다시 나오게해줘
-    #     if user is None :
-    #         return render(request, "Accounts_login.html", context = {"check_info" : "아이디와 비밀번호를 확인해주세요!"})
-    #     else :
-    #         login(request, user)
-    #         return redirect("diagnosis_home") 
-    # else :
-    #     return render(request, "Accounts_login.html")
-    
-
-
-
-
 
 def logout_view(request) :
     logout(request)
     return redirect("login")
 
 
-def signup(request) :
+@never_cache
+def signup_view(request):
+    if request.user.is_authenticated:
+        return render(request, "Accounts_login_status.html")
+        
     question = [q.question for q in Question.objects.all()]
-    if request.method == "POST" :
-        license_number = request.POST["License_Number"]
-    
-        if Doctor_profile.objects.filter(license=license_number).exists():
-            return render(request, "Accounts_signup.html", context={"question": question, "exists_license": "이미 등록된 의사면허번호입니다."})
-        
-        if Doctor.objects.filter(username = request.POST["username"]).exists():
-            return render(request, "Accounts_signup.html", context = {"question" : question, "exists_id" : "존재하는 아이디입니다."})
-        
-        elif not re.search(r'^[a-zA-Z0-9]{5,25}$', (request.POST['username'])):
-            return render(request, "Accounts_signup.html", context = {"question" : question,"check_username" : "아이디는 5~25 글자의 영어 대 소문자, 숫자만 입력 가능합니다."})
-        
-        elif not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
-            return render(request, "Accounts_signup.html", context = {"question" : question,"check_password" : "비밀번호는 10~25 글자의 영어 대 소문자, 숫자, 특수문자를 사용하세요."})
 
-        elif re.search(r'[^0-9]{11}',(request.POST['phonenumber'])):
-            return render(request, "Accounts_signup.html", context = {"question" : question,"wrong_phone" : "휴대폰번호는 '-'없이 입력하세요."})
-
-        elif request.POST["password1"] != request.POST["password2"] :
-            return render(request, "Accounts_signup.html", context = {"question" : question, "wrong_password" : "비밀번호가 일치하지 않습니다!"})
-
-        else :
-            doctor = Doctor.objects.create_user(
-                username = request.POST["username"],
-                password = request.POST["password1"],
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        
+        if form.is_valid():
+            user = Doctor.object.create_user(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1'],
+                
             )
-            login(request, doctor)
 
             Doctor_profile.objects.create(
-                doctor_username = Doctor.objects.get(username = request.POST["username"]),
-                license=license_number,
-                real_name       = request.POST["name"],
-                email           = request.POST["email"],
-                phone           = request.POST["phonenumber"],
-                belong          = request.POST["Affiliation"],
-                position        = request.POST["Rank"],
-                medical_subject = request.POST["Subject"],
-                question        = Question.objects.get(question = request.POST["question"]),
-                question_answer = request.POST["hint"],
+                doctor_username=user,
+                license=form.cleaned_data['License_Number'],
+                real_name=form.cleaned_data['name'],
+                email=form.cleaned_data['email'],
+                phone=form.cleaned_data['phonenumber'],
+                belong=form.cleaned_data['Affiliation'],
+                position=form.cleaned_data['Rank'],
+                medical_subject=form.cleaned_data['Subject'],
+                question=Question.objects.get(question = request.POST["question"]),
+                question_answer=form.cleaned_data['hint'],
             )
-            return render(request, "Accounts_login.html", context = {"success_signup" : "회원가입이 완료되었습니다!"})
-    return render(request, "Accounts_signup.html", context = {"question" : question} )
+            messages.success(request, "회원가입이 완료되었습니다! 로그인 해주세요.")
+            return redirect("login")
+    else:
+        form = SignUpForm()
+
+    return render(request, "Accounts_signup.html", {"form": form, "question": question})
 
 
+@never_cache
 def id_search(request):
+    if request.user.is_authenticated:
+        return render(request, "Accounts_login_status.html")
+    
     question = [q.question for q in Question.objects.all()]
     
     if request.method == "POST":
@@ -139,8 +117,11 @@ def id_search(request):
     return render(request, "Accounts_id_search.html", context={"question": question})
 
 
-
+@never_cache
 def password_search(request):
+    if request.user.is_authenticated:
+        return render(request, "Accounts_login_status.html")
+    
     question = [q.question for q in Question.objects.all()]
     
     if request.method == "POST":
@@ -188,7 +169,11 @@ def password_search(request):
     return render(request, "Accounts_password_search.html", context={"question": question})
 
 
+@never_cache
 def password_reset(request):
+    if request.user.is_authenticated:
+        return render(request, "Accounts_login_status.html")
+    
     if request.method == "POST":
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
@@ -203,7 +188,7 @@ def password_reset(request):
             try:
                 if not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
                     return render(request, "Accounts_password_reset.html", context=context)
-                doctor = Doctor.objects.get(username=username)
+                doctor = Doctor.object.get(username=username)
                 doctor.set_password(password1)
                 doctor.save()
                 request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제

@@ -175,5 +175,3 @@ if __name__=="__main__":
             break
         else:
             print('키 입력 에러')
-
-

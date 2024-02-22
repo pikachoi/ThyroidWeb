@@ -1,4 +1,4 @@
-.findId-form {
+.findId-form, .signUp-form {
     border-radius: 10px;
     width: 350px;
     height: 460px;
@@ -10,12 +10,12 @@
     background-color: #f7f7f7;
   }
   
-  .findId-input {
+  .findId-input, .signUp-input {
     width: 80%;
     margin: 7px;
   }
 
-  .findId-submit{
+  .findId-submit, .signUp-submit{
     width: 235px;
     margin-top: 15px;
     font-weight: bold;
@@ -24,13 +24,13 @@
     cursor: pointer;
   }
   
-  .findId-submit:hover {
+  .findId-submit:hover, .signUp-submit:hover {
     box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
       6px 6px 6px rgba(255, 255, 255, 0.781);
     transition: 500ms;
   }
   
-  .findId-submit:active {
+  .findId-submit:active, .signUp-submit:active {
     color: rgb(255, 135, 60);
     transition: 10ms;
    }
