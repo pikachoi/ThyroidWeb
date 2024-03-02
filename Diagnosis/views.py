@@ -338,7 +338,7 @@ def diagnosis_home(request):
 # 요약 페이지
 def diagnosis_summary(request, patient_idx, image_idx = 0, crop_idx = 0) :
     if request.user.is_authenticated :
-        doctor_username     = Doctor.objects.get(pk = request.user)
+        doctor_username     = Doctor.object.get(pk = request.user)
         need_summary        = Patient.objects.filter(is_summary = True, doctor = request.user)
         
         if len(need_summary) == 0 :

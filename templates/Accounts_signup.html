@@ -5,45 +5,43 @@
         <div class="signup-state"></div>
     </div>
 
-    <div class="account-back">
-        <form class="signUp-form" style="width: auto;" method="POST" action = "{% url 'signup' %}">
-            {% csrf_token %}
-            <div class="div-custom">
-                <img class="logo" src="{% static 'img/ltlux-logo2.png' %}" style="margin-top: 15px;">
-                <samll class="forgotten" style="margin-top: 15px; margin-left: 3px; font-size: 85%;"><small>｜</small>Create your account</samll>
+    <form class="signUp-form" style="width: auto;" method="POST" action = "{% url 'signup' %}">
+        {% csrf_token %}
+        <div class="div-custom">
+            <img class="logo" src="{% static 'img/ltlux-logo2.png' %}" style="margin-top: 15px;">
+            <samll class="forgotten" style="margin-top: 15px; margin-left: 3px; font-size: 85%;"><small>｜</small>Create your account</samll>
+        </div>
+
+        <div class="div-custom">
+            <div class="div-custom2">
+                <input class="input signUp-input" name="{{ form.username.html_name }}" id = "id" type="text" placeholder="5~25 글자의 영어, 숫자" required>
+                <input class="input signUp-input" name="{{ form.password1.html_name }}" id ="password1" type="password" placeholder="8~20 글자 영어, 숫자, 특수문자 포함" required>
+                <input class="input signUp-input" name="{{ form.password2.html_name }}" id ="password2" type="password" placeholder="비밀번호 재확인" required>
+                <input class="input signUp-input" name="{{ form.name.html_name }}" id = "name" type="text" placeholder="이름" required>
+                <input class="input signUp-input" name="{{ form.email.html_name }}" type="email" placeholder="이메일" required>
+                <input class="input signUp-input" name="{{ form.phonenumber.html_name }}" type="tel" placeholder="휴대폰번호('-' 제외)" required>
             </div>
 
-            <div class="div-custom">
-                <div class="div-custom2">
-                    <input class="input signUp-input" name="{{ form.username.html_name }}" id = "id" type="text" placeholder="아이디" required>
-                    <input class="input signUp-input" name="{{ form.password1.html_name }}" id ="password1" type="password" placeholder="비밀번호" required>
-                    <input class="input signUp-input" name="{{ form.password2.html_name }}" id ="password2" type="password" placeholder="비밀번호 재확인" required>
-                    <input class="input signUp-input" name="{{ form.name.html_name }}" id = "name" type="text" placeholder="이름" required>
-                    <input class="input signUp-input" name="{{ form.email.html_name }}" type="email" placeholder="이메일" required>
-                    <input class="input signUp-input" name="{{ form.phonenumber.html_name }}" type="tel" placeholder="휴대폰번호('-' 제외)" required>
-                </div>
-
-                <div class="div-custom2">
-                    <input class="input signUp-input" name="{{ form.License_Number.html_name }}" id = "License_Number" type="text" placeholder="의사면허번호" required>
-                    <input class="input signUp-input" name="{{ form.Affiliation.html_name }}" id = "Affiliation" type="text" placeholder="소속" required>
-                    <input class="input signUp-input" name="{{ form.Rank.html_name }}" id = "Rank" type="text" placeholder="직급 / 직위" required>
-                    <input class="input signUp-input" name="{{ form.Subject.html_name }}" id = "Subject" type="text" placeholder="진료 과목" required>
-                    <select class="input signUp-input" style="width: 180px;" name="{{ form.question.html_name }}">
-                        {% for q in question %}
-                            <option>{{ q }}</option>
-                        {% endfor %}
-                    </select>
-                    <input class="input signUp-input" name="{{form.hint.html_name}}" id = "hint" type="text" placeholder="비밀번호 힌트 답변" required>
-                </div>
+            <div class="div-custom2">
+                <input class="input signUp-input" name="{{ form.License_Number.html_name }}" id = "License_Number" type="text" placeholder="의사면허번호" required>
+                <input class="input signUp-input" name="{{ form.Affiliation.html_name }}" id = "Affiliation" type="text" placeholder="소속" required>
+                <input class="input signUp-input" name="{{ form.Rank.html_name }}" id = "Rank" type="text" placeholder="직급 / 직위" required>
+                <input class="input signUp-input" name="{{ form.Subject.html_name }}" id = "Subject" type="text" placeholder="진료 과목" required>
+                <select class="input signUp-input" style="width: 180px;" name="{{ form.question.html_name }}">
+                    {% for q in question %}
+                        <option>{{ q }}</option>
+                    {% endfor %}
+                </select>
+                <input class="input signUp-input" name="{{form.hint.html_name}}" id = "hint" type="text" placeholder="비밀번호 힌트 답변" required>
             </div>
-                
-            <input class="input signUp-submit" style="margin-top: 10px;" type="submit" value="Create">
+        </div>
+            
+        <input class="input signUp-submit" style="margin-top: 10px;" type="submit" value="Create">
 
-            <div class="div-custom" style="width: 100%; height: 35px; margin-left: 5px;">
-                <a class="find-submit" style="font-size: 14px;" href="{% url 'id_search' %}">Sign In</a>
-                <div class="hr-vertical" style="margin-top: 0px; height: 30px;"></div>
-                <a class="find-submit" href="{% url 'id_search' %}">Find ID</a>
-            </div>
-        </form>
-    </div>
+        <div class="div-custom" style="width: 100%; height: 35px; margin-left: 5px;">
+            <a class="find-submit" style="font-size: 14px;" href="{% url 'id_search' %}">Sign In</a>
+            <div class="hr-vertical" style="margin-top: 0px; height: 30px;"></div>
+            <a class="find-submit" href="{% url 'id_search' %}">Find ID</a>
+        </div>
+    </form>
 {% endblock %}

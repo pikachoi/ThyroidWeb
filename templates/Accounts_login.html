@@ -2,33 +2,71 @@
 {% load static %}
 
 {% block content %}
-<div class="menu-state">
+<!-- <div class="menu-state">
     <div class="signin-state"></div>
-</div>
-    
-    <div class="account-back">
-        <form class="login-form" method="POST" action = "{% url 'login' %}">
-            {% csrf_token %}
-            <img class="logo" src="{% static 'img/ltlux-logo2.png' %}">
+</div> -->
+<div class="accounts-box">
+  <div class="account-navi">
+    <div>
+    <img class="logo" src="{% static 'img/ltlux-logo2.png' %}">
+  </div>
+  
 
-            <input class="input" name="{{ form.username.html_name }}" type="text" required placeholder="ID">
-            <input class="input" name="{{ form.password.html_name }}" type="password" required placeholder="Password">
-            <input class="input login-submit" type="submit" value="Sign in">
 
-            <p class="forgotten" style="margin-top: 20px;">Forgotten your login details ?</p>
 
-            <div class="div-custom" style="width: 100%; height: 35px;">
-                <a class="find-submit" href="{% url 'id_search' %}">Find ID</a>
-                <div class="hr-vertical"></div>
-                <a class="find-submit" href="{% url 'password_search' %}">Find PW</a>
-            </div>
-            
-            <div class="or" style="margin-right: 3px;">or</div>
+  <ul class="wrapper">
+    <li class="icon signin">
+      <a  href="{% url 'login' %}"></a>
+      <span style="display: flex;" class="tooltip">Sign-<div style="color: rgb(255, 135, 15);">In</div></span>
+      <span><i class="fab fa-facebook-f"></i></span>
+    </li>
+    <li class="icon signup">
+      <a  href="{% url 'signup' %}"></a>
+      <span style="display: flex;" class="tooltip">Sign<div style="color: rgb(255, 135, 15);">Up</div></span>
+      <span><i class="fab fa-twitter"></i></span>
+    </li>
+    <li class="icon findid">
+      <a  href="{% url 'id_search' %}"></a>
+      <span style="display: flex;" class="tooltip">Find<div style="color: rgb(255, 135, 15);">ID</div></span>
+      <span><i class="fab fa-instagram"></i></span>
+    </li>
+    <li class="icon findpw">
+      <a  href="{% url 'password_search' %}"></a>
+      <span style="display: flex;" class="tooltip">Find<div style="color: rgb(255, 135, 15);">PW</div></span>
+      <span><i class="fab fa-instagram"></i></span>
+  </li>
+</ul>
 
-            <p class="signup-text">Don't have an account ? <a class="signup-submit" href="{% url 'signup' %}">Sign Up</a></p>
-        </form>
+
+
+
+
+   
+   
+  </div>
+
+  <div class="accounts-box2">
+  <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="input-box">
+      <input name="{{ form.username.html_name }}" type="text" required="">
+      <label>Username</label>
     </div>
+    <div class="input-box">
+      <input name="{{ form.password.html_name }}" type="password" required="">
+      <label>Password</label>
+    </div>
+    <center>
+      <button class="send" style="margin-top: 20px;" href="#" type="submit">
+            SEND
+        <span></span>
+      </button>
+    </center>
+    <label type="text" class="aaa"></label>
+
+  </form>
+</div>
+</div> 
 {% endblock %}
 
-
-
+            

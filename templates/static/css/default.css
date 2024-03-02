@@ -34,14 +34,7 @@ input[type=email] {
     margin-left : 40%;
 }
 
-/* input[type=password] {
-    width: 200PX;
-    height : 30PX;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid lightgray;
-    box-sizing: border-box;
-} */
+
 
 input[type=tel] {
     width: 20%;
@@ -846,43 +839,7 @@ html, body {
 }
 
 
-#warning_login{
-    margin-top : 10px;
-    margin-bottom: 10px;
-    text-align : center;
-    color : red;
 
-}
-
-#warning_signup{
-    text-align : center;
-    color : red;
-
-}
-
-#id_check_al{
-    width: 20%;
-    background-color: red;
-    color: #fff;
-    padding: 7px;
-    border-radius: 5px;
-    border: none;
-    margin-top: 1%;
-    margin-left : 40%;
-}
-
-.id_check_btn{
-    width: 20%;
-    background-color: dodgerblue;
-    color: #fff;
-    padding: 7px;
-    border-radius: 5px;
-    border: none;
-    margin-top: 1%;
-    margin-left : 40%;
-
-
-}
 
 
 /* 버튼 클릭시 색상 유지*/

@@ -16,7 +16,6 @@ def login_view(request):
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
-
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
@@ -161,47 +160,10 @@ def password_reset_view(request):
             doctor.set_password(password1)
             doctor.save()
             request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제
-            return render(request, "Accounts_login.html", {"password_reset_success": "비밀번호가 재설정되었습니다."})
+            messages.success(request, "비밀번호가 재설정되었습니다.")
+            return redirect("login")
+        
         except Doctor.DoesNotExist:
             form.add_error(None, "사용자를 찾을 수 없습니다.")
 
     return render(request, "Accounts_password_reset.html", {"form": form})
-
-
-
-
-# @never_cache
-# def password_reset_view(request):
-#     if request.user.is_authenticated:
-#         return render(request, "Accounts_login_status.html")
-
-#     # 세션에 정보가 없다면 페이지 접근 제한(url 수동 입력으로 접근을 막기위함)
-#     username = request.session.get("reset_username")
-#     if not username:
-#         return redirect("password_search")
-
-#     if request.method == "POST":
-#         password1 = request.POST.get("password1")
-#         password2 = request.POST.get("password2")
-        
-#         if password1 != password2:
-#             return render(request, "Accounts_password_reset.html", {"error": "비밀번호가 일치하지 않습니다."})
-        
-#         # 비밀번호 재설정 로직
-#         username = request.session.get("reset_username")
-#         context = {"check_password" : "비밀번호는 10~25 글자의 영어 대 소문자, 숫자, 특수문자를 사용하세요."}
-#         if username:
-#             try:
-#                 if not re.search(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,20}$",(request.POST['password1'])):
-#                     return render(request, "Accounts_password_reset.html", context=context)
-#                 doctor = Doctor.object.get(username=username)
-#                 doctor.set_password(password1)
-#                 doctor.save()
-#                 request.session.pop("reset_username")  # 비밀번호 재설정 완료 후 세션에서 삭제
-#                 return render(request, "Accounts_login.html", {"password_reset_success": "비밀번호가 재설정되었습니다."})
-#             except Doctor.DoesNotExist:
-#                 return render(request, "Accounts_password_reset.html")
-        
-#         return render(request, "Accounts_password_reset.html", context=context)
-    
-#     return render(request, "Accounts_password_reset.html")

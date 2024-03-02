@@ -405,7 +405,7 @@
 
                                             <!-- 결절 위치 (오른, 왼, 지협) -->
                                             <div style="display: flex;">
-                                                <div class="checklist_column" style="height: 60px; background-color: rgb(214, 239, 247);">Location</div>
+                                                <div class="checklist_column" style="height: 90px; background-color: rgb(214, 239, 247);">Location</div>
                                                 <div style="width: 100%;">
                                                     <div class="checklist_one_line">
                                                         <div class="checklist_items">
@@ -420,7 +420,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="checklist_items">
+                                                    <div class="checklist_items" style="border: solid 0px;">
                                                         <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-1" name="item2" value="Item2-1">
                                                         <label style="margin: 0px;" for="item2-1">upper</label>
                                         
@@ -429,6 +429,14 @@
                                         
                                                         <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-3" name="item2" value="Item2-3">
                                                         <label style="margin: 0px;" for="item2-3">lower</label>
+                                                    </div>
+
+                                                    <div class="checklist_items">
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-4" name="item2" value="Item2-4">
+                                                        <label style="margin: 0px;" for="item2-4">upper to lower</label>
+
+                                                        <input style="margin-left: 10px; margin-right: 5px;" type="checkbox" id="item2-5" name="item2" value="Item2-5">
+                                                        <label style="margin: 0px;" for="item2-5">mid to lower</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1261,7 +1269,7 @@
                         item1Text.textContent = '[   ]';
                     }
                 }
-                else if (this.id === "item2-1" || this.id === "item2-2" || this.id === "item2-3") {
+                else if (this.id === "item2-1" || this.id === "item2-2" || this.id === "item2-3" || this.id === "item2-4" || this.id === "item2-5") {
                     checkboxes.forEach(otherCheckbox => {
                         if (otherCheckbox.id !== this.id && otherCheckbox.name === this.name) {
                             otherCheckbox.checked = false;
@@ -1276,6 +1284,12 @@
                         item2Text.textContent = ` ${checkedItemValue}`;
                     } else if (checkedItemValue === "lower") {
                         const checkedItemValue = "lower";
+                        item2Text.textContent = ` ${checkedItemValue}`;
+                    } else if (checkedItemValue === "upper to lower") {
+                        const checkedItemValue = "upper to lower";
+                        item2Text.textContent = ` ${checkedItemValue}`;
+                    } else if (checkedItemValue === "mid to lower") {
+                        const checkedItemValue = "mid to lower";
                         item2Text.textContent = ` ${checkedItemValue}`;
                     } else {
                         item2Text.textContent = '[   ]';
@@ -1480,3 +1494,5 @@
 
     </script>
 {% endblock %}
+
+

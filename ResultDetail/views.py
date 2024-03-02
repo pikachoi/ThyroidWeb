@@ -16,7 +16,7 @@ from .models import Tagging, Interpretation
 
 def patient_detail(request, patient_idx, image_idx = 0, crop_idx = 0) :
     if request.user.is_authenticated :# patient = get_object_or_404(Patient ,pk = idx)
-        doctor_username     = Doctor.objects.get(pk = request.user)
+        doctor_username     = Doctor.object.get(pk = request.user)
 
         patient             = Patient.objects.get(idx = patient_idx)
         images              = ImagePath.objects.filter(patient = patient_idx)
