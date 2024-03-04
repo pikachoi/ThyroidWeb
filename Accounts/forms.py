@@ -60,7 +60,7 @@ class SignUpForm(forms.Form):
     def clean_phonenumber(self):
         phonenumber = self.cleaned_data['phonenumber']
         if Doctor_profile.objects.filter(phone=phonenumber).exists():
-            raise ValidationError("이미 등록된 번호 입니다.")
+            raise ValidationError("이미 등록된 휴대폰 번호 입니다.")
         
         if not re.match(r"^01[016789][0-9]{7,8}$", phonenumber):
             raise ValidationError("휴대폰번호는 '-' 없이 10~11자리 숫자만 입력하세요.")

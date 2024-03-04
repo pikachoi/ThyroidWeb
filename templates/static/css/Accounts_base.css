@@ -1,48 +1,3 @@
-body, html {
-  height: 95%;
-  margin: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit; /* 링크 색상을 부모 요소로부터 상속받음 */
-}
-
-.body-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.account-back {
-  flex: 1; /* 남은 공간 모두 차지 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #e8e8e8;
-}
-
-footer {
-  flex: 0 0 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.div-custom{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.div-custom2{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 .logo-box{
   width: 100%;
   display: flex;
@@ -57,133 +12,23 @@ footer {
 .logo {
   width: 80px;
   margin: 15px;
-  margin-top: 20px;
 }
-
-.card {
-  padding: 10px 100px;
-  margin: 20px;
-  border-radius: 20px;
-  background: #e0e0e0;
-  box-shadow: 15px 15px 30px #bebebe,
-             -15px -15px 30px #ffffff;
-             
-}
-
-.form-custom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  border-radius: 15px;
-  padding: 5px;
-  background-color: #f7f7f7;
-  box-shadow: -3px -3px 3px white, 3px 3px 5px rgba(209, 209, 209, 0.705);
-}
-
-
 
 /* 브라우저 화살표 기본값 제한 및 변경 */
-.select-custom {
+/* .select-custom {
   appearance: none; 
   -webkit-appearance: none; 
   -moz-appearance: none;
   background: url('/static/img/ic-down_97618.png') no-repeat right center; 
   background-size: 10px;
-  }
-
-.input {
-  padding: 10px;
-  margin: 10px;
-  border-radius: 15px;
-  display: block;
-  width: 287px;
-  border: none;
-  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
-    6px 6px 6px rgba(255, 255, 255, 0.781);
-  outline: none;
-  background-color: inherit;
-  color: rgb(161, 161, 161);
-  font-size: inherit;
-}
-
-.btn-submit {
-  width: 240px;
-  margin-top: 25px;
-  font-weight: bold;
-  box-shadow: -3px -3px 5px white, 3px 3px 5px rgba(182, 182, 182, 0.705);
-  color: rgb(112, 112, 112);
-  cursor: pointer;
-}
-
-.btn-submit:hover {
-  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
-    6px 6px 6px rgba(255, 255, 255, 0.781);
-  transition: 500ms;
-}
-
-.btn-submit:active {
-  color: rgb(255, 135, 60);
-  transition: 10ms;
- }
-
-
-
-
-
-
-
-
-
-
- .navi-input {
-  display: flex;
-  flex-direction: row;
-  width: auto;
-  justify-content: center;
-  border-radius: 5px;
-  align-items: center;
-}
-
-.navi-value {
-  background-color: transparent;
-  border: none;
-  padding: 10px;
-  color: rgb(138, 138, 138);
-  display: flex;
-  position: relative;
-  gap: 5px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.navi-value:not(:active):hover,
-.navi-value:focus {
-  background-color: #4e5867;
-  color: rgb(255, 255, 255);
-}
-
-
-
-.navi-value svg {
-  width: 15px;
-}
-
-
-
-
-
-
-
-
+  } */
 
 /* 브라우저 기본값 자동완성 스타일 제한 */
 input:-webkit-autofill,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
-  text-indent: 90px;
+  /* text-indent: 90px; */
   -webkit-text-fill-color: #949494;
 }
 
@@ -191,16 +36,19 @@ input:-webkit-autofill:active {
   width: 100%;
   height: 60px;
   /* background-color: rgb(102, 120, 153); */
+  /* background-color: rgb(112, 150, 171); */
   /* background-color: rgb(115, 125, 131); */
   /* background-color: rgb(120, 120, 120); */
-  color: #bebebe;
+  background-color: rgb(236, 236, 236);
+
+  color: #a5a5a5;
   font-size: 14px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: left;
-  border-bottom: solid rgba(0,0,0,.3) 3px;
+  /* border-bottom: solid rgba(0,0,0,.3) 3px; */
 }
 
 .accounts-box {
@@ -309,27 +157,7 @@ input:-webkit-autofill:active {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*---------------------------------- navigation ---------------------------------- */
 .wrapper {
   display: inline-flex;
   list-style: none;
@@ -337,17 +165,17 @@ input:-webkit-autofill:active {
   justify-content: center;
   padding: 0px;
   margin: 0px;
-  margin-left: 60px;
+  margin-left: 25px;
 }
 
 .wrapper .icon {
   position: relative;
-  border: solid 1.5px;
+  border: solid #bfbfbf 1.5px;
   background: #fff;
   border-radius: 50%;
-  margin: 10px;
-  width: 30px;
-  height: 30px;
+  margin: 1px;
+  width: 35px;
+  height: 35px;
   font-size: 18px;
   display: flex;
   justify-content: center;
@@ -421,109 +249,3 @@ input:-webkit-autofill:active {
   background: #ffffff;
   color: #5d5d5d;
 }
-
-
-
-/* 
-.find-submit{
-  color: gray;
-  font-size: small;
-  text-align: center;
-  padding: 0 20px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.find-submit:hover {
-  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
-    6px 6px 6px rgba(255, 255, 255, 0.781);
-  transition: 10ms;
-}
-
-.find-submit:active {
-  color: rgb(255, 135, 60);
-  transition: 10ms;
- }
-
-.signup-text { 
-  margin-top: 20px;
-  font-size: 1rem;
-  color: gray;
-}
-
-.signup-submit{
-  font-weight: bolder;
-  box-shadow: -3px -3px 5px white, 3px 3px 5px rgba(182, 182, 182, 0.705);
-  color: gray;
-  cursor: pointer;
-  text-align: center;
-  border-radius: 7px;
-  padding: 7px 10px;
-  font-size: 0.9rem;
-}
-
-.signup-submit:hover {
-  box-shadow: inset 6px 6px 8px rgba(39, 39, 39, 0.075),
-    6px 6px 6px rgba(255, 255, 255, 0.781);
-  transition: 500ms;
-}
-
-.signup-submit:active {
-  color: rgb(255, 135, 60);
-  transition: 10ms;
- }
-
-
-
-
-.menu-state {
-position: relative;
-}
-
-.signin-state {
-position: absolute;
-top: -110px;
-left: -115px;
-width: 105px;
-height: 35px;
-background-color: rgba(255, 109, 30, 0.1);
-border-radius: 5px;
-}
-
-.signup-state {
-position: absolute;
-top: -47px;
-left: -115px;
-width: 105px;
-height: 35px;
-background-color: rgba(255, 109, 30, 0.1);
-border-radius: 5px;
-}
-
-.findid-state {
-position: absolute;
-top: 14px;
-left: -115px;
-width: 105px;
-height: 35px;
-background-color: rgba(255, 109, 30, 0.1);
-border-radius: 5px;
-}
-
-.findpw-state {
-position: absolute;
-top: 76px;
-left: -115px;
-width: 105px;
-height: 35px;
-background-color: rgba(255, 109, 30, 0.1);
-border-radius: 5px;
-} */
-
-
-
-
-
-
-

@@ -1,12 +1,34 @@
 {% extends 'Accounts_base.html' %}
 {% load static %}
-
 {% block content %}
-    <form class="login-form" method="POST" action = "{% url 'logout' %}">
+<div class="accounts-box">
+    <div class="account-navi">
+        <div>
+            <img class="logo" src="{% static 'img/ltlux-logo2.png' %}">
+        </div>
+        <h3>Find PW</h3>
+    </div>
+    <div class="accounts-box2" style="text-align: center;">
+        <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <img class="logo" style="margin: 10px 0px" src="{% static 'img/ltlux-logo2.png' %}">
-        <p class="div-custom" style="text-align: center; font-size: 14px; line-height: 2; margin: 0;">현재 로그인 상태 입니다.<br>로그아웃 이후에 시도해주세요.</p>
-        <input class="input login-submit" type="submit" value="Sign Out">
-        <a class="input login-submit" style="color: rgb(112, 112, 112); font-weight: 800; padding: 8px 0px; text-align: center;" href="{% url 'diagnosis_home' %}">Main Page</a>
-    </form>
+        <P>현재 로그인 상태 입니다.<br><br>로그아웃 이후에 시도해주세요.</P>
+            <center>
+                <button class="send" style="margin-top: 20px;" href="#" type="submit">
+                    Logout
+                <span></span>
+                </button>
+            </center>
+            <small style="font-size: 16px; margin: 0px; color: rgb(157, 157, 157);">&</small>
+            <a href="{% url 'diagnosis_home' %}">
+                <center>
+                    <div class="send" style="margin-top: 0px;">
+                        home
+                    <span></span>
+                    </div>
+                </center>
+            </a>
+        </form>
+        
+    </div>
+</div> 
 {% endblock %} 
