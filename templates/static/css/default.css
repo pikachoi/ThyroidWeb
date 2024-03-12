@@ -124,8 +124,8 @@ input[type=tel] {
 
 .comment_save{
     position: fixed;
-    top: 68%;
-    left: 75%;
+    top: 71%;
+    left: 45%;
     width: 8%;
     background-color: dodgerblue;
     color: #fff;
@@ -133,13 +133,16 @@ input[type=tel] {
     border-radius: 5px;
     border: none;
     z-index: 1;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 16px;
+    width: 70PX;
 
 }
 
 .comment_delete{
     position: fixed;
-    top: 78%;
-    left: 75%;
+    top: 71%;
+    left: 55%;
     width: 8%;
     background-color: dodgerblue;
     color: #fff;
@@ -147,7 +150,9 @@ input[type=tel] {
     border-radius: 5px;
     border: none;
     z-index: 1;
-
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 16px;
+    width: 70PX;
 }
 
 
@@ -211,8 +216,8 @@ input[type=tel] {
     
 .text_modal1_body, .text_modal2_body, .text_modal3_body{
     position: fixed;
-    top: 85%;
-    left: 53%;
+    top: 60%;
+    left: 50%;
 
     width: 27%;
     height: 15%;

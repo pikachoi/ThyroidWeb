@@ -17,7 +17,7 @@ import base64
 import time
 
 
-AI_mode = False
+AI_mode = True
 
 if AI_mode :
     print("\n검출 모델 로드 중...\n")

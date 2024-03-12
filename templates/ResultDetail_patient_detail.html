@@ -139,17 +139,17 @@
                                     <table class="table responsive-table">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th width="7.09%" scope="col" style = "text-align: center;">B / M</th>
-                                                <th width="7.09%" scope="col" style = "text-align: center;">P / N</th>
-                                                <th width="3.09%" scope="col" style = "text-align: center;">Echogenicity</th>
-                                                <th width="11.09%" scope="col" style = "text-align: center;">Margin</th>
+                                                <th width="9.09%" scope="col" style = "text-align: center;">B / M</th>
+                                                <th width="9.09%" scope="col" style = "text-align: center;">P / N</th>
+                                                <th width="8.09%" scope="col" style = "text-align: center;">Echogenicity</th>
+                                                <th width="12.09%" scope="col" style = "text-align: center;">Margin</th>
                                                 <th width="15.09%" scope="col" style = "text-align: center;">Echogenic foci</th>
-                                                <th width="10.50%" scope="col" style = "text-align: center;">Orientation</th>
-                                                <th width="11.09%" scope="col" style = "text-align: center;">Shape</th>
-                                                <th width="11.09%" scope="col" style = "text-align: center;">Composition</th>
+                                                <th width="12.50%" scope="col" style = "text-align: center;">Orientation</th>
+                                                <!-- <th width="11.09%" scope="col" style = "text-align: center;">Shape</th> -->
+                                                <th width="17.09%" scope="col" style = "text-align: center;">Composition</th>
                                                
                                                 
-                                                <th width="4.09%" scope="col"></th>                                                                      
+                                                <!-- <th width="4.09%" scope="col"></th>                                                                       -->
                                                 <th width="9.09%" scope="col" style= "background-color : #fae0e0; text-align: center;">※ K-TIRADS</th>
                                             </tr>
                                         </thead>
@@ -203,14 +203,14 @@
                                                         {% endfor %}
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <!-- <td>
                                                     <div style="text-align: center;font-size: 13px;">
                                                         {% for spec, value in crop_img.classifi_result|get_spec:"SHAPE" %}
                                                             <p style = "color:#000; font-weight: bold;" class="{{spec}}"> {{spec}} : {{value}} % </p>
                                                             <div class="SHAPE-result" SHAPE-spec="{{ spec }}" SHAPE-value="{{ value }}"></div>
                                                         {% endfor %}
                                                     </div>
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <div style="text-align: center;font-size: 13px;">
                                                         {% for spec, value in crop_img.classifi_result|get_spec:"COMPOSITION" %}
@@ -219,9 +219,8 @@
                                                         {% endfor %}
                                                     </div>
                                                 </td>
-                                               
                                                 
-                                                <td></td>
+                                                <!-- <td></td> -->
                                                 <td style = "background-color : #fae0e0;">
                                                     <div style="text-align: center;font-size: 13px;">
                                                         {% for spec, value in crop_img.classifi_result|get_spec:"GRADE" %}
@@ -297,7 +296,7 @@
                                                     {% csrf_token %}
                                                     <textarea name="body" cols="40" rows="10" maxlength="200"  class="text_modal2_body" id="id_body" placeholder="Comment..." required ></textarea>
                                                     <input type="submit" class="comment_save" value="Save" />
-                                                    <input type="reset" class="comment_delete" value="Delete" data-dismiss="modal" />
+                                                    <input type="reset" class="comment_delete" value="Cancel" data-dismiss="modal" />
                                                 </form>
                                             </td>
                                             <td colspan="4" style="background-color:white;"> 
@@ -624,22 +623,21 @@
                                     </div>
 
                                     
-
+                                    <!-- Shape: <span id="item7-text"></span> -->
                                     <!-- 원본 판독문 -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
                                     <div style="white-space: pre-line;" class="original_interpretation">
                                         A nodule measuring [<span id="width-text"></span><span id="currentUnit1"></span> x <span id="height-text"></span><span id="currentUnit2"></span> x <span id="depth-text"></span><span id="currentUnit3"></span>] and having a volume of [<span id="volume-result2"></span>ml] was discovered in the <span id="item2-text">[   ]</span> portion of the <span id="item1-text">[   ]</span> thyroid gland.
 
-                                        This nodule is <span id="item0-text">[   ]</span>, and the identified characteristics are as follows:
+                                        The discovered nodule could be <span id="item00-text">[   ]</span>, potentially indicating <span id="item0-text">[   ]</span>, and the identified characteristics are as follows:
 
                                         Echogenicity: <span id="item3-text"></span>
                                         Margin: <span id="item4-text"></span>
                                         Echogenicity Foci: <span id="item5-text"></span>
                                         Orientation: <span id="item6-text"></span>
-                                        Shape: <span id="item7-text"></span>
-                                        Internal Composition: <span id="item8-text"></span>
+                                        Composition: <span id="item8-text"></span>
 
-                                        Based on these characteristics, it has been classified as <span id="item9-text"></span>.
-                                        
+                                        Based on these characteristics, it could potentially be classified as <span id="item9-text"></span>.
+
                                         <span style="display: none;"  id="item00-text">[   ]</span>
                                     </div>
                                 </form>
@@ -753,12 +751,12 @@
                 if (BM_resultSpecData === 'B') {
                     const Benign = document.getElementById("item0-1");
                     Benign.checked = true; 
-                    BM_Text.textContent = `benign`;
+                    BM_Text.textContent = `a benign condition`;
                 }
                 else if (BM_resultSpecData === 'M') {
                     const Malignant = document.getElementById("item0-2");
                     Malignant.checked = true; 
-                    BM_Text.textContent = `malignant`;
+                    BM_Text.textContent = `malignancy`;
                 }
             });
         }
@@ -1223,10 +1221,10 @@
                     });
                     // 체크 항목 이름을 임의로 수정
                     if (checkedItemValue === "Benign") {
-                        const checkedItemValue = "benign";
+                        const checkedItemValue = "a benign condition";
                         item0Text.textContent = ` ${checkedItemValue}`;
                     } else if (checkedItemValue === "Malignant") {
-                        const checkedItemValue = "malignant";
+                        const checkedItemValue = "malignancy";
                         item0Text.textContent = ` ${checkedItemValue}`;
                     } else {
                         item0Text.textContent = '[   ]';
